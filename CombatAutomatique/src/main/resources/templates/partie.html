@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Azurhyan</title>
+</head>
+<body>
+	
+	<h1> Ici on joue à <span th:text="${partie}">partie</span> ! </h1>
+	
+	<aside>
+		<table>
+			<thead>
+				<tr>
+					<th> Evènements </th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="action : ${actions}">
+					<td><span th:text="${action.toString}"> action </span></td>
+				</tr>
+			</tbody>
+		</table>
+		<!--
+		<form action="#" th:action="@{/azurhyan/${partie}/annulerAction}" method="get">
+			<button type="submit">Annuler la dernière action</button> 
+		</form>
+		-->
+	</aside>
+	
+	<table>
+		<thead>
+			<tr>
+				<th> Init </th>
+				<th> Perso </th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="perso : ${persos}">
+				<td><span th:text="${perso.init}"> init </span></td>
+				<td><span th:text="${perso.nom}"> nom </span></td>
+				<td>
+					<form action="#" th:action="@{/azurhyan/${partie}/${perso.id}/combo}" method="get">
+						<button type="submit">Voir combo</button>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<form action="#" th:action="@{/azurhyan/${partie}/visibilitePerso}" method="get">
+		<button type="submit">Cacher/Révéler personnages</button> 
+	</form>	
+	
+	<form action="#" th:action="@{/azurhyan/${partie}/nouveauPerso}" method="get">
+		<button type="submit">Créer un nouveau perso</button> 
+	</form>
+	
+</body>
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Azurhyan</title>
+</head>
+<body>
+	<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Azurhyan</title>
+</head>
+<body>
+	
+	<h1> Voici le combo de <span th:text="${perso.nom}">perso</span> </h1>
+	
+	<aside>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<form action="#" th:action="@{/azurhyan/${partie}}" method="post">
+							<button type="submit">Retourner à la page principale</button> 
+						</form>
+					</td>
+					<td>
+						<form action="#" th:action="@{/azurhyan/${partie}/${perso.id}/combo}" method="post">
+							<button type="submit">Annuler les modifications</button> 
+						</form>
+					</td>
+					<td>
+						<form action="#" th:action="@{/azurhyan/${partie}/${perso.id}/attaque}" method="post">
+							<button type="submit">Lancer une attaque</button> 
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</aside>
+	
+	<table>
+		<thead>
+			<tr>
+				<th> </th>
+				<th> Init </th>
+				<th> Portée </th>
+				<th> Toucher </th>
+				<th> Parade ennemie </th>
+				<th> Force </th>
+				<th> IB att </th>
+				<th> </th>
+				<th> Défense </th>
+				<th> Esquive </th>
+				<th> Parade </th>
+				<th> Endurance du bouclier </th>
+				<th> Endurance du perso </th>
+				<th> IB def </th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th> Total </th>
+				<th> Init </th>
+				<th> Portée </th>
+				<th> Toucher </th>
+				<th> Parade ennemie </th>
+				<th> Force </th>
+				<th> IB att </th>
+				<th> </th>
+				<th> Défense </th>
+				<th> Esquive </th>
+				<th> Parade </th>
+				<th> Endurance du bouclier </th>
+				<th> Endurance du perso </th>
+				<th> IB def </th>
+			</tr>
+			<tr>
+				<th> Carac et PdC </th>
+				<th>  </th>
+				<th> AGI + PdC + réflexe </th>
+				<th> AGI + PdC + toucher ou PER + PdC + toucher </th>
+				<th> +0 </th>
+				<th> CON </th>
+				<th> Vigueur + CON - 10 </th>
+				<th> </th>
+				<th> AGI + PdC + défense </th>
+				<th> AGI + PdC + reflexe </th>
+				<th> défense </th>
+				<th> +0 </th>
+				<th> CON </th>
+				<th> Vigueur + CON - 10 </th>
+			</tr>
+			<tr>
+				<th> Equipement (switch) </th>
+				<th> Init </th>
+				<th> CàC ou Dist </th>
+				<th> Toucher </th>
+				<th> Parade ennemie </th>
+				<th> Force </th>
+				<th> IB att </th>
+				<th> </th>
+				<th> Défense </th>
+				<th> Esquive </th>
+				<th> Parade </th>
+				<th> Endurance du bouclier </th>
+				<th> Endurance du perso </th>
+				<th> IB def </th>
+			</tr>
+			<tr>
+				<th> Handicaps (nombre) </th>
+				<th> -X </th>
+				<th>  </th>
+				<th> -X </th>
+				<th> +0 </th>
+				<th> -X </th>
+				<th> -X </th>
+				<th> </th>
+				<th> -X </th>
+				<th> -X </th>
+				<th> +0 </th>
+				<th> -X </th>
+				<th> -X </th>
+				<th> -X </th>
+			</tr>
+			<tr>
+				<th> Bonus magiques </th>
+				<th> Init </th>
+				<th>  </th>
+				<th> Toucher </th>
+				<th> Parade ennemie </th>
+				<th> Force </th>
+				<th> IB att </th>
+				<th> </th>
+				<th> Défense </th>
+				<th> Esquive </th>
+				<th> Parade </th>
+				<th> Endurance du bouclier </th>
+				<th> Endurance du perso </th>
+				<th> IB def </th>
+			</tr>
+			<tr>
+				<th> ATR (switch) </th>
+				<th> Init </th>
+				<th>  </th>
+				<th> Toucher </th>
+				<th> Parade ennemie </th>
+				<th> Force </th>
+				<th> IB att </th>
+				<th> </th>
+				<th> Défense </th>
+				<th> Esquive </th>
+				<th> Parade </th>
+				<th> Endurance du bouclier </th>
+				<th> Endurance du perso </th>
+				<th> IB def </th>
+			</tr>
+			<tr>
+				<th> Tactique alonge (taille de l'arme - liste) </th>
+				<th> +0 </th>
+				<th>  </th>
+				<th> -1/-4 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> </th>
+				<th> +1/+4 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+			</tr>
+			<tr>
+				<th> Tactique balayage (switch nb 1-4) </th>
+				<th> +0 </th>
+				<th>  </th>
+				<th> +2/+8 </th>
+				<th> +1/+4 </th>
+				<th> -1/-4 </th>
+				<th> +0 </th>
+				<th> </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+			</tr>
+			<tr>
+				<th> Tactique bousculade </th>
+				<th> Init </th>
+				<th>  </th>
+				<th> Toucher </th>
+				<th> Parade ennemie </th>
+				<th> Force </th>
+				<th> IB att </th>
+				<th> </th>
+				<th> Défense </th>
+				<th> Esquive </th>
+				<th> Parade </th>
+				<th> Endurance du bouclier </th>
+				<th> Endurance du perso </th>
+				<th> IB def </th>
+			</tr>
+			<tr>
+				<th> Tactique bourrinage </th>
+				<th> +0 </th>
+				<th>  </th>
+				<th> -1 </th>
+				<th> +1 </th>
+				<th> +1 </th>
+				<th> +0 </th>
+				<th> </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+			</tr>
+			<tr>
+				<th> Tactique coup ciblé (nb) </th>
+				<th> +0 </th>
+				<th>  </th>
+				<th> -1*nb </th>
+				<th> +0 </th>
+				<th> +1*nb </th>
+				<th> +0 </th>
+				<th> </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+				<th> +0 </th>
+			</tr>
+			<tr>
+				<th> Autre (écriture libre) </th>
+				<th> Init </th>
+				<th>  </th>
+				<th> Toucher </th>
+				<th> Parade ennemie </th>
+				<th> Force </th>
+				<th> IB att </th>
+				<th> </th>
+				<th> Défense </th>
+				<th> Esquive </th>
+				<th> Parade </th>
+				<th> Endurance du bouclier </th>
+				<th> Endurance du perso </th>
+				<th> IB def </th>
+			</tr>
+		</tbody>
+	</table>
+	
+	<form action="#" th:action="@{/azurhyan/${partie}/visibilitePerso}" method="get">
+		<button type="submit">Cacher/Révéler personnages</button> 
+	</form>	
+	
+	<form action="#" th:action="@{/azurhyan/${partie}/nouveauPerso}" method="get">
+		<button type="submit">Créer un nouveau perso</button> 
+	</form>
+	
+</body>
+</html>
+	<h1> Fiche de <span th:text="${perso.nom}">perso</span> ! </h1>
+	
+	<aside>
+		<form action="#" th:action="@{/azurhyan/${partie}}" method="get">
+			<button type="submit">Retour fiche de partie</button> 
+		</form>
+	</aside>
+	
+	<form action="#" th:action="@{/azurhyan/${partie}/perso}" th:object="${perso}" method="post">
+		<aside>
+			<button type="submit">Enregistrer</button> 
+		</aside>
+		
+		<table>
+			<thead>
+				<tr>
+					<th> Nom </th>
+					<th> Joueur </th>
+					<th> Partie </th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th> <input type="text" th:value="${perso.nom}"/> </th>
+					<th> <input type="text" th:value="${perso.joueur}"/> </th>
+					<th> <input type="text" th:value="${perso.partie}"/> </th>
+				</tr>
+			</tbody>
+		</table>
+		
+		<h3> Caractéristiques </h3>
+
+		<table>
+			<thead>
+				<tr>
+					<th> AGI </th>
+					<th> CHA </th>
+					<th> CON </th>
+					<th> ESP </th>
+					<th> HAB </th>
+					<th> INT </th>
+					<th> PER </th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th> <input type="number" th:value="${perso.carac.AGI}"/> </th>
+					<th> <input type="number" th:value="${perso.carac.CHA}"/> </th>
+					<th> <input type="number" th:value="${perso.carac.CON}"/> </th>
+					<th> <input type="number" th:value="${perso.carac.ESP}"/> </th>
+					<th> <input type="number" th:value="${perso.carac.HAB}"/> </th>
+					<th> <input type="number" th:value="${perso.carac.INT}"/> </th>
+					<th> <input type="number" th:value="${perso.carac.PER}"/> </th>
+				</tr>
+			</tbody>
+		</table>
+	
+		<h3> Compétences </h3>
+		
+				<table>
+			<thead>
+				<tr>
+					<th> Compétence </th>
+					<th> PdC </th>
+					<th> Sous-compétence 1 </th>
+					<th> bonus/malus </th>
+					<th> bonus temporaire </th>
+					<th> Sous-compétence 2 </th>
+					<th> bonus/malus </th>
+					<th> bonus temporaire </th>
+					<th> Sous-compétence 3 </th>
+					<th> bonus/malus </th>
+					<th> bonus temporaire </th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="competence : ${perso.competence}">
+					<th> <span th:text="${competence.nom}"> Nom compétence </span> </th>
+					<th> <input type="number" th:value="${competence.PdC}"/> </th>
+					<th> <span th:text="${competence.sousComp1}"> sous-comp 1 </span> </th>
+					<th> <input type="number" th:value="${competence.sousComp1Bonus}"/> </th>
+					<th> <input type="number" th:value="${competence.sousComp1Temp}"/> </th>
+					<th> <span th:text="${competence.sousComp2}"> sous-comp 2 </span> </th>
+					<th> <input type="number" th:value="${competence.sousComp2Bonus}"/> </th>
+					<th> <input type="number" th:value="${competence.sousComp2Temp}"/> </th>
+					<th> <span th:text="${competence.sousComp3}"> sous-comp 3 </span> </th>
+					<th> <input type="number" th:value="${competence.sousComp3Bonus}"/> </th>
+					<th> <input type="number" th:value="${competence.sousComp3Temp}"/> </th>
+				</tr>
+			</tbody>
+		</table>
+		
+		<h3> Capacités de combat </h3>
+
+		
+		<h3> Equipement </h3>
+
+
+		<h3> Combo </h3>
+
+			
+		<h3> Blessures </h3>
+
+
+	</form>
+	
+</body>
+</html>

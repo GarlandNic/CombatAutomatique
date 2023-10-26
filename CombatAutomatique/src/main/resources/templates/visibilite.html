@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Azurhyan</title>
+</head>
+<body>
+	
+	<h1> Liste des personnages de <span th:text="${partie}">partie</span> : </h1>
+	
+	<form action="#" th:action="@{/azurhyan/${partie}/visibilitePerso}" th:object="${persosVisibles}" method="post">
+
+		<table>
+			<thead>
+				<tr>
+					<th> Visible </th>
+					<th> Perso </th>
+				</tr>
+			</thead>
+			<tbody>
+			    <tr th:each="perso, itemStat : *{persoList}">
+                    <td><input type="radio" th:checked="*{persoList[__${itemStat.index}__].visibilite}" /></td>
+                    <td><span th:text="*{persoList[__${itemStat.index}__].nom}"> nom </span></td>
+                </tr>
+			</tbody>
+		</table>
+	
+		<button type="submit">Enregistrer les modifications</button> 
+	</form>	
+	
+	<form action="#" th:action="@{/azurhyan/${partie}/visibilitePerso}" method="get">
+		<button type="submit">Retour</button> 
+	</form>	
+		
+</body>
+</html>
