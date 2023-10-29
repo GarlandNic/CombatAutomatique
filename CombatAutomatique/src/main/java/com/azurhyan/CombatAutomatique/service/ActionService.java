@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ActionService {
 	
-	void annulerDerniereAction() {
+	public void annulerDerniereAction() {
 		
 	}
 
