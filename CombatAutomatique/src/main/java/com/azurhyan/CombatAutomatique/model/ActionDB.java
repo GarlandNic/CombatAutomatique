@@ -14,6 +14,7 @@ public class ActionDB {
 //			 ID integer PRIMARY KEY,
 //			 ACTEURID integer,
 //			 ACTEURNOM varchar(255),
+//      	 ACTIONTIME datetime NOT NULL,
 //			 DESCRIPTION varchar(1023)
 //			);
 

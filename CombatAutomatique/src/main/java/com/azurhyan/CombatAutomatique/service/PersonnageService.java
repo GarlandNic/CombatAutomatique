@@ -14,6 +14,7 @@ public class PersonnageService {
 	PersonnageRepository persoRepo;
 
 	public Iterable<PersoPartie> listForPartie(String partieName) {
+		// liste des perso visibles avec init/nom/id à mettre 
 		persoRepo.findByPartieAndVisible(partieName);
 		// TODO Auto-generated method stub
 		return null;

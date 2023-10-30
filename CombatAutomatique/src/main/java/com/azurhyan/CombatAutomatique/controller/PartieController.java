@@ -26,11 +26,11 @@ public class PartieController {
 		return filledPage_Partie(model, partie);
 	}
 	
-	@GetMapping("/azurhyan/{game}/annulerAction") // pas encore implémenté
-	public String annulerAction(Model model, @PathVariable("game") final String partie) {
-		actionServ.annulerDerniereAction();
-		return filledPage_Partie(model, partie);
-	}
+//	@GetMapping("/azurhyan/{game}/annulerAction") // pas encore implémenté TODO
+//	public String annulerAction(Model model, @PathVariable("game") final String partie) {
+//		actionServ.annulerDerniereAction();
+//		return filledPage_Partie(model, partie);
+//	}
 	
 	@GetMapping("/azurhyan/{game}/visibilitePerso")
 	public String switchVisibilitePersos(Model model, @PathVariable("game") final String partie) {
@@ -52,10 +52,10 @@ public class PartieController {
 	
 	private String filledPage_Partie(Model model, String partie) {
 		model.addAttribute("partie", partie);
-		// liste des perso avec init/nom/id à mettre 
+		// liste des perso visibles avec init/nom/id à mettre 
 		model.addAttribute("persos", persoServ.listForPartie(partie));
 		// liste des actions à afficher / action.toString
-		// model.addAttribute("actions", actions);
+		// model.addAttribute("actions", actionServ.actions);
 		return "partie";
 	}
 	

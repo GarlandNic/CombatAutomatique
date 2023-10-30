@@ -8,7 +8,7 @@ create table personnages(
  ID integer PRIMARY KEY,
  NOM varchar(255) NOT NULL,
  PARTIE varchar(255) NOT NULL,
- JOUEUR varchar(255) NOT NULL,
+ JOUEUR varchar(255),
  VISIBLE boolean NOT NULL DEFAULT TRUE,
  CON integer unsigned NOT NULL DEFAULT 10,
  HFATIGUE integer unsigned NOT NULL DEFAULT 0,
@@ -50,8 +50,10 @@ create table combos(
 
 create table actions(
  ID integer PRIMARY KEY,
+ PARTIE varchar(255) NOT NULL,
  ACTEURID integer,
  ACTEURNOM varchar(255),
+ ACTIONTIME datetime NOT NULL,
  DESCRIPTION varchar(1023)
 );
 

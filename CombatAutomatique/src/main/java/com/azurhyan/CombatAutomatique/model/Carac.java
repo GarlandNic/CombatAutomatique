@@ -5,9 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-@Entity
 @Data
-@Table(name = "caracs")
 public class Carac {
 	
 	String id;
