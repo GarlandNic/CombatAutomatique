@@ -19,12 +19,21 @@
 			</thead>
 			<tbody>
 			    <tr th:each="perso, itemStat : *{persoList}">
-                    <td><input type="radio" th:checked="*{persoList[__${itemStat.index}__].visibilite}" /></td>
+                    <td><input type="checkbox" th:checked="*{persoList[__${itemStat.index}__].visibilite}" /></td>
                     <td><span th:text="*{persoList[__${itemStat.index}__].nom}"> nom </span></td>
                 </tr>
 			</tbody>
 		</table>
-	
+		
+		<!-- 
+		<ul>
+  <li th:each="perso : *{persoList}">
+    <input type="checkbox" th:field="*{features}" th:value="${feat}" />
+    <label th:for="${#ids.prev('features')}" 
+           th:text="#{${'seedstarter.feature.' + feat}}">Heating</label>
+  </li>
+</ul>
+	-->
 		<button type="submit">Enregistrer les modifications</button> 
 	</form>	
 	

@@ -35,17 +35,16 @@ public class PartieController {
 	@GetMapping("/azurhyan/{game}/visibilitePerso")
 	public String switchVisibilitePersos(Model model, @PathVariable("game") final String partie) {
 		model.addAttribute("partie", partie);
-		// aller chercher liste des perso pour la partie
-		//persoServ.allVisibilite();
 		// ajouter au model la liste des perso // perso.id, perso.nom, perso.visibilite
-		// PersosVisiblesDto persosVisibles // persosVisibles.persoList
-		// model.addAttribute("persosVisibles", persosVisibles);
+		PersosVisiblesDto persosVisibles = persoServ.withVisibilite(partie);
+		// persosVisibles.persoList
+		model.addAttribute("persosVisibles", persosVisibles);
 		return "visibilite";
 	}
 	
 	@PostMapping("/azurhyan/{game}/visibilitePerso")
 	public String changeVisibilitePersos(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles) {
-		//persoServ.setAllVisibilite(persoVisibles);
+		persoServ.setAllVisibilite(persosVisibles);
 		return filledPage_Partie(model, partie);
 	}
 	
@@ -54,8 +53,8 @@ public class PartieController {
 		model.addAttribute("partie", partie);
 		// liste des perso visibles avec init/nom/id à mettre 
 		model.addAttribute("persos", persoServ.listForPartie(partie));
-		// liste des actions à afficher / action.toString
-		// model.addAttribute("actions", actionServ.actions);
+		// liste des actions à afficher / action.description
+		model.addAttribute("actions", actionServ.listForPartie(partie));
 		return "partie";
 	}
 	

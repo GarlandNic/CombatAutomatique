@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -22,42 +23,51 @@ public class PersonnageDB {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int id;
+	@Column(name="ID")
+	int persoId;
 	
-	String nom;
+	String nom="Perso";
 	
-	String joueur;
+	String joueur="PNJ";
 	
 	String partie;
 	
-	boolean visible;
+	boolean visible=true;
 	
 	@OneToMany(cascade = CascadeType.ALL, 
 			   orphanRemoval = true, 
 			   fetch = FetchType.EAGER)
-	@JoinColumn(name = "personnage")
+	@JoinColumn(name = "persoId")
 	List<ComboDB> comboList = new ArrayList<>();
 	
 	@OneToMany(cascade = CascadeType.ALL, 
 			   orphanRemoval = true, 
 			   fetch = FetchType.EAGER)
-	@JoinColumn(name = "personnage")
-	List<BlessureDB> blessureList;
+	@JoinColumn(name = "persoId")
+	List<BlessureDB> blessureList = new ArrayList<>();
 	
-	int CON;
+	@OneToMany
+	@JoinColumn(name = "persoId")
+	List<ActionDB> actionList = new ArrayList<>();
 	
-	int Hfatigue;
+	int CON=10;
 	
-	int CCinfatigable;
+	int Hfatigue=0;
 	
-	int Hmobilite;
+	int CCinfatigable=0;
 	
-	int CCincoercible;
+	int Hmobilite=0;
 	
-	int Hsens;
+	int CCincoercible=0;
 	
-	int CCtoujoursPret;
+	int Hsens=0;
 	
-	int CCcombatPlusieurs;
+	int CCtoujoursPret=0;
+	
+	int CCcombatPlusieurs=0;
+	
+	public PersonnageDB(String partie) {
+		this.partie = partie;
+	}
 
 }

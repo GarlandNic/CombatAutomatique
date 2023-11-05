@@ -34,7 +34,7 @@ public class PersonnageController {
 	private String filledPage_Personnage(Model model, String partie, String persoId) {
 		model.addAttribute("partie", partie);
 		// créer un perso vide
-		PersonnageDB perso = new PersonnageDB();
+		PersonnageDB perso = new PersonnageDB(partie);
 		if(!persoId.isEmpty()) {
 			// récupérer les infos du perso depuis la BD grace à persoId
 		}

@@ -2,7 +2,11 @@ package com.azurhyan.CombatAutomatique.model;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -10,22 +14,42 @@ import lombok.Data;
 @Data
 @Table(name = "combos")
 public class ComboDB {
-//	create table combos(
-//	 ID integer PRIMARY KEY,
-//	 PERSONNAGE integer,
-//	 NOM varchar(255),
-//	 INIT integer unsigned NOT NULL DEFAULT 15,
-//	 CAC boolean NOT NULL DEFAULT TRUE,
-//	 TOUCHER integer unsigned NOT NULL DEFAULT 15,
-//	 PRDENNEMIE integer NOT NULL DEFAULT 0,
-//	 FORCE integer unsigned NOT NULL DEFAULT 15,
-//	 IBATT integer unsigned NOT NULL DEFAULT 15,
-//	 DEFENSE integer unsigned NOT NULL DEFAULT 15,
-//	 ESQUIVE integer unsigned NOT NULL DEFAULT 15,
-//	 PARADE integer NOT NULL DEFAULT 0,
-//	 ENDBOUCLIER integer unsigned NOT NULL DEFAULT 15,
-//	 ENDURANCE integer unsigned NOT NULL DEFAULT 15,
-//	 IBDEF integer unsigned NOT NULL DEFAULT 15,
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="ID")
+	int comboId;
+	
 //	 FOREIGN KEY (PERSONNAGE) REFERENCES personnages (ID) ON DELETE CASCADE ON UPDATE CASCADE
-//	);
+	@Column(name="PERSONNAGE")
+	int persoId;
+	
+	String nom;
+	
+	int init=15;
+
+	boolean CaC=true;
+
+	int toucher=15;
+
+	int prdEnnemie=0;
+	
+	@Column(name="FORCEATTAQUE")
+	int force=15;
+
+	int IBatt=15;
+	
+	@Column(name="DEFENSE")
+	int defense=15;
+	
+	int esquive=15;
+	
+	int parade=0;
+	
+	int endBouclier=15;
+	
+	int endPerso=15;
+	
+	int IBdef=15;
+
 }

@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class PersoVisible {
 	
-	String id;
+	int id;
 	
 	String nom;
 	

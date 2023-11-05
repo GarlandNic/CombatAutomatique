@@ -13,17 +13,17 @@
 			<tbody>
 				<tr>
 					<td>
-						<form action="#" th:action="@{/azurhyan/${partie}}" method="post">
+						<form action="#" th:action="@{/azurhyan/${partie}}" method="get">
 							<button type="submit">Retourner à la page principale</button> 
 						</form>
 					</td>
 					<td>
-						<form action="#" th:action="@{/azurhyan/${partie}/${perso.id}/combo}" method="post">
+						<form action="#" th:action="@{/azurhyan/${partie}/${perso.id}/combo}" method="get">
 							<button type="submit">Annuler les modifications</button> 
 						</form>
 					</td>
 					<td>
-						<form action="#" th:action="@{/azurhyan/${partie}/${perso.id}/attaque}" method="post">
+						<form action="#" th:action="@{/azurhyan/${partie}/${perso.id}/attaque}" method="get">
 							<button type="submit">Lancer une attaque</button> 
 						</form>
 					</td>
@@ -32,12 +32,33 @@
 		</table>
 	</aside>
 	
+	<form action="#" th:action="@{/azurhyan/${partie}/${perso.id}}" th:object="${personnageDB}" method="post">
+	
+	<table>
+		<tbody>
+			<tr>
+				<td>
+					Nom : <input type="text" th:field="*{nom}"/> 
+				</td>
+				<td>
+					Joueur : <input type="text" th:field="*{joueur}"/> 
+				</td>
+				<td>
+					Partie : <input type="text" th:field="*{partie}" value="${partie}" disabled/> 
+				</td>
+			</tr>
+		</tbody>
+	</table>
+		
+	<h3>Combo</h3>
+	
 	<table>
 		<thead>
 			<tr>
 				<th> </th>
 				<th> Init </th>
 				<th> Portée </th>
+				type de dégâts !!!!!!!!!!!
 				<th> Toucher </th>
 				<th> Parade ennemie </th>
 				<th> Force </th>
@@ -247,120 +268,89 @@
 		</tbody>
 	</table>
 	
-	<form action="#" th:action="@{/azurhyan/${partie}/visibilitePerso}" method="get">
-		<button type="submit">Cacher/Révéler personnages</button> 
-	</form>	
+	<h3>Blessures</h3>
+	<span style="float: right;">CON de combat : <input type="number" th:field="*{CON}"/></span> 
 	
-	<form action="#" th:action="@{/azurhyan/${partie}/nouveauPerso}" method="get">
-		<button type="submit">Créer un nouveau perso</button> 
-	</form>
+	<table>
+		<thead>
+			<tr>
+				<th> Dégâts (niveaux) </th>
+				<th> Points de choc </th>
+				<th> Gravité </th>
+				<th> Partie touchée </th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th> each </th>
+				<th> <input type="number" th:value="*{demiNiveau} / 2.0"/> </th>
+				<th> <input type="number" th:field="*{CCinfatigable}"/> </th>
+				<th> <input type="number" value="*{totFatigue}" disabled/> </th>
+			</tr>
+			<tr>
+				<th> Mobilité ou entraves </th>
+				<th> <input type="number" th:field="*{Hmobilite}"/> </th>
+				<th> <input type="number" th:field="*{CCincoercible}"/> </th>
+				<th> <input type="number" value="*{totMobile}" disabled/> </th>
+			</tr>
+			<tr>
+				<th> Sens ou surprise </th>
+				<th> <input type="number" th:field="*{Hsens}"/> </th>
+				<th> <input type="number" th:field="*{CCtoujoursPret}"/> </th>
+				<th> <input type="number" value="*{totSens}" disabled/> </th>
+			</tr>
+			<tr>
+				<th> Total </th>
+				<th> - </th>
+				<th> - </th>
+				<th> <input type="number" value="*{totFatigue} + *{totMobile} + *{totSens}" disabled/> </th>
+			</tr>
+		</tbody>
+	</table>
 	
-</body>
-</html>
-	<h1> Fiche de <span th:text="${perso.nom}">perso</span> ! </h1>
 	
-	<aside>
-		<form action="#" th:action="@{/azurhyan/${partie}}" method="get">
-			<button type="submit">Retour fiche de partie</button> 
-		</form>
-	</aside>
 	
-	<form action="#" th:action="@{/azurhyan/${partie}/perso}" th:object="${perso}" method="post">
-		<aside>
-			<button type="submit">Enregistrer</button> 
-		</aside>
-		
-		<table>
-			<thead>
-				<tr>
-					<th> Nom </th>
-					<th> Joueur </th>
-					<th> Partie </th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th> <input type="text" th:value="${perso.nom}"/> </th>
-					<th> <input type="text" th:value="${perso.joueur}"/> </th>
-					<th> <input type="text" th:value="${perso.partie}"/> </th>
-				</tr>
-			</tbody>
-		</table>
-		
-		<h3> Caractéristiques </h3>
-
-		<table>
-			<thead>
-				<tr>
-					<th> AGI </th>
-					<th> CHA </th>
-					<th> CON </th>
-					<th> ESP </th>
-					<th> HAB </th>
-					<th> INT </th>
-					<th> PER </th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th> <input type="number" th:value="${perso.carac.AGI}"/> </th>
-					<th> <input type="number" th:value="${perso.carac.CHA}"/> </th>
-					<th> <input type="number" th:value="${perso.carac.CON}"/> </th>
-					<th> <input type="number" th:value="${perso.carac.ESP}"/> </th>
-					<th> <input type="number" th:value="${perso.carac.HAB}"/> </th>
-					<th> <input type="number" th:value="${perso.carac.INT}"/> </th>
-					<th> <input type="number" th:value="${perso.carac.PER}"/> </th>
-				</tr>
-			</tbody>
-		</table>
+	<h3>Handicaps</h3>
 	
-		<h3> Compétences </h3>
-		
-				<table>
-			<thead>
-				<tr>
-					<th> Compétence </th>
-					<th> PdC </th>
-					<th> Sous-compétence 1 </th>
-					<th> bonus/malus </th>
-					<th> bonus temporaire </th>
-					<th> Sous-compétence 2 </th>
-					<th> bonus/malus </th>
-					<th> bonus temporaire </th>
-					<th> Sous-compétence 3 </th>
-					<th> bonus/malus </th>
-					<th> bonus temporaire </th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="competence : ${perso.competence}">
-					<th> <span th:text="${competence.nom}"> Nom compétence </span> </th>
-					<th> <input type="number" th:value="${competence.PdC}"/> </th>
-					<th> <span th:text="${competence.sousComp1}"> sous-comp 1 </span> </th>
-					<th> <input type="number" th:value="${competence.sousComp1Bonus}"/> </th>
-					<th> <input type="number" th:value="${competence.sousComp1Temp}"/> </th>
-					<th> <span th:text="${competence.sousComp2}"> sous-comp 2 </span> </th>
-					<th> <input type="number" th:value="${competence.sousComp2Bonus}"/> </th>
-					<th> <input type="number" th:value="${competence.sousComp2Temp}"/> </th>
-					<th> <span th:text="${competence.sousComp3}"> sous-comp 3 </span> </th>
-					<th> <input type="number" th:value="${competence.sousComp3Bonus}"/> </th>
-					<th> <input type="number" th:value="${competence.sousComp3Temp}"/> </th>
-				</tr>
-			</tbody>
-		</table>
-		
-		<h3> Capacités de combat </h3>
-
-		
-		<h3> Equipement </h3>
-
-
-		<h3> Combo </h3>
-
-			
-		<h3> Blessures </h3>
-
-
+	<table>
+		<thead>
+			<tr>
+				<th> Nature du handicap </th>
+				<th> H- </th>
+				<th> H+ (CC) </th>
+				<th> Total </th>
+			</tr>
+		</thead>
+		<tbody th:with="totFatigue= (*{Hfatigue} > *{CCinfatigable} ? *{Hfatigue} - *{CCinfatigable} : 0) , totMobile= (*{Hmobilite} > *{CCincoercible} ? *{Hmobilite} - *{CCincoercible} : 0) , totSens= (*{Hsens} > *{CCtoujoursPret} ? *{Hsens} - *{CCtoujoursPret} : 0)">
+			<tr>
+				<th> Blessure ou fatigue </th>
+				<th> <input type="number" th:field="*{Hfatigue}"/> </th>
+				<th> <input type="number" th:field="*{CCinfatigable}"/> </th>
+				<th> <input type="number" value="*{totFatigue}" disabled/> </th>
+			</tr>
+			<tr>
+				<th> Mobilité ou entraves </th>
+				<th> <input type="number" th:field="*{Hmobilite}"/> </th>
+				<th> <input type="number" th:field="*{CCincoercible}"/> </th>
+				<th> <input type="number" value="*{totMobile}" disabled/> </th>
+			</tr>
+			<tr>
+				<th> Sens ou surprise </th>
+				<th> <input type="number" th:field="*{Hsens}"/> </th>
+				<th> <input type="number" th:field="*{CCtoujoursPret}"/> </th>
+				<th> <input type="number" value="*{totSens}" disabled/> </th>
+			</tr>
+			<tr>
+				<th> Total </th>
+				<th> - </th>
+				<th> - </th>
+				<th> <input type="number" value="*{totFatigue} + *{totMobile} + *{totSens}" disabled/> </th>
+			</tr>
+		</tbody>
+	</table>
+	
+	<button type="submit" style="float: right;">Enregistrer les modifications</button> 
+	
 	</form>
 	
 </body>

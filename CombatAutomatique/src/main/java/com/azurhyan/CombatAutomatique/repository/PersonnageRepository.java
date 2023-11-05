@@ -6,6 +6,6 @@ import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 
 public interface PersonnageRepository extends CrudRepository<PersonnageDB, Integer> {
 
-	Iterable<PersonnageDB> findByPartieAndVisible(String partie);
+	Iterable<PersonnageDB> findByPartieAndVisible(String partie, boolean visible);
 
 }

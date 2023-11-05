@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<h1>Page de tests de html avec thymeleaf</h1>
+
+<h3>Tests de dynamisme</h3>
+
+<p th:with="valeur=0">
+<input type="number" th:name="nombre" th:value="${valeur}"/>
+</br>
+Et du coup le nombre est : <span th:text="${valeur}">valeur</span>
+</p>
+ça marche pas :(
+
+<h3>Test add/remove rows</h3>
+<p>
+
+<form action="#" th:action="@{/}" th:object="${seedStarter}" method="post">
+    ...
+
+<table>
+  <thead>
+    <tr>
+      <th>Row</th>
+      <th>Variety</th>
+      <th>Seeds per cell</th>
+      <th>
+        <button type="submit" name="addRow">Add row</button>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="row,rowStat : *{rows}">
+      <td th:text="${rowStat.count}">1</td>
+      <td>
+        <input type="text" th:field="*{rows[__${rowStat.index}__].variety}"/>
+      </td>
+      <td>
+        <input type="text" th:field="*{rows[__${rowStat.index}__].seedsPerCell}" />
+      </td>
+      <td>
+        <button type="submit" name="removeRow" 
+                th:value="${rowStat.index}">Remove row</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</form>
+
+</p>
+
+
+</body>
+</html>

@@ -37,13 +37,13 @@ create table combos(
  CAC boolean NOT NULL DEFAULT TRUE,
  TOUCHER integer unsigned NOT NULL DEFAULT 15,
  PRDENNEMIE integer NOT NULL DEFAULT 0,
- FORCE integer unsigned NOT NULL DEFAULT 15,
+ FORCEATTAQUE integer unsigned NOT NULL DEFAULT 15,
  IBATT integer unsigned NOT NULL DEFAULT 15,
  DEFENSE integer unsigned NOT NULL DEFAULT 15,
  ESQUIVE integer unsigned NOT NULL DEFAULT 15,
  PARADE integer NOT NULL DEFAULT 0,
  ENDBOUCLIER integer unsigned NOT NULL DEFAULT 15,
- ENDURANCE integer unsigned NOT NULL DEFAULT 15,
+ ENDPERSO integer unsigned NOT NULL DEFAULT 15,
  IBDEF integer unsigned NOT NULL DEFAULT 15,
  FOREIGN KEY (PERSONNAGE) REFERENCES personnages (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -54,7 +54,8 @@ create table actions(
  ACTEURID integer,
  ACTEURNOM varchar(255),
  ACTIONTIME datetime NOT NULL,
- DESCRIPTION varchar(1023)
+ DESCRIPTION varchar(1023),
+ FOREIGN KEY (ACTEURID) REFERENCES personnages (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 commit;
