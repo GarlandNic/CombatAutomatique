@@ -1,6 +1,5 @@
 package com.azurhyan.CombatAutomatique.repository;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.azurhyan.CombatAutomatique.model.ActionDB;

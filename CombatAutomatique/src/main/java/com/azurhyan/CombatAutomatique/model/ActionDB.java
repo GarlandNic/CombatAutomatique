@@ -1,6 +1,6 @@
 package com.azurhyan.CombatAutomatique.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,21 +19,24 @@ public class ActionDB {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="ID")
+	@Column(name="ACTIOID")
 	int actionId;
 	
 //	 FOREIGN KEY (ACTEURID) REFERENCES personnages (ID) ON DELETE CASCADE ON UPDATE CASCADE
-	@Column(name="ACTEURID")
-	int persoId;
+//	@Column(name="ACTEURID")
+//	int persoId;
 	
 	@ManyToOne
-	@JoinColumn(name="persoId")
+	@JoinColumn(name="ACTEURID")
 	PersonnageDB acteur;
 	
+	@Column(name="ACTEURNOM")
 	String acteurNom;
 	
-	LocalDate actionTime;
+	@Column(name="ACTIONTIME")
+	LocalDateTime actionTime;
 
+	@Column(name="DESCRIPTION")
 	String description;
 	
 	public String getPartie() {

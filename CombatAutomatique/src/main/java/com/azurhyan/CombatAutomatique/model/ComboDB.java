@@ -4,52 +4,113 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+
+enum Dgts {
+	NOR,
+	CTD,
+	PRF
+}
 
 @Entity
 @Data
 @Table(name = "combos")
 public class ComboDB {
 	
+	public ComboDB(String nom, PersonnageDB perso, boolean mod) {
+		this.nom = nom;
+		this.perso = perso;
+		if(mod) {
+			this.init = 0;
+			this.toucher = 0;
+			this.prdEnnemie = 0;
+			this.force = 0;
+			this.IBatt = 0;
+			this.defense = 0;
+			this.esquive = 0;
+			this.parade = 0;
+			this.endBouclier = 0;
+			this.endPerso = 0;
+			this.IBdef = 0;
+		}
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="ID")
+	@Column(name="COMBOID")
 	int comboId;
 	
 //	 FOREIGN KEY (PERSONNAGE) REFERENCES personnages (ID) ON DELETE CASCADE ON UPDATE CASCADE
-	@Column(name="PERSONNAGE")
-	int persoId;
+//	@Column(name="PERSONNAGE")
+//	int persoId;
 	
+	@ManyToOne
+	@JoinColumn(name="PERSONNAGE")
+	PersonnageDB perso;
+	
+	@Column(name="NOM")
 	String nom;
 	
+	@Column(name="INIT")
 	int init=15;
 
+	@Column(name="TYPEDGTS")
+	@Enumerated(EnumType.STRING)
+	Dgts typeDgts=Dgts.NOR;
+
+	@Column(name="CAC")
 	boolean CaC=true;
 
+	@Column(name="TOUCHER")
 	int toucher=15;
 
+	@Column(name="PRDENNEMIE")
 	int prdEnnemie=0;
 	
 	@Column(name="FORCEATTAQUE")
 	int force=15;
 
+	@Column(name="IBATT")
 	int IBatt=15;
 	
 	@Column(name="DEFENSE")
 	int defense=15;
 	
+	@Column(name="ESQUIVE")
 	int esquive=15;
 	
+	@Column(name="PARADE")
 	int parade=0;
 	
+	@Column(name="ENDBOUCLIER")
 	int endBouclier=15;
 	
+	@Column(name="ENDPERSO")
 	int endPerso=15;
 	
+	@Column(name="IBDEF")
 	int IBdef=15;
+	
+	public void addHandicap(int demiH) {
+		int h = demiH/2;
+		this.init = this.init - h;
+		this.toucher = this.toucher - h;
+		this.force = this.force - h;
+		this.IBatt = this.IBatt - h;
+		this.defense = this.defense - h;
+		this.esquive = this.esquive - h;
+		this.endBouclier = this.endBouclier - h;
+		this.endPerso = this.endPerso - h;
+		this.IBdef = this.IBdef - h;
+
+	}
 
 }

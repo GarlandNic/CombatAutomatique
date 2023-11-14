@@ -1,5 +1,6 @@
 package com.azurhyan.CombatAutomatique.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -10,6 +11,6 @@ import lombok.Data;
 @Data
 public class PersosVisiblesDto {
 	
-	List<PersoVisible> persoList;
+	List<PersonnageDB> persoList = new ArrayList<>();
 
 }

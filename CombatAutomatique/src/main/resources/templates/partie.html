@@ -8,7 +8,7 @@
 	
 	<h1> Ici on joue à <span th:text="${partie}">partie</span> ! </h1>
 	
-	<aside>
+	<aside style="float: right;">
 		<table>
 			<thead>
 				<tr>
@@ -22,12 +22,13 @@
 			</tbody>
 		</table>
 		<!--
-		<form action="#" th:action="@{/azurhyan/${partie}/annulerAction}" method="get">
+		<form action="#" th:action="@{'/azurhyan/'+${partie}+'/annulerAction'}" method="get">
 			<button type="submit">Annuler la dernière action</button> 
 		</form>
 		-->
 	</aside>
 	
+	<div style="float: left;">
 	<table>
 		<thead>
 			<tr>
@@ -41,7 +42,7 @@
 				<td><span th:text="${perso.init}"> init </span></td>
 				<td><span th:text="${perso.nom}"> nom </span></td>
 				<td>
-					<form action="#" th:action="@{/azurhyan/${partie}/${perso.id}/combo}" method="get">
+					<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${perso.id}+'/combo'}" method="get">
 						<button type="submit">Voir combo</button>
 					</form>
 				</td>
@@ -49,13 +50,14 @@
 		</tbody>
 	</table>
 	
-	<form action="#" th:action="@{/azurhyan/${partie}/visibilitePerso}" method="get">
+	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/visibilitePerso'}" method="get">
 		<button type="submit">Cacher/Révéler personnages</button> 
 	</form>	
 	
-	<form action="#" th:action="@{/azurhyan/${partie}/nouveauPerso}" method="get">
+	<form action="#" th:action="@{/azurhyan/{partie}/nouveauPerso(partie=${partie})}" method="get">
 		<button type="submit">Créer un nouveau perso</button> 
 	</form>
+	</div>
 	
 </body>
 </html>

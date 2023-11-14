@@ -14,7 +14,7 @@
 	??
 	
 	
-	<form action="#" th:action="@{/azurhyan/${partie}/visibilitePerso}" th:object="${persosVisibles}" method="post">
+	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/visibilitePerso'}" th:object="${persosVisibles}" method="post">
 
 		<table>
 			<thead>
@@ -34,7 +34,7 @@
 		<button type="submit">Enregistrer les modifications</button> 
 	</form>	
 	
-	<form action="#" th:action="@{/azurhyan/${partie}/visibilitePerso}" method="get">
+	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/visibilitePerso'}" method="get">
 		<button type="submit">Retour</button> 
 	</form>	
 		

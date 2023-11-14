@@ -8,4 +8,6 @@ public interface PersonnageRepository extends CrudRepository<PersonnageDB, Integ
 
 	Iterable<PersonnageDB> findByPartieAndVisible(String partie, boolean visible);
 
+	Iterable<PersonnageDB> findByPartie(String partie);
+
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.azurhyan.CombatAutomatique.model.PersoPartie;
 import com.azurhyan.CombatAutomatique.model.PersosVisiblesDto;
 import com.azurhyan.CombatAutomatique.service.ActionService;
 import com.azurhyan.CombatAutomatique.service.PersonnageService;
@@ -35,9 +36,7 @@ public class PartieController {
 	@GetMapping("/azurhyan/{game}/visibilitePerso")
 	public String switchVisibilitePersos(Model model, @PathVariable("game") final String partie) {
 		model.addAttribute("partie", partie);
-		// ajouter au model la liste des perso // perso.id, perso.nom, perso.visibilite
 		PersosVisiblesDto persosVisibles = persoServ.withVisibilite(partie);
-		// persosVisibles.persoList
 		model.addAttribute("persosVisibles", persosVisibles);
 		return "visibilite";
 	}
@@ -51,9 +50,7 @@ public class PartieController {
 	
 	private String filledPage_Partie(Model model, String partie) {
 		model.addAttribute("partie", partie);
-		// liste des perso visibles avec init/nom/id à mettre 
 		model.addAttribute("persos", persoServ.listForPartie(partie));
-		// liste des actions à afficher / action.description
 		model.addAttribute("actions", actionServ.listForPartie(partie));
 		return "partie";
 	}

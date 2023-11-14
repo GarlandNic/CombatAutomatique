@@ -1,6 +1,20 @@
 
 TODO list
 
+personnage.html > handicap
+personnage.html > (Blessure) boutons pour enlever/ajouter des lignes
+personnage.html > lignes de blessures
+personnage.html > section combo
+utiliser les redirect:/ ??
+
+
+
+
+
+
+
+
+
 o objects de la base de donnée
 - o class repository
 - - o service
@@ -8,14 +22,14 @@ o objects de la base de donnée
 o partie.html
 	o GET pour affichage
 		o liste des actions à récupérer (ActionsDto.actionList : List<ActionDB>)
-X			o actionService
-X				o actionRepository
+			o actionService
+				o actionRepository
 		o liste des perso visibles à récupérer (PersosVisiblesDto.persoList : List<PersoVisible>)
-X			o persoService
-X				o persoRepository
-	o (Voir combo) -> GET personnage.html
-	o (Cacher/Révéler personnage) -> GET visibilite.html
-	o (Créer un vouveau personnage) -> GET personnage.html
+			o persoService
+				o persoRepository
+x	o (Voir combo) -> GET personnage.html
+x	o (Cacher/Révéler personnage) -> GET visibilite.html
+x	o (Créer un vouveau personnage) -> GET personnage.html
 o visibilite.html
 	o GET pour affichage
 		o liste des persos à récupérer (PersosDto.persoList : List<PersonnageDB>)

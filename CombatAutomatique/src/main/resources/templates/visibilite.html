@@ -8,12 +8,12 @@
 	
 	<h1> Liste des personnages de <span th:text="${partie}">partie</span> : </h1>
 	
-	<form action="#" th:action="@{/azurhyan/${partie}/visibilitePerso}" th:object="${persosVisibles}" method="post">
+	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/visibilitePerso'}" th:object="${persosVisibles}" method="post">
 
 		<table>
 			<thead>
 				<tr>
-					<th> Visible </th>
+					<th> Visible ? </th>
 					<th> Perso </th>
 				</tr>
 			</thead>
@@ -37,7 +37,7 @@
 		<button type="submit">Enregistrer les modifications</button> 
 	</form>	
 	
-	<form action="#" th:action="@{/azurhyan/${partie}}" method="get">
+	<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get">
 		<button type="submit">Retourner sans enregistrer</button> 
 	</form>	
 		

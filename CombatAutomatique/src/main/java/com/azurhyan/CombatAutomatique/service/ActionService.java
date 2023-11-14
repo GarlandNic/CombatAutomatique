@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.azurhyan.CombatAutomatique.model.ActionDB;
+import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 import com.azurhyan.CombatAutomatique.repository.ActionRepository;
 
 @Service
@@ -17,8 +18,7 @@ public class ActionService {
 	}
 
 	public Iterable<ActionDB> listForPartie(String partie) {
-		// TODO Auto-generated method stub
-		return null;
+		return actionRepo.findByActeurPartie(partie);
 	}
 
 }

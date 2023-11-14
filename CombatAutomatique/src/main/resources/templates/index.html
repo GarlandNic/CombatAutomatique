@@ -19,8 +19,21 @@ Et du coup le nombre est : <span th:text="${valeur}">valeur</span>
 
 <h3>Test add/remove rows</h3>
 <p>
+    ...
+    
+    Nombre de lignes : <span th:text="${#lists.size(seedStarter.rows)}"></span>
+    
+    ...
 
 <form action="#" th:action="@{/}" th:object="${seedStarter}" method="post">
+    ...
+    Nombre de lignes : <span th:text="${#lists.size(seedStarter.rows)}"></span>
+    ...
+    
+    ...
+    Id : <span th:text="${seedStarter.id}"></span> <input type="text" th:field="*{id}"/>
+    
+    bis : <input type="text" th:field="*{id}"/>
     ...
 
 <table>
@@ -54,7 +67,38 @@ Et du coup le nombre est : <span th:text="${valeur}">valeur</span>
 </form>
 
 </p>
+<!-- 
+<form action="#" th:action="@{/bloub}" th:object="${perso}" method="post">
 
+<table>
+  <thead>
+    <tr>
+      <th>Row</th>
+      <th>Variety</th>
+      <th>Seeds per cell</th>
+      <th>
+        <button type="submit" name="addRow">Add row</button>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="row,rowStat : *{rows}">
+      <td th:text="${rowStat.count}">1</td>
+      <td>
+        <input type="text" th:field="*{rows[__${rowStat.index}__].variety}"/>
+      </td>
+      <td>
+        <input type="text" th:field="*{rows[__${rowStat.index}__].seedsPerCell}" />
+      </td>
+      <td>
+        <button type="submit" name="removeRow" 
+                th:value="${rowStat.index}">Remove row</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
+</form>
+ -->
 </body>
 </html>
