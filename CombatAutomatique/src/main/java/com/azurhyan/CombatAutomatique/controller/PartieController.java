@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.azurhyan.CombatAutomatique.model.PersoPartie;
-import com.azurhyan.CombatAutomatique.model.PersosVisiblesDto;
+import com.azurhyan.CombatAutomatique.dto.PersoPartieDto;
+import com.azurhyan.CombatAutomatique.dto.PersosVisiblesDto;
 import com.azurhyan.CombatAutomatique.service.ActionService;
 import com.azurhyan.CombatAutomatique.service.PersonnageService;
 

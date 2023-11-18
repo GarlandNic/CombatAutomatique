@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.azurhyan.CombatAutomatique.dto.BlessureDto;
+import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
+import com.azurhyan.CombatAutomatique.dto.PersosVisiblesDto;
 import com.azurhyan.CombatAutomatique.indextesting.Row;
 import com.azurhyan.CombatAutomatique.indextesting.SeedStarter;
 import com.azurhyan.CombatAutomatique.model.BlessureDB;
 import com.azurhyan.CombatAutomatique.model.ComboDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
-import com.azurhyan.CombatAutomatique.model.PersosVisiblesDto;
 import com.azurhyan.CombatAutomatique.service.ActionService;
 import com.azurhyan.CombatAutomatique.service.PersonnageService;
 
@@ -37,32 +39,32 @@ public class PersonnageController {
 
 	@GetMapping("/azurhyan/{game}/{persoId}")
 	public String fichePersonnage(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId) {
-		return filledPage_Personnage(model, partie, persoServ.findById(persoId));
+		return filledPage_Personnage(model, partie, persoServ.findPersoCompletDto(persoId));
 	}
 	
 	@PostMapping("/azurhyan/{game}/{persoId}")
 	public String savePersonnage(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
-			@ModelAttribute("perso") PersonnageDB perso) {
-		PersonnageDB pp = persoServ.save(perso);
-		return filledPage_Personnage(model, partie, pp);
+			@ModelAttribute("perso") PersoCompletDto perso) {
+		PersonnageDB pp = persoServ.saveDto(perso);
+		return filledPage_Personnage(model, partie, new PersoCompletDto(pp));
 	}
 	
 	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"actu"})
 	public String actu(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
-			@ModelAttribute("perso") PersonnageDB perso) {
+			@ModelAttribute("perso") PersoCompletDto perso) {
 	    return filledPage_Personnage(model, partie, perso);
 	}
 
 	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"addRow"})
 	public String addRow(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
-			@ModelAttribute("perso") PersonnageDB perso) {
-	    perso.getBlessureList().add(new BlessureDB(perso, 0, 0));
+			@ModelAttribute("perso") PersoCompletDto perso) {
+	    perso.getBlessureList().add(new BlessureDto(0, 0));
 	    return filledPage_Personnage(model, partie, perso);
 	}
 
 	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"removeRow"})
 	public String removeRow(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
-			@ModelAttribute("perso") PersonnageDB perso, final HttpServletRequest req) {
+			@ModelAttribute("perso") PersoCompletDto perso, final HttpServletRequest req) {
 	    final Integer rowId = Integer.valueOf(req.getParameter("removeRow"));
 	    perso.getBlessureList().remove(rowId.intValue());
 	    return filledPage_Personnage(model, partie, perso);
@@ -82,14 +84,14 @@ public class PersonnageController {
 //	}
 
 	
-	private String filledPage_Personnage(Model model, String partie, PersonnageDB perso) {
+	private String filledPage_Personnage(Model model, String partie, PersoCompletDto perso) {
 		model.addAttribute("partie", partie);
 		if(perso==null) {
-			perso = new PersonnageDB(partie);
+			perso = new PersoCompletDto(partie);
 		}
 		model.addAttribute("perso", perso);
-		model.addAttribute("combohandicap", persoServ.comboHandicap(perso));
-		model.addAttribute("combototal", persoServ.comboTotal(perso));
+		model.addAttribute("combohandicap", perso.getComboHandicap());
+		model.addAttribute("combototal", perso.getComboTotal());
 		return "personnage";
 	}
 	

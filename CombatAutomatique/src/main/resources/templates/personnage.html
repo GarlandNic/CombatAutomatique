@@ -267,10 +267,10 @@
 	<h3>Blessures</h3>
 	<p>
 		CON de combat : <input type="number" th:field="*{CON}"/>
-		Total niveaux : <input type="number" th:value="*{totalDemiNiveauxBlessures()/2.0}" disabled/>
-		Total points de chocs : <input type="number" th:value="*{totalPtsDeChocs()}" disabled/>
+		Total niveaux : <input type="number" th:value="*{totalBlessures()}" disabled/>
+		Total points de chocs : <input type="number" th:value="*{totalPtsDeChoc()}" disabled/>
 	</p> 
-	<!-- 
+	
 	<table>
 		<thead>
 			<tr>
@@ -285,15 +285,14 @@
 			<tr th:each="row,rowStat : *{blessureList}">
 				<th> <input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/> </th>
 				<th> <input type="number" th:field="*{blessureList[__${rowStat.index}__].ptDeChoc}"/> </th>
-				<th> <input type="text" th:value="*{blessureList[__${rowStat.index}__].getGravite(CON)}" disabled/> 
-					 <input type="hidden" th:field="*{blessureList[__${rowStat.index}__].perso}"/> </th>
+				<th> <input type="text" th:value="${perso.getGravite(row)}" disabled/> </th>
 				<th> <input type="text" th:field="*{blessureList[__${rowStat.index}__].partieTouchee}"/> </th>
 				<th> <button type="submit" name="removeRow" 
                 th:value="${rowStat.index}">Supprimer la ligne</button> </th>
 			</tr>
 		</tbody>
 	</table>
-	 -->
+	
 	<button type="submit" name="actu">Actualiser la fiche</button>
 	<h3>Handicaps</h3>
 	
@@ -329,7 +328,7 @@
 				<th> Total </th>
 				<th> - </th>
 				<th> - </th>
-				<th> <input type="number" th:value="${totFatigue + totMobile + totSens}" disabled/> </th>
+				<th> <input type="number" th:value="${(totFatigue + totMobile + totSens)/2.0}" disabled/> </th>
 			</tr>
 		</tbody>
 	</table>

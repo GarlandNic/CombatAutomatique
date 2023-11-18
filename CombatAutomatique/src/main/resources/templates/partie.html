@@ -42,7 +42,7 @@
 				<td><span th:text="${perso.init}"> init </span></td>
 				<td><span th:text="${perso.nom}"> nom </span></td>
 				<td>
-					<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${perso.id}+'/combo'}" method="get">
+					<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${perso.id}}" method="get">
 						<button type="submit">Voir combo</button>
 					</form>
 				</td>

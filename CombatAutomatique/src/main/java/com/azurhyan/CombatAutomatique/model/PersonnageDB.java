@@ -21,6 +21,9 @@ import lombok.Data;
 @Table(name = "personnages")
 public class PersonnageDB {
 	
+	public PersonnageDB() {
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="PERSOID")
@@ -89,7 +92,7 @@ public class PersonnageDB {
 		return this.blessureList.stream().mapToInt(bl -> bl.getDemiNiveau()).sum();
 	}
 
-	public int totalPtsDeChocs() {
+	public int totalPtsDeChoc() {
 		return this.blessureList.stream().mapToInt(bl -> bl.getPtDeChoc()).sum();
 	}
 	

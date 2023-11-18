@@ -1,7 +1,5 @@
 package com.azurhyan.CombatAutomatique.model;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,16 +12,19 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-enum Dgts {
-	NOR,
-	CTD,
-	PRF
-}
-
 @Entity
 @Data
 @Table(name = "combos")
 public class ComboDB {
+	
+	public static enum Dgts {
+		NOR,
+		CTD,
+		PRF
+	}
+
+	public ComboDB() {
+	}
 	
 	public ComboDB(String nom, PersonnageDB perso, boolean mod) {
 		this.nom = nom;
@@ -110,7 +111,6 @@ public class ComboDB {
 		this.endBouclier = this.endBouclier - h;
 		this.endPerso = this.endPerso - h;
 		this.IBdef = this.IBdef - h;
-
 	}
 
 }

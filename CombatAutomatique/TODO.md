@@ -1,7 +1,6 @@
 
 TODO list
 
-personnage.html > handicap
 personnage.html > (Blessure) boutons pour enlever/ajouter des lignes
 personnage.html > lignes de blessures
 personnage.html > section combo

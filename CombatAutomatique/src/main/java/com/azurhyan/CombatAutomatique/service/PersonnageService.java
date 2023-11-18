@@ -7,10 +7,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
+import com.azurhyan.CombatAutomatique.dto.PersoPartieDto;
+import com.azurhyan.CombatAutomatique.dto.PersosVisiblesDto;
 import com.azurhyan.CombatAutomatique.model.ComboDB;
-import com.azurhyan.CombatAutomatique.model.PersoPartie;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
-import com.azurhyan.CombatAutomatique.model.PersosVisiblesDto;
 import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
 
 @Service
@@ -19,10 +20,10 @@ public class PersonnageService {
 	@Autowired
 	PersonnageRepository persoRepo;
 
-	public Iterable<PersoPartie> listForPartie(String partieName) {
+	public Iterable<PersoPartieDto> listForPartie(String partieName) {
 		Iterable <PersonnageDB> persoListBD = persoRepo.findByPartieAndVisible(partieName, true);
-		List<PersoPartie> persosList = new ArrayList<PersoPartie>();
-		persoListBD.forEach(perso -> persosList.add(new PersoPartie(perso)));
+		List<PersoPartieDto> persosList = new ArrayList<PersoPartieDto>();
+		persoListBD.forEach(perso -> persosList.add(new PersoPartieDto(perso)));
 		return persosList;
 	}
 
@@ -77,6 +78,18 @@ public class PersonnageService {
 
 	public PersonnageDB save(PersonnageDB perso) {
 		return persoRepo.save(perso);
+	}
+	
+	public PersoCompletDto findPersoCompletDto(int persoId) {
+		Optional<PersonnageDB> perso = persoRepo.findById(persoId);
+		if(perso.isEmpty()) return null;
+		
+		return (new PersoCompletDto(perso.get()));
+	}
+
+	public PersonnageDB saveDto(PersoCompletDto perso) {
+		PersonnageDB pp = perso.persoToDB();
+		return persoRepo.save(pp);
 	}
 
 }
