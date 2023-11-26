@@ -7,17 +7,25 @@ import lombok.Data;
 @Data
 public class PersoPartieDto {
 	
+	public PersoPartieDto() {
+	}
+	
 	public PersoPartieDto(PersonnageDB perso) {
 		this.id = perso.getPersoId();
 		this.nom = perso.getNom();
-		this.init = 0;
+		this.init = -(perso.getHfatigue() > perso.getCCinfatigable() ? (perso.getHfatigue() - perso.getCCinfatigable())/2 : 0) 
+				-(perso.getHmobilite() > perso.getCCincoercible() ? (perso.getHmobilite() - perso.getCCincoercible())/2 : 0)
+				-(perso.getHsens() > perso.getCCtoujoursPret() ? (perso.getHsens() - perso.getCCtoujoursPret())/2 : 0);
 		perso.getComboList().forEach(combo -> this.init = this.init + combo.getInit());
+		this.visible = perso.isVisible();
 	}
 
-	public int id;
+	int id;
 	
-	public String nom;
+	String nom;
 	
-	public int init;
+	int init;
+	
+	boolean visible;
 
 }

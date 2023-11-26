@@ -41,11 +41,13 @@ public class PartieController {
 		return "visibilite";
 	}
 	
+	// TO CHECK
 	@PostMapping("/azurhyan/{game}/visibilitePerso")
 	public String changeVisibilitePersos(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles) {
 		persoServ.setAllVisibilite(persosVisibles);
 		return filledPage_Partie(model, partie);
 	}
+	
 	
 	
 	private String filledPage_Partie(Model model, String partie) {

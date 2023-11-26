@@ -19,8 +19,15 @@
 			</thead>
 			<tbody>
 			    <tr th:each="perso, itemStat : *{persoList}">
-                    <td><input type="checkbox" th:checked="*{persoList[__${itemStat.index}__].visibilite}" /></td>
-                    <td><span th:text="*{persoList[__${itemStat.index}__].nom}"> nom </span></td>
+                    <td>
+                    	<input type="hidden" th:field="*{persoList[__${itemStat.index}__].id}"/>
+                    	<input type="hidden" th:field="*{persoList[__${itemStat.index}__].nom}"/>
+                    	<input type="hidden" th:field="*{persoList[__${itemStat.index}__].init}"/>
+                    	<input type="checkbox" th:field="*{persoList[__${itemStat.index}__].visible}" />
+                    </td>
+                    <td>
+                    	<span th:text="*{persoList[__${itemStat.index}__].nom}"> nom </span>
+                    </td>
                 </tr>
 			</tbody>
 		</table>

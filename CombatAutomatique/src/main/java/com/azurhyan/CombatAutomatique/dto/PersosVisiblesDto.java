@@ -13,6 +13,6 @@ import lombok.Data;
 @Data
 public class PersosVisiblesDto {
 	
-	List<PersonnageDB> persoList = new ArrayList<>();
+	List<PersoPartieDto> persoList = new ArrayList<>();
 
 }

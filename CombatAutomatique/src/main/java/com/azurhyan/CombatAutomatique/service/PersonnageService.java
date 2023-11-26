@@ -28,14 +28,23 @@ public class PersonnageService {
 	}
 
 	public PersosVisiblesDto withVisibilite(String partie) {
-		PersosVisiblesDto persosVisibles = new PersosVisiblesDto();
 		Iterable<PersonnageDB> persoListBD = persoRepo.findByPartie(partie);
-		persoListBD.forEach(perso -> persosVisibles.getPersoList().add(perso));
+		PersosVisiblesDto persosVisibles = new PersosVisiblesDto();
+		persoListBD.forEach(perso -> persosVisibles.getPersoList().add(new PersoPartieDto(perso)));
 		return persosVisibles;
 	}
 
 	public void setAllVisibilite(PersosVisiblesDto persosVisibles) {
-		persoRepo.saveAll(persosVisibles.getPersoList());
+		persosVisibles.getPersoList().forEach(persoPartie -> {
+			Optional<PersonnageDB> persoDB = persoRepo.findById(persoPartie.getId());
+			if(persoDB.isPresent()) {
+				PersonnageDB perso = persoDB.get();
+				if(perso.isVisible() != persoPartie.isVisible()) {
+					perso.setVisible(persoPartie.isVisible());
+					persoRepo.save(perso);
+				}
+			}
+		});
 	}
 	
 	public ComboDB comboTotal(PersonnageDB perso) {

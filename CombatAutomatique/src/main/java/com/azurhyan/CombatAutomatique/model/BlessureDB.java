@@ -45,6 +45,7 @@ public class BlessureDB {
 		return this.getGravite(CON);
 	}
 	public String getGravite(int CON) {
+		if(this.partieTouchee.equals("Bouclier")) return "";
 		int demiHandicap = Math.max(0, Math.round(this.getHandicap(CON)*2));
 		switch(demiHandicap) {
 			case 0: return "égratignure";
@@ -63,10 +64,11 @@ public class BlessureDB {
 		return this.getHandicap(CON);
 	}
 	public float getHandicap(int CON) {
+		if(this.partieTouchee.equals("Bouclier")) return 0;
 		if(this.getNiveau()+0.5 > 0.7*CON) {
 			return 10;
 		}
-		if(this.getNiveau()+0.5 > 0.5*CON) {
+		if(this.getNiveau()+0.5 > 0.55*CON) {
 			return (float) 4.5;
 		}
 		if(this.getNiveau()+0.5 > 0.4*CON) {
@@ -90,12 +92,12 @@ public class BlessureDB {
 	
 	public void setNiveau(float niv) {
 		this.demiNiveau = Math.max(0, Math.round(niv*2));
-		this.perso.setHfatigue(this.perso.getHfatigue() + (int) (this.getHandicap()*2));
+//		this.perso.setHfatigue(this.perso.getHfatigue() + (int) (this.getHandicap()*2));
 	}
 	
 	public void setDemiNiveau(int demniv) {
 		this.demiNiveau = demniv;
-		this.perso.setHfatigue(this.perso.getHfatigue() + (int) (this.getHandicap()*2));
+//		this.perso.setHfatigue(this.perso.getHfatigue() + (int) (this.getHandicap()*2));
 	}
 	
 	public BlessureDB(PersonnageDB perso, float niv, int pdc) {

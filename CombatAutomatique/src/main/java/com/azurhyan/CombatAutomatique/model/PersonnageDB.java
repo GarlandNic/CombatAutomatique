@@ -53,11 +53,14 @@ public class PersonnageDB {
 			   mappedBy = "perso")
 	List<BlessureDB> blessureList = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "acteur")
-	List<ActionDB> actionList = new ArrayList<>();
+//	@OneToMany(mappedBy = "persoId")
+//	List<ActionDB> actionList = new ArrayList<>();
 	
 	@Column(name="CON")
 	int CON=10;
+	
+	@Column(name="PDCCOMBAT")
+	int pdcCombat=3;
 	
 	@Column(name="HFATIGUE")
 	int Hfatigue=0; // nb de demi-Handicap

@@ -23,12 +23,15 @@ public class ActionDB {
 	int actionId;
 	
 //	 FOREIGN KEY (ACTEURID) REFERENCES personnages (ID) ON DELETE CASCADE ON UPDATE CASCADE
-//	@Column(name="ACTEURID")
-//	int persoId;
+	@Column(name="ACTEURID")
+	int persoId;
 	
-	@ManyToOne
-	@JoinColumn(name="ACTEURID")
-	PersonnageDB acteur;
+	@Column(name="PARTIE")
+	String partie;
+	
+//	@ManyToOne
+//	@JoinColumn(name="ACTEURID")
+//	PersonnageDB acteur;
 	
 	@Column(name="ACTEURNOM")
 	String acteurNom;
@@ -39,8 +42,12 @@ public class ActionDB {
 	@Column(name="DESCRIPTION")
 	String description;
 	
-	public String getPartie() {
-		return acteur.getPartie();
+//	public String getPartie() {
+//		return acteur.getPartie();
+//	}
+	
+	public void addDescription(String txt) {
+		this.description += txt;
 	}
 
 }

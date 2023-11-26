@@ -19,7 +19,7 @@ public class ActionDto {
 	
 	public ActionDB actionToDB(PersonnageDB perso) {
 		ActionDB act = new ActionDB();
-		act.setActeur(perso);
+		act.setActionId(perso.getPersoId());
 		act.setActeurNom(this.acteurNom);
 		act.setActionTime(this.actionTime);
 		act.setDescription(this.description);

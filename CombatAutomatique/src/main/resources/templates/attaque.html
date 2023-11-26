@@ -6,35 +6,130 @@
 </head>
 <body>
 	
-	<h1> Liste des personnages de <span th:text="${partie}">partie</span> : </h1>
-	
-	rappel du combo total
-	nombre d'ennemis
-	classer les ennemis 
-	??
-	
-	
-	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/visibilitePerso'}" th:object="${persosVisibles}" method="post">
-
+		<aside>
 		<table>
-			<thead>
-				<tr>
-					<th> Visible </th>
-					<th> Perso </th>
-				</tr>
-			</thead>
 			<tbody>
-			    <tr th:each="perso, itemStat : *{persoList}">
-                    <td><input type="radio" th:checked="*{persoList[__${itemStat.index}__].visibilite}" /></td>
-                    <td><span th:text="*{persoList[__${itemStat.index}__].nom}"> nom </span></td>
-                </tr>
+				<tr>
+					<td>
+						<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get">
+							<button type="submit">Retourner à la page principale</button> 
+						</form>
+					</td>
+					<td>
+						<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${attaque.attaquantId}}" method="get">
+							<button type="submit">Retourner à la fiche de perso</button> 
+						</form>
+					</td>
+				</tr>
 			</tbody>
 		</table>
+	</aside>
 	
-		<button type="submit">Enregistrer les modifications</button> 
+	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${attaque.attaquantId}+'/attaque'}" th:object="${attaque}" method="post">
+		<input type="hidden" th:field="*{attaquantId}"/>
+		<input type="hidden" th:field="*{attaquantNom}"/>
+		<input type="hidden" th:field="*{attaquantPdc}"/>
+		<input type="hidden" th:field="*{partie}"/>
+	
+	<h1> <span th:text="*{attaquantNom}">acteur</span> lance une attaque : </h1>
+	
+	<h3>Combo :</h3>
+	
+	<table>
+		<thead>
+			<tr>
+				<th> </th>
+				<th> Init </th>
+				<th> Toucher </th>
+				<th> Parade<br/>ennemie </th>
+				<th> Force </th>
+				<th> IB att </th>
+				<th> </th>
+				<th> Défense </th>
+				<th> Esquive </th>
+				<th> Parade </th>
+				<th> Endurance<br/>du bouclier </th>
+				<th> Endurance<br/>du perso </th>
+				<th> IB def </th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th> 
+					Combo total
+					<br/> 	<input type="text" th:value="*{attaquantCombo.CaC ? 'C-à-c' : 'Dist'}" style="width: 3em;" disabled/> /
+							<input type="text" th:value="*{attaquantCombo.typeDgts.toString()}" style="width: 3em;" disabled/>
+							<input type="hidden" th:field="*{attaquantCombo.CaC}" style="width: 3em;"/> /
+							<input type="hidden" th:field="*{attaquantCombo.typeDgts}" style="width: 3em;"/>
+				</th>
+				<td> <input type="number" th:field="*{attaquantCombo.init}" readonly/> </td>
+				<td> <input type="number" th:field="*{attaquantCombo.toucher}" readonly/> </td>
+				<td> <input type="number" th:field="*{attaquantCombo.prdEnnemie}" readonly/> </td>
+				<td> <input type="number" th:field="*{attaquantCombo.force}" readonly/> </td>
+				<td> <input type="number" th:field="*{attaquantCombo.IBatt}" readonly/> </td>
+				<td> </td>
+				<td> <input type="number" th:field="*{attaquantCombo.defense}" readonly/> </td>
+				<td> <input type="number" th:field="*{attaquantCombo.esquive}" readonly/> </td>
+				<td> <input type="number" th:field="*{attaquantCombo.parade}" readonly/> </td>
+				<td> <input type="number" th:field="*{attaquantCombo.endBouclier}" readonly/> </td>
+				<td> <input type="number" th:field="*{attaquantCombo.endPerso}" readonly/> </td>
+				<td> <input type="number" th:field="*{attaquantCombo.IBdef}" readonly/> </td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h3>Cibles de l'attaque : </h3>
+	
+	<table>
+		<thead>
+			<tr>
+				<td></td>
+				<td>Cibles potentielles : </td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<table>
+						<tr th:each="cible, itemStat : *{cibleList}">
+							<td>
+								<span th:text="*{cibleList[__${itemStat.index}__].cibleNom}"> nom </span>
+								<input type="hidden" th:field="*{cibleList[__${itemStat.index}__].cibleId}"/>
+								<input type="hidden" th:field="*{cibleList[__${itemStat.index}__].cibleNom}"/>							
+							</td>
+		                    <td> <button type="submit" name="removeTarget" th:value="${itemStat.index}"> &#x1F872; </button> </td>
+						</tr>					
+					</table>
+				</td>
+				<td>
+					<table>
+						<tr th:each="row, rowStat : *{pasCibleList}">
+		                    <td> <button type="submit" name="addTarget" th:value="${rowStat.index}"> &#x1F870; </button> </td>
+							<td>
+								<span th:text="*{pasCibleList[__${rowStat.index}__].cibleNom}"> nom </span>
+								<input type="hidden" th:field="*{pasCibleList[__${rowStat.index}__].cibleId}"/>
+								<input type="hidden" th:field="*{pasCibleList[__${rowStat.index}__].cibleNom}"/>							
+							</td>
+            		    </tr>						
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<p>
+		Attaque multiple (par défaut, on attaque tous les ennemis de la même manière) : 
+		<br/>
+		<label>
+	  		<input type="checkbox" th:field="*{lePlusPossible}" />
+	  		Le plus possible (l'ordre ci-dessus est pris en compte)
+  		</label>
+	</p>
+						
+		<button type="submit">Lancer l'attaque</button> 
 	</form>	
 	
-	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/visibilitePerso'}" method="get">
+	<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get">
 		<button type="submit">Retour</button> 
 	</form>	
 		

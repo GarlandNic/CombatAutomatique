@@ -34,6 +34,7 @@ public class PersoCompletDto {
 		this.partie = perso.getPartie();
 		this.visible = perso.isVisible();
 		this.CON=perso.getCON();
+		this.pdcCombat=perso.getPdcCombat();
 		this.Hfatigue=perso.getHfatigue2();
 		this.CCinfatigable=perso.getCCinfatigable2();
 		this.Hmobilite=perso.getHmobilite2();
@@ -50,10 +51,10 @@ public class PersoCompletDto {
 		for(BlessureDB bl : perso.getBlessureList()) {
 			this.blessureList.add(new BlessureDto(bl));
 		}
-		this.actionList = new ArrayList<>();
-		for(ActionDB action : perso.getActionList()) {
-			this.actionList.add(new ActionDto(action));
-		}
+//		this.actionList = new ArrayList<>();
+//		for(ActionDB action : perso.getActionList()) {
+//			this.actionList.add(new ActionDto(action));
+//		}
 	}
 	
 	public PersonnageDB persoToDB() {
@@ -64,6 +65,7 @@ public class PersoCompletDto {
 		perso.setPartie(partie);
 		perso.setVisible(visible);
 		perso.setCON(CON);
+		perso.setPdcCombat(pdcCombat);
 		perso.setHfatigue2(this.Hfatigue);
 		perso.setCCinfatigable2(this.CCinfatigable);
 		perso.setHmobilite2(this.Hmobilite);
@@ -72,9 +74,9 @@ public class PersoCompletDto {
 		perso.setCCtoujoursPret2(this.CCtoujoursPret);
 		perso.setCCcombatPlusieurs(CCcombatPlusieurs);
 		
-		List<ActionDB> actList = new ArrayList<>();
-		this.actionList.forEach(act -> actList.add(act.actionToDB(perso)));
-		perso.setActionList(actList);
+//		List<ActionDB> actList = new ArrayList<>();
+//		this.actionList.forEach(act -> actList.add(act.actionToDB(perso)));
+//		perso.setActionList(actList);
 		
 		List<BlessureDB> blList = new ArrayList<>();
 		this.blessureList.forEach(bl -> blList.add(bl.blessureToDB(perso)));
@@ -95,10 +97,10 @@ public class PersoCompletDto {
 
 	List<ComboDto> comboList = new ArrayList<>();
 	List<BlessureDto> blessureList = new ArrayList<>();
-	List<ActionDto> actionList = new ArrayList<>();
+//	List<ActionDto> actionList = new ArrayList<>();
 	
 	int CON=10;
-	
+	int pdcCombat=3;
 	float Hfatigue=0;
 	float CCinfatigable=0;
 	float Hmobilite=0;
@@ -110,7 +112,8 @@ public class PersoCompletDto {
 	public float totalBlessures() {
 		float res = (float) 0.0;
 		for(BlessureDto bl : blessureList) {
-			res += bl.getNiveau();
+			if( !bl.getPartieTouchee().equals("Bouclier") )
+				res += bl.getNiveau();
 		}
 		return res;
 	}
@@ -124,6 +127,7 @@ public class PersoCompletDto {
 	}
 	
 	public float getHandicap(BlessureDto bl) {
+		if(bl.getPartieTouchee().equals("Bouclier")) return 0;
 		float niv = bl.getNiveau();
 		int CON = this.CON;
 		if(niv+0.5 > 0.7*CON) {
@@ -148,6 +152,7 @@ public class PersoCompletDto {
 	}
 
 	public String getGravite(BlessureDto bl) {
+		if(bl.getPartieTouchee().equals("Bouclier")) return "";
 		int demiHandicap = Math.max(0, Math.round(this.getHandicap(bl)*2));
 		switch(demiHandicap) {
 			case 0: return "égratignure";
@@ -161,10 +166,10 @@ public class PersoCompletDto {
 		return "";
 	}
 
-	public void addBlessure(BlessureDto bl) {
-		this.blessureList.add(bl);
-		this.Hfatigue += this.getHandicap(bl);
-	}
+//	public void addBlessure(BlessureDto bl) {
+//		this.blessureList.add(bl);
+//		this.Hfatigue += this.getHandicap(bl);
+//	}
 	
 	public ComboDto getComboHandicap() {
 		float handicap = Math.max(0, this.getHfatigue() - this.getCCinfatigable());

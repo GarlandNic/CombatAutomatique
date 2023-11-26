@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Azurhyan : <span th:text="${partie}">partie</span></title>
+	<meta charset="UTF-8">
+	<title>Azurhyan : <span th:text="${partie}">partie</span></title>
+	<link th:href="@{/style.css}" rel="stylesheet">
 </head>
 <body>
 	
 	<h1> Voici le combo de <span th:text="${perso.nom}">perso</span> </h1>
 	
-	<aside>
+	<aside style="float: right;">
 		<table>
 			<tbody>
 				<tr>
@@ -28,7 +29,6 @@
 	</aside>
 	 
 	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${perso.persoId}}" th:object="${perso}" method="post">
-	<input type="hidden" th:field="*{partie}"/>
 	
 	<table>
 		<tbody>
@@ -40,7 +40,7 @@
 					Joueur : <input type="text" th:field="*{joueur}"/> 
 				</td>
 				<td>
-					Partie : <input type="text" th:field="*{partie}" value="${partie}" disabled/> 
+					Partie : <input type="text" th:field="*{partie}" readonly/> 
 				</td>
 			</tr>
 		</tbody>
@@ -48,218 +48,103 @@
 		
 	<h3>Combo</h3>
 	
+	<aside style="float: right;">
+		<label>
+			PdC combat : 
+			<input type="number" th:field="*{pdcCombat}" min="0"/>
+		</label>
+		<label>
+			CC combat à plusieurs : 
+			<input type="number" th:field="*{CCcombatPlusieurs}" min="0"/>
+		</label>
+	</aside>
+	
 	<table>
 		<thead>
 			<tr>
 				<th> </th>
 				<th> Init </th>
-				<th> Portée </th>
-				type de dégâts !!!!!!!!!!!
 				<th> Toucher </th>
-				<th> Parade ennemie </th>
+				<th> Parade<br/>ennemie </th>
 				<th> Force </th>
 				<th> IB att </th>
 				<th> </th>
 				<th> Défense </th>
 				<th> Esquive </th>
 				<th> Parade </th>
-				<th> Endurance du bouclier </th>
-				<th> Endurance du perso </th>
+				<th> Endurance<br/>du bouclier </th>
+				<th> Endurance<br/>du perso </th>
 				<th> IB def </th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<th> Total </th>
-				<th> Init </th>
-				<th> Portée </th>
-				<th> Toucher </th>
-				<th> Parade ennemie </th>
-				<th> Force </th>
-				<th> IB att </th>
-				<th> </th>
-				<th> Défense </th>
-				<th> Esquive </th>
-				<th> Parade </th>
-				<th> Endurance du bouclier </th>
-				<th> Endurance du perso </th>
-				<th> IB def </th>
+			<tr th:with="comboTmp = ${combototal}">
+				<th> 
+					Combo total
+					<br/> 	<input type="text" th:value="${comboTmp.CaC ? 'C-à-c' : 'Dist'}" style="width: 3em;" disabled/> /
+							<input type="text" th:value="${comboTmp.typeDgts.toString()}" style="width: 3em;" disabled/>
+				</th>
+				<td> <input type="number" th:value="${comboTmp.init}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.toucher}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.prdEnnemie}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.force}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.IBatt}" disabled/> </td>
+				<td> </td>
+				<td> <input type="number" th:value="${comboTmp.defense}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.esquive}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.parade}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.endBouclier}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.endPerso}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.IBdef}" disabled/> </td>
 			</tr>
-			<tr>
-				<th> Carac et PdC </th>
-				<th>  </th>
-				<th> AGI + PdC + réflexe </th>
-				<th> AGI + PdC + toucher ou PER + PdC + toucher </th>
-				<th> +0 </th>
-				<th> CON </th>
-				<th> Vigueur + CON - 10 </th>
-				<th> </th>
-				<th> AGI + PdC + défense </th>
-				<th> AGI + PdC + reflexe </th>
-				<th> défense </th>
-				<th> +0 </th>
-				<th> CON </th>
-				<th> Vigueur + CON - 10 </th>
+			<tr th:with="comboTmp = ${combohandicap}">
+				<th> 
+					Handicaps
+				</th>
+				<td> <input type="number" th:value="${comboTmp.init}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.toucher}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.prdEnnemie}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.force}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.IBatt}" disabled/> </td>
+				<td> </td>
+				<td> <input type="number" th:value="${comboTmp.defense}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.esquive}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.parade}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.endBouclier}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.endPerso}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.IBdef}" disabled/> </td>
 			</tr>
-			<tr>
-				<th> Equipement (switch) </th>
-				<th> Init </th>
-				<th> CàC ou Dist </th>
-				<th> Toucher </th>
-				<th> Parade ennemie </th>
-				<th> Force </th>
-				<th> IB att </th>
-				<th> </th>
-				<th> Défense </th>
-				<th> Esquive </th>
-				<th> Parade </th>
-				<th> Endurance du bouclier </th>
-				<th> Endurance du perso </th>
-				<th> IB def </th>
-			</tr>
-			<tr>
-				<th> Handicaps (nombre) </th>
-				<th> -X </th>
-				<th>  </th>
-				<th> -X </th>
-				<th> +0 </th>
-				<th> -X </th>
-				<th> -X </th>
-				<th> </th>
-				<th> -X </th>
-				<th> -X </th>
-				<th> +0 </th>
-				<th> -X </th>
-				<th> -X </th>
-				<th> -X </th>
-			</tr>
-			<tr>
-				<th> Bonus magiques </th>
-				<th> Init </th>
-				<th>  </th>
-				<th> Toucher </th>
-				<th> Parade ennemie </th>
-				<th> Force </th>
-				<th> IB att </th>
-				<th> </th>
-				<th> Défense </th>
-				<th> Esquive </th>
-				<th> Parade </th>
-				<th> Endurance du bouclier </th>
-				<th> Endurance du perso </th>
-				<th> IB def </th>
-			</tr>
-			<tr>
-				<th> ATR (switch) </th>
-				<th> Init </th>
-				<th>  </th>
-				<th> Toucher </th>
-				<th> Parade ennemie </th>
-				<th> Force </th>
-				<th> IB att </th>
-				<th> </th>
-				<th> Défense </th>
-				<th> Esquive </th>
-				<th> Parade </th>
-				<th> Endurance du bouclier </th>
-				<th> Endurance du perso </th>
-				<th> IB def </th>
-			</tr>
-			<tr>
-				<th> Tactique alonge (taille de l'arme - liste) </th>
-				<th> +0 </th>
-				<th>  </th>
-				<th> -1/-4 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> </th>
-				<th> +1/+4 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-			</tr>
-			<tr>
-				<th> Tactique balayage (switch nb 1-4) </th>
-				<th> +0 </th>
-				<th>  </th>
-				<th> +2/+8 </th>
-				<th> +1/+4 </th>
-				<th> -1/-4 </th>
-				<th> +0 </th>
-				<th> </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-			</tr>
-			<tr>
-				<th> Tactique bousculade </th>
-				<th> Init </th>
-				<th>  </th>
-				<th> Toucher </th>
-				<th> Parade ennemie </th>
-				<th> Force </th>
-				<th> IB att </th>
-				<th> </th>
-				<th> Défense </th>
-				<th> Esquive </th>
-				<th> Parade </th>
-				<th> Endurance du bouclier </th>
-				<th> Endurance du perso </th>
-				<th> IB def </th>
-			</tr>
-			<tr>
-				<th> Tactique bourrinage </th>
-				<th> +0 </th>
-				<th>  </th>
-				<th> -1 </th>
-				<th> +1 </th>
-				<th> +1 </th>
-				<th> +0 </th>
-				<th> </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-			</tr>
-			<tr>
-				<th> Tactique coup ciblé (nb) </th>
-				<th> +0 </th>
-				<th>  </th>
-				<th> -1*nb </th>
-				<th> +0 </th>
-				<th> +1*nb </th>
-				<th> +0 </th>
-				<th> </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-				<th> +0 </th>
-			</tr>
-			<tr>
-				<th> Autre (écriture libre) </th>
-				<th> Init </th>
-				<th>  </th>
-				<th> Toucher </th>
-				<th> Parade ennemie </th>
-				<th> Force </th>
-				<th> IB att </th>
-				<th> </th>
-				<th> Défense </th>
-				<th> Esquive </th>
-				<th> Parade </th>
-				<th> Endurance du bouclier </th>
-				<th> Endurance du perso </th>
-				<th> IB def </th>
+			<tr th:each="row,rowStat : *{comboList}">
+				<th> 
+					<input type="text" th:field="*{comboList[__${rowStat.index}__].nom}"/> 
+					<div th:if="*{comboList[__${rowStat.index}__].nom == 'Base'}">
+						<select th:field="*{comboList[__${rowStat.index}__].CaC}">
+							<option value="true" text="C-à-c">C-à-c</option>
+							<option value="false" text="Dist">Dist</option>
+						</select>
+						<select th:field="*{comboList[__${rowStat.index}__].typeDgts}">
+							<option value="NOR" text="Nor">Nor</option>
+							<option value="CTD" text="Ctd">Ctd</option>
+							<option value="PRF" text="Prf">Perf</option>
+						</select>
+					</div>					
+					<div th:unless="*{comboList[__${rowStat.index}__].nom == 'Base'}">
+						<input type="hidden" th:field="*{comboList[__${rowStat.index}__].CaC}" value="true"/>
+						<input type="hidden" th:field="*{comboList[__${rowStat.index}__].typeDgts}" value="NOR"/>
+					</div>
+				</th>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].init}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].toucher}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].prdEnnemie}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].force}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].IBatt}"/> </td>
+				<td> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].defense}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].esquive}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].parade}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].endBouclier}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].endPerso}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].IBdef}"/> </td>
 			</tr>
 		</tbody>
 	</table>
@@ -283,12 +168,11 @@
 		</thead>
 		<tbody>
 			<tr th:each="row,rowStat : *{blessureList}">
-				<th> <input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:field="*{blessureList[__${rowStat.index}__].ptDeChoc}"/> </th>
-				<th> <input type="text" th:value="${perso.getGravite(row)}" disabled/> </th>
-				<th> <input type="text" th:field="*{blessureList[__${rowStat.index}__].partieTouchee}"/> </th>
-				<th> <button type="submit" name="removeRow" 
-                th:value="${rowStat.index}">Supprimer la ligne</button> </th>
+				<td> <input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/> </td>
+				<td> <input type="number" th:field="*{blessureList[__${rowStat.index}__].ptDeChoc}"/> </td>
+				<td> <input type="text" th:value="${perso.getGravite(row)}" disabled/> </td>
+				<td> <input type="text" th:field="*{blessureList[__${rowStat.index}__].partieTouchee}"/> </td>
+				<td> <button type="submit" name="removeRow" th:value="${rowStat.index}">Supprimer la ligne</button> </td>
 			</tr>
 		</tbody>
 	</table>
@@ -308,27 +192,27 @@
 		<tbody th:with="totFatigue= (*{Hfatigue} > *{CCinfatigable} ? *{Hfatigue} - *{CCinfatigable} : 0) , totMobile= (*{Hmobilite} > *{CCincoercible} ? *{Hmobilite} - *{CCincoercible} : 0) , totSens= (*{Hsens} > *{CCtoujoursPret} ? *{Hsens} - *{CCtoujoursPret} : 0)">
 			<tr>
 				<th> Blessure ou fatigue </th>
-				<th> <input type="number" th:field="*{Hfatigue2}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:field="*{CCinfatigable2}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:value="${totFatigue/2.0}" disabled/> </th>
+				<th> <input type="number" th:field="*{Hfatigue}" min="0" step="0.5"/> </th>
+				<th> <input type="number" th:field="*{CCinfatigable}" min="0" step="0.5"/> </th>
+				<th> <input type="number" th:value="${totFatigue}" disabled/> </th>
 			</tr>
 			<tr>
 				<th> Mobilité ou entraves </th>
-				<th> <input type="number" th:field="*{Hmobilite2}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:field="*{CCincoercible2}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:value="${totMobile/2.0}" disabled/> </th>
+				<th> <input type="number" th:field="*{Hmobilite}" min="0" step="0.5"/> </th>
+				<th> <input type="number" th:field="*{CCincoercible}" min="0" step="0.5"/> </th>
+				<th> <input type="number" th:value="${totMobile}" disabled/> </th>
 			</tr>
 			<tr>
 				<th> Sens ou surprise </th>
-				<th> <input type="number" th:field="*{Hsens2}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:field="*{CCtoujoursPret2}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:value="${totSens/2.0}" disabled/> </th>
+				<th> <input type="number" th:field="*{Hsens}" min="0" step="0.5"/> </th>
+				<th> <input type="number" th:field="*{CCtoujoursPret}" min="0" step="0.5"/> </th>
+				<th> <input type="number" th:value="${totSens}" disabled/> </th>
 			</tr>
 			<tr>
 				<th> Total </th>
 				<th> - </th>
 				<th> - </th>
-				<th> <input type="number" th:value="${(totFatigue + totMobile + totSens)/2.0}" disabled/> </th>
+				<th> <input type="number" th:value="${(totFatigue + totMobile + totSens)}" disabled/> </th>
 			</tr>
 		</tbody>
 	</table>

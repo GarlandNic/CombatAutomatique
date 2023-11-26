@@ -4,8 +4,6 @@ import com.azurhyan.CombatAutomatique.model.ComboDB;
 import com.azurhyan.CombatAutomatique.model.ComboDB.Dgts;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 
-import jakarta.persistence.Entity;
-
 import lombok.Data;
 
 @Data
@@ -100,6 +98,19 @@ public class ComboDto {
 	
 	public void addHandicap(float hp) {
 		this.addHandicap(Math.round(hp*2));
+	}
+	
+	public void modifComboTF(int toucher, int force) {
+		this.toucher += toucher;
+		this.force += force;
+	}
+	
+	public void appliqueBonusDefense(int bonus) {
+		this.defense += bonus;
+		this.esquive += bonus;
+		this.endBouclier += bonus;
+		this.endPerso += bonus;
+		this.IBdef += bonus;
 	}
 
 }
