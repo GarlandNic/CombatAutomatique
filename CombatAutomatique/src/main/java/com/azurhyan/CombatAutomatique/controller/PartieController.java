@@ -8,10 +8,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
 import com.azurhyan.CombatAutomatique.dto.PersoPartieDto;
 import com.azurhyan.CombatAutomatique.dto.PersosVisiblesDto;
+import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 import com.azurhyan.CombatAutomatique.service.ActionService;
 import com.azurhyan.CombatAutomatique.service.PersonnageService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class PartieController {
@@ -41,14 +45,20 @@ public class PartieController {
 		return "visibilite";
 	}
 	
-	// TO CHECK
 	@PostMapping("/azurhyan/{game}/visibilitePerso")
 	public String changeVisibilitePersos(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles) {
 		persoServ.setAllVisibilite(persosVisibles);
 		return filledPage_Partie(model, partie);
 	}
 	
-	
+	@PostMapping(value="/azurhyan/{game}/visibilitePerso", params={"dupliquer"})
+	public String removeRow(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles, 
+			final HttpServletRequest req) {
+	    final Integer id = Integer.valueOf(req.getParameter("dupliquer"));
+	    PersonnageDB perso = persoServ.findById(id);
+	    persoServ.saveCopy(perso);
+	    return "redirect:/azurhyan/"+partie+"/visibilitePerso";
+	}
 	
 	private String filledPage_Partie(Model model, String partie) {
 		model.addAttribute("partie", partie);

@@ -2,33 +2,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Azurhyan : <span th:text="${partie}">partie</span></title>
+<title>Azurhyan : <span th:remove="tag" th:text="${partie}">partie</span></title>
 </head>
 <body>
 	
-	<h1> Ici on joue à <span th:text="${partie}">partie</span> ! </h1>
+	<h1> Ici on joue à <span th:remove="tag" th:text="${partie}">partie</span> ! </h1>
 	
-	<aside style="float: right;">
-		<table>
-			<thead>
-				<tr>
-					<th> Evènements </th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="action : ${actions}">
-					<td><div th:text="${action.description}"> action </div></td>
-				</tr>
-			</tbody>
-		</table>
-		<!--
-		<form action="#" th:action="@{'/azurhyan/'+${partie}+'/annulerAction'}" method="get">
-			<button type="submit">Annuler la dernière action</button> 
-		</form>
-		-->
-	</aside>
-	
-	<div style="float: left;">
+<table><tr><td valign="top">
+
 	<table>
 		<thead>
 			<tr>
@@ -57,7 +38,28 @@
 	<form action="#" th:action="@{/azurhyan/{partie}/nouveauPerso(partie=${partie})}" method="get">
 		<button type="submit">Créer un nouveau perso</button> 
 	</form>
-	</div>
+	
+</td><td valign="top">
+	
+	<table>
+		<thead>
+			<tr>
+				<th> Evènements </th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="action : ${actions}">
+				<td><div th:utext="${action.description}"> action </div></td>
+			</tr>
+		</tbody>
+	</table>
+	<!--
+	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/annulerAction'}" method="get">
+		<button type="submit">Annuler la dernière action</button> 
+	</form>
+	-->
+	
+</td></tr></table>
 	
 </body>
 </html>

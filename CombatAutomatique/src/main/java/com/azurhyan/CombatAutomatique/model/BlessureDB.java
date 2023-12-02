@@ -109,5 +109,14 @@ public class BlessureDB {
 	
 	public BlessureDB() {
 	}
+	
+	public BlessureDB copy(PersonnageDB newPerso) {
+		BlessureDB bl = new BlessureDB();
+		bl.setDemiNiveau(this.getDemiNiveau());
+		bl.setPartieTouchee(this.getPartieTouchee());
+		bl.setPtDeChoc(this.getPtDeChoc());
+		bl.setPerso(newPerso);
+		return bl;
+	}
 
 }

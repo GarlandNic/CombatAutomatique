@@ -6,6 +6,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.azurhyan.CombatAutomatique.dto.ActionDto;
 import com.azurhyan.CombatAutomatique.dto.AttaqueDto;
 import com.azurhyan.CombatAutomatique.dto.BlessureDto;
 import com.azurhyan.CombatAutomatique.dto.CibleDto;
@@ -47,11 +48,11 @@ public class ActionService {
 		act.setActionTime(LocalDateTime.now());
 		act.setDescription(attaque.getAttaquantNom().concat(" attaque "));
 		
-		String strDe = new String(); strDe = "";
+		ActionDto strDe = new ActionDto();
 		int bonusDuDe = jetDAttaque(attaque.getAttaquantPdc(), strDe);
 		ComboDto comboFinal = attaque.getAttaquantCombo();
 		comboFinal.modifComboTF(bonusDuDe, bonusDuDe);
-		act.addDescription("("+strDe+") ");
+		act.addDescription("("+strDe.getDescription()+") ");
 		
 		int nbAdv = attaque.getCibleList().size();
 		if(nbAdv==0) return null;
@@ -100,19 +101,20 @@ public class ActionService {
 		String descr = defenseur.getNom();
 
 		ComboDto comboDef = defenseur.getComboTotal();
-		String strDe = new String(); strDe = "";
+		ActionDto strDe = new ActionDto();
 		int bonusDef = jetDeComp(defenseur.getPdcCombat(), strDe);
 		comboDef.appliqueBonusDefense(bonusDef);
-		descr += " ("+strDe+") : ";
+		descr += " ("+strDe.getDescription()+") : ";
 		
 		int margeTch = comboFinal.getToucher() - (comboFinal.isCaC() ? comboDef.getDefense() : comboDef.getEsquive());
 		int endu = 0;
 		
 		if(margeTch < 0) {
 			descr += "raté !";
-			return descr.concat("  ");
+			return descr.concat(" <br/> ");
 		} else {
-			int bonusForce = (margeTch-1)/3;
+			int bonusForce = (margeTch-1 - (comboDef.getParade() + comboFinal.getPrdEnnemie()))/3;
+			bonusForce = (bonusForce > 0 ? bonusForce : 0);
 			boolean isPare = (comboDef.getParade() + comboFinal.getPrdEnnemie() >= margeTch);
 			String partieTouchee ="";
 			if(isPare) {
@@ -120,15 +122,16 @@ public class ActionService {
 				BlessureDto blBcl = calculDegats(bonusForce+comboFinal.getForce(), comboDef.getEndBouclier(), comboFinal.getTypeDgts() == Dgts.CTD);
 				if(null == blBcl) {
 					descr += "Pas de dégâts.";
-					return descr.concat("  ");
+					return descr.concat(" <br/> ");
 				}
 				partieTouchee = "Bouclier";
 				blBcl.setPartieTouchee(partieTouchee);
 				blBcl.setPtDeChoc(0);
-				descr += "Bouclier : "+blBcl.getNiveau()+" nv ; ";
-				
 				BlessureDB blToSave = blBcl.blessureToDB(defenseur.persoToDB());
+				if(comboFinal.getTypeDgts()==Dgts.PRF) blToSave.setDemiNiveau(blToSave.getDemiNiveau()/2);
 				blessRepo.save(blToSave);
+				
+				descr += "Bouclier : "+blToSave.getNiveau()+" nv ; ";
 				
 				partieTouchee = "bras-bouclier";
 				endu = 4 + (comboDef.getEndPerso() > comboDef.getEndBouclier() ? comboDef.getEndPerso() : comboDef.getEndBouclier());
@@ -140,18 +143,27 @@ public class ActionService {
 			BlessureDto bl = calculDegats(bonusForce+comboFinal.getForce(), endu, comboFinal.getTypeDgts() == Dgts.CTD);
 			if(null == bl) {
 				descr += "Pas de dégâts.";
-				return descr.concat("  ");
+				return descr.concat(" <br/> ");
 			}
 			bl.setPartieTouchee(partieTouchee);
-			descr += partieTouchee;
-			descr += (" : "+bl.getNiveau()+" nv & "+bl.getPtDeChoc()+"#.");
-			
 			PersonnageDB defDB = defenseur.persoToDB();
 			BlessureDB blToSave = bl.blessureToDB(defDB);
 			blessRepo.save(blToSave);
+
+			descr += partieTouchee;
+			descr += (" : "+blToSave.getNiveau()+" nv & "+blToSave.getPtDeChoc()+"#");
+			descr += (" ("+blToSave.getGravite()+")");
 			defDB.setHfatigue(defDB.getHfatigue() + (int) (blToSave.getHandicap()*2));
 			persoRepo.save(defDB);
-			return descr.concat("  ");
+			
+			BlessureDB blArmure = new BlessureDB();
+			blArmure.setPerso(defDB);
+			blArmure.setDemiNiveau(comboFinal.getTypeDgts()==Dgts.PRF ? blToSave.getDemiNiveau()/2 : blToSave.getDemiNiveau());
+			blArmure.setPtDeChoc(0);
+			blArmure.setPartieTouchee("Armure");
+			blessRepo.save(blArmure);
+			
+			return descr.concat(". <br/> ");
 		}
 	}
 	
@@ -239,7 +251,7 @@ public class ActionService {
 		 }
 	}
 	
-	public int jetDeComp(int pdc, String str) {
+	public int jetDeComp(int pdc, ActionDto str) {
 		int bonusMin = -10;
 		switch(pdc) {
 			case 0: bonusMin = -10; break;
@@ -253,16 +265,34 @@ public class ActionService {
 		boolean comp = (pdc != 0);
 		
 		int de = D20(comp);
-		if(str != null) str += de;
+		str.setDescription(Integer.toString(de));
+		if(de==1) str.setDescription("EC !");
 		return bonusD20(bonusMin, de);
 	}
 	
-	public int jetDAttaque(int pdc, String str) {
+	public int jetDAttaque(int pdc, ActionDto str) {
 		int bonusMin = -10;
 		boolean comp = (pdc != 0);		
 		int de = D20(comp);
-		if(str != null) str += de;
+		str.setDescription(Integer.toString(de));
+		if(de==1) str.setDescription("EC !");
 		return bonusD20(bonusMin, de);
+	}
+	
+	public int jetDeDefense(int pdc, ActionDto str) {
+		int bonus = jetDeComp(pdc, str);
+		if(bonus == -10) {
+			switch(pdc) {
+				case 0: bonus = -10; break;
+				case 1: bonus = -10; break;
+				case 2: bonus = -8; break;
+				case 3: bonus = -6; break;
+				case 4: bonus = -4; break;
+				case 5: bonus = -4; break;
+				default: bonus = -4;
+			}
+		}
+		return bonus;
 	}
 	
 	public int combaPlusToucher(int CC) {

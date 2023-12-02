@@ -113,4 +113,24 @@ public class ComboDB {
 		this.IBdef = this.IBdef - h;
 	}
 
+	public ComboDB copy(PersonnageDB newPerso) {
+		ComboDB combo = new ComboDB();
+		combo.setCaC(this.isCaC());
+		combo.setDefense(this.getDefense());
+		combo.setEndBouclier(endBouclier);
+		combo.setEndPerso(endPerso);
+		combo.setEsquive(esquive);
+		combo.setForce(force);
+		combo.setIBatt(IBatt);
+		combo.setIBdef(IBdef);
+		combo.setInit(init);
+		combo.setNom(nom);
+		combo.setParade(parade);
+		combo.setPrdEnnemie(prdEnnemie);
+		combo.setToucher(toucher);
+		combo.setTypeDgts(typeDgts);
+		combo.setPerso(newPerso);
+		return combo;
+	}
+
 }

@@ -79,11 +79,11 @@
 		</thead>
 		<tbody>
 			<tr th:with="comboTmp = ${combototal}">
-				<th> 
+				<td> 
 					Combo total
 					<br/> 	<input type="text" th:value="${comboTmp.CaC ? 'C-à-c' : 'Dist'}" style="width: 3em;" disabled/> /
 							<input type="text" th:value="${comboTmp.typeDgts.toString()}" style="width: 3em;" disabled/>
-				</th>
+				</td>
 				<td> <input type="number" th:value="${comboTmp.init}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.toucher}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.prdEnnemie}" disabled/> </td>
@@ -98,9 +98,9 @@
 				<td> <input type="number" th:value="${comboTmp.IBdef}" disabled/> </td>
 			</tr>
 			<tr th:with="comboTmp = ${combohandicap}">
-				<th> 
+				<td> 
 					Handicaps
-				</th>
+				</td>
 				<td> <input type="number" th:value="${comboTmp.init}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.toucher}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.prdEnnemie}" disabled/> </td>
@@ -115,7 +115,7 @@
 				<td> <input type="number" th:value="${comboTmp.IBdef}" disabled/> </td>
 			</tr>
 			<tr th:each="row,rowStat : *{comboList}">
-				<th> 
+				<td> 
 					<input type="text" th:field="*{comboList[__${rowStat.index}__].nom}"/> 
 					<div th:if="*{comboList[__${rowStat.index}__].nom == 'Base'}">
 						<select th:field="*{comboList[__${rowStat.index}__].CaC}">
@@ -132,7 +132,7 @@
 						<input type="hidden" th:field="*{comboList[__${rowStat.index}__].CaC}" value="true"/>
 						<input type="hidden" th:field="*{comboList[__${rowStat.index}__].typeDgts}" value="NOR"/>
 					</div>
-				</th>
+				</td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].init}"/> </td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].toucher}"/> </td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].prdEnnemie}"/> </td>
@@ -161,7 +161,7 @@
 			<tr>
 				<th> Niveaux </th>
 				<th> Points de choc </th>
-				<th> Gravité (disabled) </th>
+				<th> Gravité </th>
 				<th> Partie touchée </th>
 				<th> <button type="submit" name="addRow">Ajouter une ligne</button> </th>
 			</tr>
@@ -191,22 +191,22 @@
 		</thead>
 		<tbody th:with="totFatigue= (*{Hfatigue} > *{CCinfatigable} ? *{Hfatigue} - *{CCinfatigable} : 0) , totMobile= (*{Hmobilite} > *{CCincoercible} ? *{Hmobilite} - *{CCincoercible} : 0) , totSens= (*{Hsens} > *{CCtoujoursPret} ? *{Hsens} - *{CCtoujoursPret} : 0)">
 			<tr>
-				<th> Blessure ou fatigue </th>
-				<th> <input type="number" th:field="*{Hfatigue}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:field="*{CCinfatigable}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:value="${totFatigue}" disabled/> </th>
+				<td> Blessure ou fatigue </td>
+				<td> <input type="number" th:field="*{Hfatigue}" min="0" step="0.5"/> </td>
+				<td> <input type="number" th:field="*{CCinfatigable}" min="0" step="0.5"/> </td>
+				<td> <input type="number" th:value="${totFatigue}" disabled/> </td>
 			</tr>
 			<tr>
-				<th> Mobilité ou entraves </th>
-				<th> <input type="number" th:field="*{Hmobilite}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:field="*{CCincoercible}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:value="${totMobile}" disabled/> </th>
+				<td> Mobilité ou entraves </td>
+				<td> <input type="number" th:field="*{Hmobilite}" min="0" step="0.5"/> </td>
+				<td> <input type="number" th:field="*{CCincoercible}" min="0" step="0.5"/> </td>
+				<td> <input type="number" th:value="${totMobile}" disabled/> </td>
 			</tr>
 			<tr>
-				<th> Sens ou surprise </th>
-				<th> <input type="number" th:field="*{Hsens}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:field="*{CCtoujoursPret}" min="0" step="0.5"/> </th>
-				<th> <input type="number" th:value="${totSens}" disabled/> </th>
+				<td> Sens ou surprise </td>
+				<td> <input type="number" th:field="*{Hsens}" min="0" step="0.5"/> </td>
+				<td> <input type="number" th:field="*{CCtoujoursPret}" min="0" step="0.5"/> </td>
+				<td> <input type="number" th:value="${totSens}" disabled/> </td>
 			</tr>
 			<tr>
 				<th> Total </th>

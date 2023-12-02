@@ -112,7 +112,7 @@ public class PersoCompletDto {
 	public float totalBlessures() {
 		float res = (float) 0.0;
 		for(BlessureDto bl : blessureList) {
-			if( !bl.getPartieTouchee().equals("Bouclier") )
+			if( !(bl.getPartieTouchee().equals("Bouclier") || bl.getPartieTouchee().equals("Armure")) )
 				res += bl.getNiveau();
 		}
 		return res;
@@ -128,6 +128,7 @@ public class PersoCompletDto {
 	
 	public float getHandicap(BlessureDto bl) {
 		if(bl.getPartieTouchee().equals("Bouclier")) return 0;
+		if(bl.getPartieTouchee().equals("Armure")) return 0;
 		float niv = bl.getNiveau();
 		int CON = this.CON;
 		if(niv+0.5 > 0.7*CON) {
@@ -153,6 +154,7 @@ public class PersoCompletDto {
 
 	public String getGravite(BlessureDto bl) {
 		if(bl.getPartieTouchee().equals("Bouclier")) return "";
+		if(bl.getPartieTouchee().equals("Armure")) return "";
 		int demiHandicap = Math.max(0, Math.round(this.getHandicap(bl)*2));
 		switch(demiHandicap) {
 			case 0: return "égratignure";

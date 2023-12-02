@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
 import com.azurhyan.CombatAutomatique.dto.PersoPartieDto;
 import com.azurhyan.CombatAutomatique.dto.PersosVisiblesDto;
+import com.azurhyan.CombatAutomatique.model.BlessureDB;
 import com.azurhyan.CombatAutomatique.model.ComboDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
@@ -99,6 +100,12 @@ public class PersonnageService {
 	public PersonnageDB saveDto(PersoCompletDto perso) {
 		PersonnageDB pp = perso.persoToDB();
 		return persoRepo.save(pp);
+	}
+
+	public void saveCopy(PersonnageDB oldPerso) {
+	    PersonnageDB newPerso = oldPerso.copy();
+	    newPerso.setNom(newPerso.getNom().concat("_bis"));
+		persoRepo.save(newPerso);
 	}
 
 }

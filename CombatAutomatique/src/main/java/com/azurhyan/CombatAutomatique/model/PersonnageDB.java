@@ -136,4 +136,31 @@ public class PersonnageDB {
 	public void setCCtoujoursPret2(float hd) {
 		this.CCtoujoursPret = (int) Math.round(hd*2);
 	}
+	
+	public PersonnageDB copy() {
+		PersonnageDB newPerso = new PersonnageDB();
+	    newPerso.setNom(this.getNom());
+	    newPerso.setJoueur(this.getJoueur());
+	    newPerso.setPartie(this.getPartie());
+	    newPerso.setVisible(this.isVisible());
+	    newPerso.setCON(this.getCON());
+	    newPerso.setPdcCombat(this.getPdcCombat());
+	    newPerso.setHfatigue(this.getHfatigue());
+	    newPerso.setCCinfatigable(this.getCCinfatigable());
+	    newPerso.setHmobilite(this.getHmobilite());
+	    newPerso.setCCincoercible(this.getCCincoercible());
+	    newPerso.setHsens(this.getHsens());
+	    newPerso.setCCtoujoursPret(this.getCCtoujoursPret());
+	    newPerso.setCCcombatPlusieurs(this.getCCcombatPlusieurs());
+		
+		List<BlessureDB> blList = new ArrayList<>();
+		this.getBlessureList().forEach(bl -> blList.add(bl.copy(newPerso)));
+		newPerso.setBlessureList(blList);
+		
+		List<ComboDB> combList = new ArrayList<>();
+		this.getComboList().forEach(comb -> combList.add(comb.copy(newPerso)));
+		newPerso.setComboList(combList);
+		
+		return newPerso;
+	}
 }

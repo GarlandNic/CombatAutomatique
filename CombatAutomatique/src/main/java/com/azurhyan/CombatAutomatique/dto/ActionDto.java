@@ -17,6 +17,9 @@ public class ActionDto {
 		this.description = action.getDescription();
 	}
 	
+	public ActionDto() {
+	}
+
 	public ActionDB actionToDB(PersonnageDB perso) {
 		ActionDB act = new ActionDB();
 		act.setActionId(perso.getPersoId());
