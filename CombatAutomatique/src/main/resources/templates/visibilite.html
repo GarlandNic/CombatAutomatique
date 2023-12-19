@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Azurhyan : <span th:text="${partie}">partie</span></title>
+	<meta charset="UTF-8">
+	<title>Azurhyan : <span th:remove="tag" th:text="${partie}">partie</span></title>
+	<link th:href="@{/style.css}" rel="stylesheet">
 </head>
 <body>
 	
@@ -15,6 +16,8 @@
 				<tr>
 					<th> Visible ? </th>
 					<th> Perso </th>
+					<th></th>
+					<th> Déf </th>
 					<th></th>
 				</tr>
 			</thead>
@@ -34,6 +37,7 @@
 							<button type="submit">Voir combo</button>
 						</form>
 					</td>
+					<td> <input type="number" th:field="*{persoList[__${itemStat.index}__].deDef}" style="width: 3em;" min="0"/> </td>
                     <td> <button type="submit" name="dupliquer" th:value="${perso.id}">Dupliquer le perso</button> </td>
                 </tr>
 			</tbody>
@@ -51,7 +55,14 @@
 		<button type="submit">Enregistrer les modifications</button> 
 	</form>	
 	
+	<form action="#" th:action="@{/azurhyan/{partie}/nouveauPerso(partie=${partie})}" method="get">
+		</br>
+		<button type="submit">Créer un nouveau perso</button> 
+	</form>
+	
+	
 	<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get">
+		</br>
 		<button type="submit">Retourner sans enregistrer</button> 
 	</form>	
 		

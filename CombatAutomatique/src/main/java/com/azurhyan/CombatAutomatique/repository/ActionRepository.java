@@ -10,4 +10,6 @@ public interface ActionRepository extends CrudRepository<ActionDB, Integer>{
 	
 	Iterable<ActionDB> findByPartie(String partie);
 
+	Iterable<ActionDB> removeByPartie(String partie);
+
 }

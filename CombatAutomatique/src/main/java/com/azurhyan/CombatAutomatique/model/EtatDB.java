@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -16,16 +18,8 @@ import lombok.Data;
 public class EtatDB {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="ETATID")
-	int etatId;
-	
-//	@Column(name="PERSONNAGE")
-//	int persoId;
-	
-	@ManyToOne
-	@JoinColumn(name="PERSONNAGE")
-	PersonnageDB perso;
+	@Column(name="PERSONNAGE")
+	int personnage;
 	
 	@Column(name="DEDEF")
 	int deDef;
@@ -35,9 +29,17 @@ public class EtatDB {
 	
 	@Column(name="INCAPACITE")
 	int incapacite;
+	
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "PERSONNAGE")
+    private PersonnageDB perso;
 
 	public EtatDB(PersonnageDB p) {
 		this.perso = p;
 		this.turnOrder = p.getPersoId();
+	}
+	
+	public EtatDB() {
 	}
 }

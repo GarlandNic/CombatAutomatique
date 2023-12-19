@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Azurhyan : <span th:text="${partie}">partie</span></title>
+	<title>Azurhyan : <span th:remove="tag" th:text="${partie}">partie</span></title>
 	<link th:href="@{/style.css}" rel="stylesheet">
 </head>
 <body>
@@ -29,7 +29,8 @@
 	</aside>
 	 
 	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${perso.persoId}}" th:object="${perso}" method="post">
-	
+		<input type="hidden" th:field="*{visible}"/>
+
 	<table>
 		<tbody>
 			<tr>

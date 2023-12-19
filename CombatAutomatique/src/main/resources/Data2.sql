@@ -1,9 +1,10 @@
 
 use azurhyan;
 
+drop table etat;
+
 create table etat(
- ETATID integer NOT NULL AUTO_INCREMENT PRIMARY KEY,
- PERSONNAGE integer NOT NULL,
+ PERSONNAGE integer NOT NULL PRIMARY KEY,
  DEDEF integer,
  TURNORDER integer NOT NULL,
  INCAPACITE integer DEFAULT 0,

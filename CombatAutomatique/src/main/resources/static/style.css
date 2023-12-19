@@ -3,3 +3,7 @@
 input[type=number] {
     width: 3em;
 }
+
+.alert {
+	color: red;
+}

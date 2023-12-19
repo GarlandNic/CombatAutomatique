@@ -39,7 +39,8 @@ public class ActionController {
 		attaque.setAttaquantPdc(perso.getPdcCombat());
 		attaque.setPartie(partie);
 		persoServ.listForPartie(partie).forEach(pp -> {
-			attaque.getPasCibleList().add(new CibleDto(pp.getId(), pp.getNom()));
+			if(pp.getId() == persoId) attaque.getAttaquantList().add(new CibleDto(pp.getId(), pp.getNom()));
+			else attaque.getAutreList().add(new CibleDto(pp.getId(), pp.getNom()));
 		});
 		return filledPage_Attaque(model, partie, attaque);
 	}
@@ -48,7 +49,7 @@ public class ActionController {
 	public String removeTarget(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
 			@ModelAttribute("attaque") AttaqueDto attaque, final HttpServletRequest req) {
 	    final Integer rowId = Integer.valueOf(req.getParameter("removeTarget"));
-	    attaque.getPasCibleList().add(attaque.getCibleList().get(rowId.intValue()));
+	    attaque.getAutreList().add(attaque.getCibleList().get(rowId.intValue()));
 	    attaque.getCibleList().remove(rowId.intValue());
 	    return filledPage_Attaque(model, partie, attaque);
 	}
@@ -57,8 +58,26 @@ public class ActionController {
 	public String addTarget(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
 			@ModelAttribute("attaque") AttaqueDto attaque, final HttpServletRequest req) {
 	    final Integer rowId = Integer.valueOf(req.getParameter("addTarget"));
-	    attaque.getCibleList().add(attaque.getPasCibleList().get(rowId.intValue()));
-	    attaque.getPasCibleList().remove(rowId.intValue());
+	    attaque.getCibleList().add(attaque.getAutreList().get(rowId.intValue()));
+	    attaque.getAutreList().remove(rowId.intValue());
+	    return filledPage_Attaque(model, partie, attaque);
+	}
+	
+	@PostMapping(value="/azurhyan/{game}/{persoId}/attaque", params={"removeAttacker"})
+	public String removeAttacker(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
+			@ModelAttribute("attaque") AttaqueDto attaque, final HttpServletRequest req) {
+	    final Integer rowId = Integer.valueOf(req.getParameter("removeAttacker"));
+	    attaque.getCibleList().add(attaque.getAttaquantList().get(rowId.intValue()));
+	    attaque.getAttaquantList().remove(rowId.intValue());
+	    return filledPage_Attaque(model, partie, attaque);
+	}
+
+	@PostMapping(value="/azurhyan/{game}/{persoId}/attaque", params={"addAttacker"})
+	public String addAttacker(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
+			@ModelAttribute("attaque") AttaqueDto attaque, final HttpServletRequest req) {
+	    final Integer rowId = Integer.valueOf(req.getParameter("addAttacker"));
+	    attaque.getAttaquantList().add(attaque.getCibleList().get(rowId.intValue()));
+	    attaque.getCibleList().remove(rowId.intValue());
 	    return filledPage_Attaque(model, partie, attaque);
 	}
 	

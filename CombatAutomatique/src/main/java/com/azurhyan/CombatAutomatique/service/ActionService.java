@@ -1,23 +1,30 @@
 package com.azurhyan.CombatAutomatique.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.azurhyan.CombatAutomatique.dto.ActionDto;
 import com.azurhyan.CombatAutomatique.dto.AttaqueDto;
 import com.azurhyan.CombatAutomatique.dto.BlessureDto;
 import com.azurhyan.CombatAutomatique.dto.CibleDto;
 import com.azurhyan.CombatAutomatique.dto.ComboDto;
+import com.azurhyan.CombatAutomatique.dto.Degat;
 import com.azurhyan.CombatAutomatique.model.ComboDB.Dgts;
+import com.azurhyan.CombatAutomatique.model.EtatDB;
 import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
 import com.azurhyan.CombatAutomatique.model.ActionDB;
 import com.azurhyan.CombatAutomatique.model.BlessureDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 import com.azurhyan.CombatAutomatique.repository.ActionRepository;
 import com.azurhyan.CombatAutomatique.repository.BlessureRepository;
+import com.azurhyan.CombatAutomatique.repository.EtatRepository;
 import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
 
 @Service
@@ -32,8 +39,16 @@ public class ActionService {
 	@Autowired
 	BlessureRepository blessRepo;
 	
+	@Autowired
+	EtatRepository etatRepo;
+	
 	public void annulerDerniereAction() {
 		// TODO
+	}
+	
+	@Transactional
+	public void effacerLesActions(String partie) {
+		actionRepo.removeByPartie(partie);
 	}
 
 	public Iterable<ActionDB> listForPartie(String partie) {
@@ -41,6 +56,36 @@ public class ActionService {
 	}
 
 	public ActionDB lancerAttaque(AttaqueDto attaque) {
+		if(attaque.getAttaquantList().size() > 1) {
+			int groupTch = attaque.getAttaquantList().size();
+			int groupFor = groupTch/2;
+			attaque.getAttaquantList().forEach(perso -> {
+				PersonnageDB persoDB = persoRepo.findById(perso.getCibleId()).get();
+				PersoCompletDto attaquant = new PersoCompletDto(persoDB);
+				AttaqueDto att = new AttaqueDto();
+				att.setAttaquantId(attaquant.getPersoId());
+				att.setAttaquantNom(attaquant.getNom());
+				att.setAttaquantPdc(attaquant.getPdcCombat());
+				ComboDto comb = attaquant.getComboTotal();
+				comb.modifComboTF(groupTch, groupFor);
+				att.setAttaquantCombo(comb);
+				List<CibleDto> attList = new ArrayList<>();
+				attList.add(perso);
+				att.setAttaquantList(attList);
+				att.setCibleList(attaque.getCibleList());
+				att.setAutreList(attaque.getAutreList());
+				att.setLePlusPossible(attaque.isLePlusPossible());
+				att.setPartie(attaque.getPartie());
+				
+				lancerAttaque1vN(att);
+			});
+			return null;
+		} else {
+			return lancerAttaque1vN(attaque);
+		}
+	}
+	
+	public ActionDB lancerAttaque1vN(AttaqueDto attaque) {
 		ActionDB act = new ActionDB();
 		act.setActeurNom(attaque.getAttaquantNom());
 		act.setPersoId(attaque.getAttaquantId());
@@ -96,13 +141,13 @@ public class ActionService {
 		return saveAction(act);
 	}
 	
-	// renvoie : "defenseur (dé) : raté|paré|Touché ! {dégâts}."
+	// renvoie : "defenseur (dé) : raté|paré|Touché ! {dégâts}." + modif BD défenseur
 	public String attaqueUnique(ComboDto comboFinal, PersoCompletDto defenseur) {
 		String descr = defenseur.getNom();
 
 		ComboDto comboDef = defenseur.getComboTotal();
 		ActionDto strDe = new ActionDto();
-		int bonusDef = jetDeComp(defenseur.getPdcCombat(), strDe);
+		int bonusDef = jetDeDefense(defenseur, strDe);
 		comboDef.appliqueBonusDefense(bonusDef);
 		descr += " ("+strDe.getDescription()+") : ";
 		
@@ -117,9 +162,11 @@ public class ActionService {
 			bonusForce = (bonusForce > 0 ? bonusForce : 0);
 			boolean isPare = (comboDef.getParade() + comboFinal.getPrdEnnemie() >= margeTch);
 			String partieTouchee ="";
+			int bousculade = 0;
 			if(isPare) {
 				descr += "paré ! ";
 				BlessureDto blBcl = calculDegats(bonusForce+comboFinal.getForce(), comboDef.getEndBouclier(), comboFinal.getTypeDgts() == Dgts.CTD);
+				bousculade = bonusForce+comboFinal.getForce() - comboDef.getEndBouclier() + comboFinal.getIBatt() - comboDef.getIBdef();
 				if(null == blBcl) {
 					descr += "Pas de dégâts.";
 					return descr.concat(" <br/> ");
@@ -141,6 +188,8 @@ public class ActionService {
 				endu = comboDef.getEndPerso();
 			}
 			BlessureDto bl = calculDegats(bonusForce+comboFinal.getForce(), endu, comboFinal.getTypeDgts() == Dgts.CTD);
+			if(bousculade == 0)
+				bousculade = bonusForce+comboFinal.getForce() - endu + comboFinal.getIBatt() - comboDef.getIBdef();
 			if(null == bl) {
 				descr += "Pas de dégâts.";
 				return descr.concat(" <br/> ");
@@ -154,6 +203,10 @@ public class ActionService {
 			descr += (" : "+blToSave.getNiveau()+" nv & "+blToSave.getPtDeChoc()+"#");
 			descr += (" ("+blToSave.getGravite()+")");
 			defDB.setHfatigue(defDB.getHfatigue() + (int) (blToSave.getHandicap()*2));
+			if(bousculade > 1 && comboFinal.getTypeDgts() == Dgts.CTD) {
+				descr += " (bousculade : "+(((float) (bousculade/2))/2.0)+" H-)";
+				defDB.setHmobilite(defDB.getHmobilite() + bousculade/2);
+			}			
 			persoRepo.save(defDB);
 			
 			BlessureDB blArmure = new BlessureDB();
@@ -164,6 +217,60 @@ public class ActionService {
 			blessRepo.save(blArmure);
 			
 			return descr.concat(". <br/> ");
+		}
+	}
+	
+	public Degat attaqueUnique(ComboDto comboAtt, ComboDto comboDef) {
+		Degat result = new Degat();
+	
+		int margeTch = comboAtt.getToucher() - (comboAtt.isCaC() ? comboDef.getDefense() : comboDef.getEsquive());
+		int endu = 0;
+		
+		if(margeTch < 0) {
+			return result;
+		} else {
+			int bonusForce = (margeTch-1 - (comboDef.getParade() + comboAtt.getPrdEnnemie()))/3;
+			bonusForce = (bonusForce > 0 ? bonusForce : 0);
+			boolean isPare = (comboDef.getParade() + comboAtt.getPrdEnnemie() >= margeTch);
+			String partieTouchee ="";
+			int bousculade = 0;
+			if(isPare) {
+				BlessureDto blBcl = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), comboAtt.getTypeDgts() == Dgts.CTD);
+				
+				bousculade = bonusForce+comboAtt.getForce() - comboDef.getEndBouclier() + comboAtt.getIBatt() - comboDef.getIBdef();
+
+				partieTouchee = "Bouclier";
+				blBcl.setPartieTouchee(partieTouchee);
+				blBcl.setPtDeChoc(0);
+				if(comboAtt.getTypeDgts()==Dgts.PRF) blBcl.setDemiNiveau(blBcl.getDemiNiveau()/2);
+				if(blBcl.getNiveau() > 0) result.getBlessList().add(blBcl);
+				
+				partieTouchee = "bras-bouclier";
+				endu = 4 + (comboDef.getEndPerso() > comboDef.getEndBouclier() ? comboDef.getEndPerso() : comboDef.getEndBouclier());
+			} else {
+				partieTouchee = partieTouchee();
+				endu = comboDef.getEndPerso();
+			}
+			BlessureDto bl = calculDegats(bonusForce+comboAtt.getForce(), endu, comboAtt.getTypeDgts() == Dgts.CTD);
+			if(bousculade == 0)
+				bousculade = bonusForce+comboAtt.getForce() - endu + comboAtt.getIBatt() - comboDef.getIBdef();
+
+			bl.setPartieTouchee(partieTouchee);
+			if(bl.getNiveau() > 0) {
+				result.getBlessList().add(bl);
+				
+				BlessureDto blArmure = new BlessureDto();
+				blArmure.setDemiNiveau((comboAtt.getTypeDgts()==Dgts.PRF ? bl.getDemiNiveau()/2 : bl.getDemiNiveau()));
+				blArmure.setPtDeChoc(0);
+				blArmure.setPartieTouchee("Armure");
+				if(blArmure.getNiveau() > 0) result.getBlessList().add(blArmure);
+			}
+
+			if(bousculade > 1 && comboAtt.getTypeDgts() == Dgts.CTD) {
+				result.setBousculadeH( ((float) (bousculade/2))/2 );
+			}
+			
+			return result;
 		}
 	}
 	
@@ -217,12 +324,14 @@ public class ActionService {
 		return actionRepo.save(act);
 	}
 	
-	private int D20(boolean comp) {
+	private int D20(boolean comp) { return D20f(comp, 0); }
+	private int D20f(boolean comp, int forcage) {
+		if(forcage!=0) return forcage;
 		Random random = new Random();
 		int nb;
 		nb = 1+random.nextInt(19);
-		if(nb==10) return 10+D20(comp);
-		if(nb==20 && comp) return 20+D20(comp);
+		if(nb==10) return 10+D20f(comp,0);
+		if(nb==20 && comp) return 20+D20f(comp,0);
 		return nb;
 	}
 	
@@ -251,7 +360,8 @@ public class ActionService {
 		 }
 	}
 	
-	public int jetDeComp(int pdc, ActionDto str) {
+	public int jetDeComp(int pdc, ActionDto str) { return jetDeCompf(pdc, str, 0); }
+	public int jetDeCompf(int pdc, ActionDto str, int forcage) {
 		int bonusMin = -10;
 		switch(pdc) {
 			case 0: bonusMin = -10; break;
@@ -264,23 +374,37 @@ public class ActionService {
 		}
 		boolean comp = (pdc != 0);
 		
-		int de = D20(comp);
+		int de = D20f(comp, forcage);
 		str.setDescription(Integer.toString(de));
 		if(de==1) str.setDescription("EC !");
 		return bonusD20(bonusMin, de);
 	}
 	
-	public int jetDAttaque(int pdc, ActionDto str) {
+	public int jetDAttaque(int pdc, ActionDto str) { return jetDAttaquef(pdc, str, 0); }
+	public int jetDAttaquef(int pdc, ActionDto str, int forcage) {
 		int bonusMin = -10;
 		boolean comp = (pdc != 0);		
-		int de = D20(comp);
+		int de = D20f(comp, forcage);
 		str.setDescription(Integer.toString(de));
 		if(de==1) str.setDescription("EC !");
 		return bonusD20(bonusMin, de);
 	}
 	
-	public int jetDeDefense(int pdc, ActionDto str) {
-		int bonus = jetDeComp(pdc, str);
+	public int jetDeDefense(PersoCompletDto defenseur, ActionDto str) {
+		int forcage = 0;
+		int pdc = defenseur.getPdcCombat();
+		Optional<EtatDB> etat = etatRepo.findById(defenseur.getPersoId());
+		if(etat.isPresent() && etat.get().getDeDef() != 0) {
+			forcage = etat.get().getDeDef();
+		} else {
+			forcage = D20(pdc != 0);
+			EtatDB etatget;
+			if(etat.isPresent()) etatget = etat.get();
+			else etatget = new EtatDB(persoRepo.findById(defenseur.getPersoId()).get());
+			etatget.setDeDef(forcage);
+			etatRepo.save(etatget);
+		}
+		int bonus = jetDeCompf(pdc, str, forcage);
 		if(bonus == -10) {
 			switch(pdc) {
 				case 0: bonus = -10; break;
@@ -340,6 +464,7 @@ public class ActionService {
 			default: return combaPlusMalusForceRec(nb-2, force+1);
 		}
 	}
+
 
 
 }

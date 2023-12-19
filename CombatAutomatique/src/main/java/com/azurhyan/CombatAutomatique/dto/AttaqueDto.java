@@ -16,10 +16,12 @@ public class AttaqueDto {
 	
 	ComboDto attaquantCombo=null;
 	
+	List<CibleDto> attaquantList = new ArrayList<>();
+	
 	List<CibleDto> cibleList = new ArrayList<>();
 	
-	List<CibleDto> pasCibleList = new ArrayList<>();
-	
+	List<CibleDto> autreList = new ArrayList<>();
+
 	boolean lePlusPossible = false;
 	
 	String partie="";

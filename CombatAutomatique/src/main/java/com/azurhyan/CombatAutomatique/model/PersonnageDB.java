@@ -13,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -39,7 +41,7 @@ public class PersonnageDB {
 	String partie;
 	
 	@Column(name="VISIBLE")
-	boolean visible=true;
+	boolean visible;
 	
 	@OneToMany(cascade = CascadeType.ALL, 
 			   orphanRemoval = true, 
@@ -52,6 +54,13 @@ public class PersonnageDB {
 			   fetch = FetchType.EAGER, 
 			   mappedBy = "perso")
 	List<BlessureDB> blessureList = new ArrayList<>();
+	
+	@OneToOne(mappedBy = "perso", 
+			  cascade = CascadeType.ALL, 
+			  orphanRemoval = true, 
+			  fetch = FetchType.EAGER)
+    @PrimaryKeyJoinColumn
+	EtatDB etat;
 	
 //	@OneToMany(mappedBy = "persoId")
 //	List<ActionDB> actionList = new ArrayList<>();

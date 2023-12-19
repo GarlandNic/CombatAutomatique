@@ -18,6 +18,7 @@ public class PersoPartieDto {
 				-(perso.getHsens() > perso.getCCtoujoursPret() ? (perso.getHsens() - perso.getCCtoujoursPret())/2 : 0);
 		perso.getComboList().forEach(combo -> this.init = this.init + combo.getInit());
 		this.visible = perso.isVisible();
+		this.deDef = (null != perso.getEtat() ? perso.getEtat().getDeDef() : 0);
 	}
 
 	int id;
@@ -27,5 +28,7 @@ public class PersoPartieDto {
 	int init;
 	
 	boolean visible;
+	
+	int deDef;
 
 }

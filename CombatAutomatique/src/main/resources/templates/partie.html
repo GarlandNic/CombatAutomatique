@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Azurhyan : <span th:remove="tag" th:text="${partie}">partie</span></title>
+	<meta charset="UTF-8">
+	<title>Azurhyan : <span th:remove="tag" th:text="${partie}">partie</span></title>
+	<link th:href="@{/style.css}" rel="stylesheet">
 </head>
 <body>
 	
@@ -16,6 +17,7 @@
 				<th> Init </th>
 				<th> Perso </th>
 				<th></th>
+				<td> Déf </td>
 			</tr>
 		</thead>
 		<tbody>
@@ -27,17 +29,23 @@
 						<button type="submit">Voir combo</button>
 					</form>
 				</td>
+				<td> <span th:if="${perso.deDef != 0}" th:text="${perso.deDef}"> dé de déf </span> </td>
+			</tr>
+			<tr>
+				<td> </td>
+				<td> </td>
+				<td></td>
+				<td> <form action="#" th:action="@{'/azurhyan/'+${partie}+'/defenseReset'}" method="get">
+						<button type="submit">Nouveau round</button>
+					</form></td>
 			</tr>
 		</tbody>
 	</table>
 	
 	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/visibilitePerso'}" method="get">
+		</br>
 		<button type="submit">Cacher/Révéler personnages</button> 
 	</form>	
-	
-	<form action="#" th:action="@{/azurhyan/{partie}/nouveauPerso(partie=${partie})}" method="get">
-		<button type="submit">Créer un nouveau perso</button> 
-	</form>
 	
 </td><td valign="top">
 	
@@ -53,12 +61,11 @@
 			</tr>
 		</tbody>
 	</table>
-	<!--
-	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/annulerAction'}" method="get">
-		<button type="submit">Annuler la dernière action</button> 
+
+	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/effacerActions'}" method="get">
+		<button type="submit" style="float: right;">Effacer les évènements</button> 
 	</form>
-	-->
-	
+
 </td></tr></table>
 	
 </body>

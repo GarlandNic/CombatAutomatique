@@ -6,6 +6,7 @@ import java.util.List;
 import com.azurhyan.CombatAutomatique.model.ActionDB;
 import com.azurhyan.CombatAutomatique.model.BlessureDB;
 import com.azurhyan.CombatAutomatique.model.ComboDB;
+import com.azurhyan.CombatAutomatique.model.EtatDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 
 import jakarta.persistence.Entity;
@@ -18,13 +19,13 @@ public class PersoCompletDto {
 	public PersoCompletDto() {
 	}
 	
-	
 	public PersoCompletDto(String partie) {
 		this.partie = partie;
 		this.comboList = new ArrayList<>();
 		this.comboList.add(new ComboDto("Base", false));
 		this.comboList.add(new ComboDto("Bonus permanent", true));
 		this.comboList.add(new ComboDto("Bonus 1 round", true));
+//		this.etat = new EtatDto();
 	}
 	
 	public PersoCompletDto(PersonnageDB perso) {
@@ -55,6 +56,8 @@ public class PersoCompletDto {
 //		for(ActionDB action : perso.getActionList()) {
 //			this.actionList.add(new ActionDto(action));
 //		}
+//		this.etat = new EtatDto(perso.getEtat());
+
 	}
 	
 	public PersonnageDB persoToDB() {
@@ -86,6 +89,8 @@ public class PersoCompletDto {
 		this.comboList.forEach(comb -> combList.add(comb.comboToDB(perso)));
 		perso.setComboList(combList);
 		
+//		if(etat != null) perso.setEtat(etat.etatToDB(perso));
+		
 		return perso;
 	}
 	
@@ -93,11 +98,12 @@ public class PersoCompletDto {
 	String nom="Perso";
 	String joueur="PNJ";
 	String partie;
-	boolean visible=true;
+	boolean visible=false;
 
 	List<ComboDto> comboList = new ArrayList<>();
 	List<BlessureDto> blessureList = new ArrayList<>();
 //	List<ActionDto> actionList = new ArrayList<>();
+//	EtatDto etat;
 	
 	int CON=10;
 	int pdcCombat=3;

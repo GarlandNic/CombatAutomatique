@@ -1,6 +1,7 @@
 package com.azurhyan.CombatAutomatique.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,9 @@ import com.azurhyan.CombatAutomatique.dto.PersoPartieDto;
 import com.azurhyan.CombatAutomatique.dto.PersosVisiblesDto;
 import com.azurhyan.CombatAutomatique.model.BlessureDB;
 import com.azurhyan.CombatAutomatique.model.ComboDB;
+import com.azurhyan.CombatAutomatique.model.EtatDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
+import com.azurhyan.CombatAutomatique.repository.EtatRepository;
 import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
 
 @Service
@@ -20,6 +23,9 @@ public class PersonnageService {
 	
 	@Autowired
 	PersonnageRepository persoRepo;
+	
+	@Autowired
+	EtatRepository etatRepo;
 
 	public Iterable<PersoPartieDto> listForPartie(String partieName) {
 		Iterable <PersonnageDB> persoListBD = persoRepo.findByPartieAndVisible(partieName, true);
@@ -42,6 +48,17 @@ public class PersonnageService {
 				PersonnageDB perso = persoDB.get();
 				if(perso.isVisible() != persoPartie.isVisible()) {
 					perso.setVisible(persoPartie.isVisible());
+					persoRepo.save(perso);
+				}
+				EtatDB etat = perso.getEtat();
+				if(etat != null) {
+					etat.setDeDef(persoPartie.getDeDef());
+					etatRepo.save(etat);
+				}
+				if(etat == null && persoPartie.getDeDef() != 0) {
+					EtatDB newEtat = new EtatDB(perso);
+					newEtat.setDeDef(persoPartie.getDeDef());
+					perso.setEtat(newEtat);
 					persoRepo.save(perso);
 				}
 			}
@@ -99,6 +116,10 @@ public class PersonnageService {
 
 	public PersonnageDB saveDto(PersoCompletDto perso) {
 		PersonnageDB pp = perso.persoToDB();
+		if(pp.getEtat() == null) {
+			Optional<EtatDB> etat = etatRepo.findByPerso(pp);
+			if(etat.isPresent()) pp.setEtat(etat.get());
+		}
 		return persoRepo.save(pp);
 	}
 
@@ -106,6 +127,19 @@ public class PersonnageService {
 	    PersonnageDB newPerso = oldPerso.copy();
 	    newPerso.setNom(newPerso.getNom().concat("_bis"));
 		persoRepo.save(newPerso);
+	}
+
+	public void resetDefense(String partie) {
+		Iterable<PersonnageDB> persoListBD = persoRepo.findByPartieAndVisible(partie, true);
+		List<EtatDB> etatListBD = new ArrayList<>();
+		persoListBD.forEach(perso -> {
+			EtatDB etat = perso.getEtat();
+			if(etat != null && etat.getDeDef() !=0) {
+				etat.setDeDef(0);
+				etatListBD.add(etat);
+			}
+		});
+		etatRepo.saveAll(etatListBD);		
 	}
 
 }

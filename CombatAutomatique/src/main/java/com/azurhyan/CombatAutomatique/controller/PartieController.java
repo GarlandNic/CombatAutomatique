@@ -37,6 +37,12 @@ public class PartieController {
 //		return filledPage_Partie(model, partie);
 //	}
 	
+	@GetMapping("/azurhyan/{game}/effacerActions") // pas encore implémenté TODO
+	public String effacerLesActions(Model model, @PathVariable("game") final String partie) {
+		actionServ.effacerLesActions(partie);
+		return filledPage_Partie(model, partie);
+	}
+	
 	@GetMapping("/azurhyan/{game}/visibilitePerso")
 	public String switchVisibilitePersos(Model model, @PathVariable("game") final String partie) {
 		model.addAttribute("partie", partie);
@@ -59,6 +65,15 @@ public class PartieController {
 	    persoServ.saveCopy(perso);
 	    return "redirect:/azurhyan/"+partie+"/visibilitePerso";
 	}
+	
+	@GetMapping("/azurhyan/{game}/defenseReset")
+	public String nouveauRound(Model model, @PathVariable("game") final String partie) {
+		persoServ.resetDefense(partie);
+		return "redirect:/azurhyan/"+partie;
+	}
+	
+	
+	
 	
 	private String filledPage_Partie(Model model, String partie) {
 		model.addAttribute("partie", partie);

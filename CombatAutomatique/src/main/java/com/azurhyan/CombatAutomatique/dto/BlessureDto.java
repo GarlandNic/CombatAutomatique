@@ -36,4 +36,12 @@ public class BlessureDto {
 		return bl;
 	}
 
+	public int getDemiNiveau() {
+		return Math.round(this.getNiveau()*2);
+	}
+
+	public void setDemiNiveau(int demiNiv) {
+		this.setNiveau( ((float) demiNiv)/2 );
+	}
+
 }
