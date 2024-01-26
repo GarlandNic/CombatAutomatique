@@ -20,7 +20,10 @@ public class ComboDB {
 	public static enum Dgts {
 		NOR,
 		CTD,
-		PRF
+		PRF,
+		GLB,
+		BOUSCUL,
+		CAPTURE
 	}
 
 	public ComboDB() {
@@ -100,6 +103,9 @@ public class ComboDB {
 	@Column(name="IBDEF")
 	int IBdef=15;
 	
+	@Column(name="ACTIF")
+	boolean actif=true;
+	
 	public void addHandicap(int demiH) {
 		int h = demiH/2;
 		this.init = this.init - h;
@@ -115,8 +121,8 @@ public class ComboDB {
 
 	public ComboDB copy(PersonnageDB newPerso) {
 		ComboDB combo = new ComboDB();
-		combo.setCaC(this.isCaC());
-		combo.setDefense(this.getDefense());
+		combo.setCaC(CaC);
+		combo.setDefense(defense);
 		combo.setEndBouclier(endBouclier);
 		combo.setEndPerso(endPerso);
 		combo.setEsquive(esquive);
@@ -129,6 +135,7 @@ public class ComboDB {
 		combo.setPrdEnnemie(prdEnnemie);
 		combo.setToucher(toucher);
 		combo.setTypeDgts(typeDgts);
+		combo.setActif(actif);
 		combo.setPerso(newPerso);
 		return combo;
 	}

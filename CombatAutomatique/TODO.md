@@ -1,23 +1,13 @@
 
 TODO list
-
- o tester attaque de groupe
- 	o bug : parfois la défense (la même pour toutes les attaques ne se sauvegarde pas)
- 	o bug de règle : les handicaps ne devrait pas compter pour les attaques du même groupe
-
- o sauvegarder avant d'attaquer
- o bug : je n'arrive pas à accéder à la fiche du 1er perso depuis visibilité. à cause des form imbriquées ?
- 
- o classer par ordre d'init
- o numéro pour dupliquer
- o bouger des boutons : enregistrer combo : plus haut + enregistrer et retourner
+  
+  o dégâts globaux
+  
+ o classer les perso ?
   
  o access different pour le MJ (-> page visibilité ?)
  o reset bonus temporaire 
  o bonus juste pour cette attaque
- o blessures avec les perso (page principale : on veut voir comment ils sont blessés)
-
-
  
 
 DONE :
@@ -36,6 +26,21 @@ DONE :
  o bugs à corriger : quand on modifie déf et sauvegarde -> plante ; quand on sauvegarde un perso -> annule son état
  o bug à l'attaque duplicate entry PERSONNAGE
  o bug d'affichage : quand on donne un dédéf à un perso (on le passe de 0 à quelque chose), il faut raffraichir une fois de plus pour que ça s'affiche
-
+ o tester attaque de groupe
+ 	o bug : parfois la défense (la même pour toutes les attaques ne se sauvegarde pas)
+ 	o bug de règle : les handicaps ne devrait pas compter pour les attaques du même groupe
+ o sauvegarder avant d'attaquer
+ o bug : je n'arrive pas à accéder à la fiche du 1er perso depuis visibilité. à cause des form imbriquées ?
+ o bug attaque : à investiguer (sipahi attaque multiple, lepluspossible)
+ o affichage bousculade
+ o bouger des boutons : enregistrer combo : plus haut + enregistrer et retourner
+ o numéro pour dupliquer -> A tester
+ o blessures avec les perso (page principale : on veut voir comment ils sont blessés)
+ o incapacité
+ o test incapacité
+ o combo a switcher
+  o bug : calcul des attaques (parade ? 
+  o bug : dans visibilité, modif incapacité
+  o ligne combo noirifiée automatiquement
 
 

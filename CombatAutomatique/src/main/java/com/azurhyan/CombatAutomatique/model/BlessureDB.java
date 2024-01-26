@@ -46,6 +46,7 @@ public class BlessureDB {
 	}
 	public String getGravite(int CON) {
 		if(this.partieTouchee.equals("Bouclier")) return "";
+		if(this.partieTouchee.equals("Armure")) return "";
 		int demiHandicap = Math.max(0, Math.round(this.getHandicap(CON)*2));
 		switch(demiHandicap) {
 			case 0: return "égratignure";
@@ -65,6 +66,7 @@ public class BlessureDB {
 	}
 	public float getHandicap(int CON) {
 		if(this.partieTouchee.equals("Bouclier")) return 0;
+		if(this.partieTouchee.equals("Armure")) return 0;
 		if(this.getNiveau()+0.5 > 0.7*CON) {
 			return 10;
 		}
@@ -117,6 +119,19 @@ public class BlessureDB {
 		bl.setPtDeChoc(this.getPtDeChoc());
 		bl.setPerso(newPerso);
 		return bl;
+	}
+	
+	
+	public String blessureToString() {
+		String result = partieTouchee;
+		result += " (";
+		if(demiNiveau > 0) result += getNiveau()+" nv";
+		if(demiNiveau > 0 && ptDeChoc > 0) result += " & ";
+		if(ptDeChoc > 0) result += ptDeChoc+"#";
+		if( !(partieTouchee.equals("Bouclier") || partieTouchee.equals("Armure")) ) 
+			result += " ("+getGravite()+")"; 
+		result += ")";
+		return result;
 	}
 
 }

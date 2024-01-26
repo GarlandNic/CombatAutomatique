@@ -7,3 +7,74 @@ input[type=number] {
 .alert {
 	color: red;
 }
+
+.c11 {
+	border-top: 1px solid;
+	border-left: 1px solid;
+}
+
+.c12 {
+	border-top: 1px solid;
+	border-right: 1px solid;
+}
+
+.c21 {
+	border-bottom: 1px solid;
+	border-left: 1px solid;
+}
+
+.c22 {
+	border-bottom: 1px solid;
+	border-right: 1px solid;
+}
+
+.carre {
+	width: 0.5em;
+	height: 0.5em;
+}
+
+
+.emptyCell {
+  background-color: transparent;
+  border: none;
+}
+
+.toggle {
+	display: none;
+}
+
+.checklab {
+	display: inline-block;
+	height: 2em;
+	width: 3.2em;
+	background: gray;
+	position: relative;
+	transition: all .3s;
+	border-radius: 1em;
+	cursor: pointer;
+}
+
+.checklab:after{
+	content: "";
+	height: 1.2em;
+	width: 1.2em;
+	background: white;
+	position: absolute;
+	top: 0.4em;
+	left: 0.4em;
+	transition: all .3s;
+	border-radius: 50%;
+}
+
+.toggle:checked + input + .checklab:after {
+	transform: translateX(1.2em);
+}
+
+.toggle:checked + input + .checklab {
+	background: green;
+}
+
+tr:has(.toggle:not(:checked)) {
+	background: black;
+}
+

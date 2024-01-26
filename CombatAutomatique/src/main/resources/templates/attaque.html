@@ -7,6 +7,10 @@
 </head>
 <body>
 	
+	<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get">
+		<button type="submit"> &#127968; </button> 
+	</form>
+	
 		<aside>
 		<table>
 			<tbody>
@@ -81,17 +85,17 @@
 	
 	<h3>Cibles de l'attaque : </h3>
 	
-	<table>
+	<table style="border: solid;">
 		<thead>
-			<tr>
-				<td>Attaquant(s)</td>
-				<td>Attaqué(s)</td>
-				<td>Personnages </td>
+			<tr style="border: solid;">
+				<td style="border: solid;">Attaquant(s)</td>
+				<td style="border: solid;">Attaqué(s)</td>
+				<td style="border: solid;">Personnages </td>
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td>
+			<tr style="border: solid;">
+				<td style="border: solid;">
 					<table>
 						<tr th:each="attaquant, itemStat : *{attaquantList}">
 							<td>
@@ -99,7 +103,7 @@
 								<input type="hidden" th:field="*{attaquantList[__${itemStat.index}__].cibleId}"/>
 								<input type="hidden" th:field="*{attaquantList[__${itemStat.index}__].cibleNom}"/>							
 							</td>
-		                    <td> <button type="submit" name="removeAttacker" th:value="${itemStat.index}" th:unless="itemStat.first"> &#x1F872; </button> </td>
+		                    <td> <button type="submit" name="removeAttacker" th:value="${itemStat.index}" th:unless="${itemStat.first}"> &#x1F872; </button> </td>
 						</tr>					
 					</table>
 					<div th:if="*{#lists.size(attaquantList) > 1}"> <em>
@@ -109,7 +113,7 @@
 						<span th:remove="tag" th:text="*{#lists.size(attaquantList)/2}"></span> for
 					</em> </div>
 				</td>
-				<td>
+				<td style="border: solid;">
 					<table th:with="n=*{#lists.size(cibleList)}">
 						<tr th:each="cible, itemStat : *{cibleList}">
 		                    <td> <button type="submit" name="addAttacker" th:value="${itemStat.index}"> &#x1F870; </button> </td>
@@ -131,7 +135,7 @@
 						</tr>					
 					</table>
 				</td>
-				<td>
+				<td style="border: solid;">
 					<table>
 						<tr th:each="row, rowStat : *{autreList}">
 		                    <td> <button type="submit" name="addTarget" th:value="${rowStat.index}"> &#x1F870; </button> </td>

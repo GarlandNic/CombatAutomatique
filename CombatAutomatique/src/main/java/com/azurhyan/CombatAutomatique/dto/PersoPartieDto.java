@@ -16,9 +16,14 @@ public class PersoPartieDto {
 		this.init = -(perso.getHfatigue() > perso.getCCinfatigable() ? (perso.getHfatigue() - perso.getCCinfatigable())/2 : 0) 
 				-(perso.getHmobilite() > perso.getCCincoercible() ? (perso.getHmobilite() - perso.getCCincoercible())/2 : 0)
 				-(perso.getHsens() > perso.getCCtoujoursPret() ? (perso.getHsens() - perso.getCCtoujoursPret())/2 : 0);
-		perso.getComboList().forEach(combo -> this.init = this.init + combo.getInit());
+		perso.getComboList().forEach(combo -> {
+			if(combo.isActif()) this.init = this.init + combo.getInit();
+		});
 		this.visible = perso.isVisible();
 		this.deDef = (null != perso.getEtat() ? perso.getEtat().getDeDef() : 0);
+		this.bles = perso.totalDemiNiveauxBlessures()*2/perso.getCON();
+		this.choc = perso.totalPtsDeChoc()*4/(perso.getCON()+1);
+		this.incapacite = (null != perso.getEtat() ? perso.getEtat().getIncapacite() : 0);
 	}
 
 	int id;
@@ -30,5 +35,11 @@ public class PersoPartieDto {
 	boolean visible;
 	
 	int deDef;
+	
+	int bles;
+	
+	int choc;
+	
+	int incapacite;
 
 }

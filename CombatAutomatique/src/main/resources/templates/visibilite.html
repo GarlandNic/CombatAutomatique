@@ -7,6 +7,10 @@
 </head>
 <body>
 	
+	<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get">
+		<button type="submit"> &#127968; </button> 
+	</form>
+	
 	<h1> Liste des personnages de <span th:text="${partie}">partie</span> : </h1>
 	
 	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/visibilitePerso'}" th:object="${persosVisibles}" method="post">
@@ -17,6 +21,7 @@
 					<th> Visible ? </th>
 					<th> Perso </th>
 					<th></th>
+					<th>  </th>
 					<th> Déf </th>
 					<th></th>
 				</tr>
@@ -33,25 +38,20 @@
                     	<span th:text="*{persoList[__${itemStat.index}__].nom}"> nom </span>
                     </td>
                     <td>
-						<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${perso.id}}" method="get">
-							<button type="submit">Voir combo</button>
-						</form>
+						<button type="submit" th:formaction="@{'/azurhyan/'+${partie}+'/'+${perso.id}}" formmethod="get">Voir combo</button>
 					</td>
-					<td> <input type="number" th:field="*{persoList[__${itemStat.index}__].deDef}" style="width: 3em;" min="0"/> </td>
+					<td> <select th:field="*{persoList[__${itemStat.index}__].incapacite}">
+							<option value="0"> <span style="color:green;font-weight: bolder;"> &xcirc; </span>Peut agir</option>
+							<option value="1"> <span style="color:grey;font-weight: bolder;"> &check; </span>Déjà agit</option>
+							<option value="2"> <span style="color:orange;font-weight: bolder;"> &olcross; </span>Action sautée</option>
+							<option value="3"> <span style="color:red;font-weight: bolder;"> &cross; </span>Incapacité</option>
+						</select> </td>
+					<td> <input type="number" th:field="*{persoList[__${itemStat.index}__].deDef}" min="0"/> </td>
                     <td> <button type="submit" name="dupliquer" th:value="${perso.id}">Dupliquer le perso</button> </td>
                 </tr>
 			</tbody>
 		</table>
 		
-		<!-- 
-		<ul>
-  <li th:each="perso : *{persoList}">
-    <input type="checkbox" th:field="*{features}" th:value="${feat}" />
-    <label th:for="${#ids.prev('features')}" 
-           th:text="#{${'seedstarter.feature.' + feat}}">Heating</label>
-  </li>
-</ul>
-	-->
 		<button type="submit">Enregistrer les modifications</button> 
 	</form>	
 	

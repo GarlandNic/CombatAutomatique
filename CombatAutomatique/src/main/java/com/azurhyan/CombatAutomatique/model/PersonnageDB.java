@@ -101,11 +101,15 @@ public class PersonnageDB {
 	}
 	
 	public int totalDemiNiveauxBlessures() {
-		return this.blessureList.stream().mapToInt(bl -> bl.getDemiNiveau()).sum();
+		return this.blessureList.stream().mapToInt(bl -> 
+			( !(bl.partieTouchee.equals("Bouclier") || bl.partieTouchee.equals("Armure")) ? 
+					bl.getDemiNiveau() : 0) ).sum();
 	}
 
 	public int totalPtsDeChoc() {
-		return this.blessureList.stream().mapToInt(bl -> bl.getPtDeChoc()).sum();
+		return this.blessureList.stream().mapToInt(bl -> 
+			( !(bl.partieTouchee.equals("Bouclier") || bl.partieTouchee.equals("Armure")) ? 
+					bl.getPtDeChoc() : 0) ).sum();
 	}
 	
 	public float getHfatigue2() {

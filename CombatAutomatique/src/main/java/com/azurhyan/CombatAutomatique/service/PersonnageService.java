@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,11 +55,13 @@ public class PersonnageService {
 				EtatDB etat = perso.getEtat();
 				if(etat != null) {
 					etat.setDeDef(persoPartie.getDeDef());
+					etat.setIncapacite(persoPartie.getIncapacite());
 					etatRepo.save(etat);
 				}
-				if(etat == null && persoPartie.getDeDef() != 0) {
+				if(etat == null) {
 					EtatDB newEtat = new EtatDB(perso);
 					newEtat.setDeDef(persoPartie.getDeDef());
+					newEtat.setIncapacite(persoPartie.getIncapacite());
 					perso.setEtat(newEtat);
 					persoRepo.save(perso);
 				}
@@ -114,18 +118,18 @@ public class PersonnageService {
 		return (new PersoCompletDto(perso.get()));
 	}
 
-	public PersonnageDB saveDto(PersoCompletDto perso) {
+	public PersoCompletDto saveDto(PersoCompletDto perso) {
 		PersonnageDB pp = perso.persoToDB();
-		if(pp.getEtat() == null) {
+		if(pp.getEtat() == null && perso.getPersoId() != 0) {
 			Optional<EtatDB> etat = etatRepo.findByPerso(pp);
 			if(etat.isPresent()) pp.setEtat(etat.get());
 		}
-		return persoRepo.save(pp);
+		return (new PersoCompletDto(persoRepo.save(pp)));
 	}
 
 	public void saveCopy(PersonnageDB oldPerso) {
 	    PersonnageDB newPerso = oldPerso.copy();
-	    newPerso.setNom(newPerso.getNom().concat("_bis"));
+	    newPerso.setNom(incrementeNom(newPerso.getNom()));
 		persoRepo.save(newPerso);
 	}
 
@@ -134,12 +138,32 @@ public class PersonnageService {
 		List<EtatDB> etatListBD = new ArrayList<>();
 		persoListBD.forEach(perso -> {
 			EtatDB etat = perso.getEtat();
-			if(etat != null && etat.getDeDef() !=0) {
-				etat.setDeDef(0);
-				etatListBD.add(etat);
+			if(etat != null) {
+				if(etat.getDeDef() !=0) {
+					etat.setDeDef(0);
+					etatListBD.add(etat);
+				}
+				switch(etat.getIncapacite()) {
+					case 0: break;
+					case 1: etat.setIncapacite(0); break;
+					case 2: etat.setIncapacite(0); break;
+					case 3: etat.setIncapacite(1); break;
+				}
+
 			}
 		});
 		etatRepo.saveAll(etatListBD);		
+	}
+	
+	public String incrementeNom(String nom) {
+		Pattern pattern = Pattern.compile("^(.*\\s)(\\d+)$");
+		Matcher m = pattern.matcher(nom);
+		if(m.matches()) {
+			nom = m.group(1) + String.format("%d", Integer.parseInt(m.group(2)) + 1);
+		} else {
+			nom += " 1";			
+		}
+		return nom;
 	}
 
 }

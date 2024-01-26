@@ -44,6 +44,7 @@ public class ComboDto {
 		this.endBouclier = combo.getEndBouclier();
 		this.endPerso = combo.getEndPerso();
 		this.IBdef = combo.getIBdef();
+		this.actif = combo.isActif();
 	}
 	
 	public ComboDB comboToDB(PersonnageDB perso) {
@@ -61,6 +62,7 @@ public class ComboDto {
 		comb.setEndBouclier(endBouclier);
 		comb.setEndPerso(endPerso);
 		comb.setIBdef(IBdef);
+		comb.setActif(actif);
 		return comb;
 	}
 
@@ -82,6 +84,7 @@ public class ComboDto {
 	int endBouclier=15;
 	int endPerso=15;
 	int IBdef=15;
+	boolean actif=true;
 	
 	public void addHandicap(int demiH) {
 		int h = demiH/2;

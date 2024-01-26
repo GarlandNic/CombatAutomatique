@@ -11,5 +11,7 @@ public class Degat {
 	List<BlessureDto> blessList = new ArrayList<>();
 	
 	float bousculadeH = 0;
+	
+	boolean toucher = false;
 
 }
