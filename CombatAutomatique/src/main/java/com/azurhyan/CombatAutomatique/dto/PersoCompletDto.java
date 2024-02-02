@@ -195,6 +195,9 @@ public class PersoCompletDto {
 				if(combo.getNom().contains("Base")) {
 					comboTot.setCaC(combo.isCaC());
 					comboTot.setTypeDgts(combo.getTypeDgts());
+					comboTot.setGlobaux(combo.isGlobaux());
+					comboTot.setElement(combo.getElement());
+					comboTot.setBouclier(combo.getBouclier());
 				}
 				comboTot.setInit(comboTot.getInit()+combo.getInit());
 				comboTot.setToucher(comboTot.getToucher()+combo.getToucher());

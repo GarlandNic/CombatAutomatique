@@ -72,7 +72,7 @@
 				<th> </th>
 				<th> Défense </th>
 				<th> Esquive </th>
-				<th> Parade <span style="cursor: help;" title="Parade &le; 0 &rArr; Pas de bouclier"> &#9432; </span></th>
+				<th> Parade </th>
 				<th> Endurance<br/>du bouclier </th>
 				<th> Endurance<br/>du perso </th>
 				<th> IB def </th>
@@ -84,8 +84,11 @@
 			<tr th:with="comboTmp = ${combototal}">
 				<td> 
 					Combo total
-					<br/> 	<input type="text" th:value="${comboTmp.CaC ? 'C-à-c' : 'Dist'}" style="width: 3em;" disabled/> /
-							<input type="text" th:value="${comboTmp.typeDgts.toString()}" style="width: 3em;" disabled/>
+					<br/> 	
+					<span th:remove="tag" th:text="${comboTmp.CaC ? 'C-à-c' : 'Dist'}"></span> /
+					Dégâts <span th:remove="tag" th:text="${comboTmp.typeDgts.toString()}"></span> 
+					<span th:remove="tag" th:text="${comboTmp.globaux ? 'Globaux' : ''}"></span> 
+					<span th:remove="tag" th:text="${comboTmp.element.toString()}"></span>
 				</td>
 				<td> <input type="number" th:value="${comboTmp.init}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.toucher}" disabled/> </td>
@@ -95,7 +98,10 @@
 				<td> </td>
 				<td> <input type="number" th:value="${comboTmp.defense}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.esquive}" disabled/> </td>
-				<td> <input type="number" th:value="${comboTmp.parade}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.parade}" disabled/> 
+					 <br/>
+					 <span th:remove="tag" th:text="${comboTmp.bouclier.toString()}"></span>
+				</td>
 				<td> <input type="number" th:value="${comboTmp.endBouclier}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.endPerso}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.IBdef}" disabled/> </td>
@@ -130,14 +136,28 @@
 							<option value="false" text="Dist">Dist</option>
 						</select>
 						<select th:field="*{comboList[__${rowStat.index}__].typeDgts}">
-							<option value="NOR" text="Nor">Nor</option>
-							<option value="CTD" text="Ctd">Ctd</option>
-							<option value="PRF" text="Prf">Perf</option>
+							<option value="NOR">Normaux</option>
+							<option value="CTD">Contondant</option>
+							<option value="PRF">Perforant</option>
+						</select>
+						<select th:field="*{comboList[__${rowStat.index}__].globaux}">
+							<option value="false" text="standard">standard</option>
+							<option value="true" text="Globaux">Globaux</option>
+						</select>
+						<select th:field="*{comboList[__${rowStat.index}__].element}">
+							<option value="NORMAL">standard</option>
+							<option value="FEU">de Feu</option>
+							<option value="ACIDE">d'Acide</option>
+							<option value="FROID">de Froid</option>
+							<option value="ELECTRICITE">Electriques</option>
+							<option value="PSYCHIQUE">Psychiques</option>
 						</select>
 					</div>					
 					<div th:unless="*{#strings.contains(comboList[__${rowStat.index}__].nom, 'Base')}">
 						<input type="hidden" th:field="*{comboList[__${rowStat.index}__].CaC}" value="true"/>
 						<input type="hidden" th:field="*{comboList[__${rowStat.index}__].typeDgts}" value="NOR"/>
+						<input type="hidden" th:field="*{comboList[__${rowStat.index}__].globaux}" value="false"/>
+						<input type="hidden" th:field="*{comboList[__${rowStat.index}__].element}" value="NORMAL"/>
 					</div>
 				</td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].init}"/> </td>
@@ -148,7 +168,22 @@
 				<td> </td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].defense}"/> </td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].esquive}"/> </td>
-				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].parade}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].parade}"/> 
+					<div th:if="*{#strings.contains(comboList[__${rowStat.index}__].nom, 'Base')}">
+						<select th:field="*{comboList[__${rowStat.index}__].bouclier}">
+							<option value="Pas_de_bouclier">Pas de bouclier</option>
+							<option value="Dague">Dague</option>
+							<option value="Targe">Targe</option>
+							<option value="Bouclier">Bouclier</option>
+							<option value="Grand_bouclier">Grand bouclier</option>
+							<option value="Bouclier_tour">Bouclier-tour</option>
+						</select>
+					</div>					
+					<div th:unless="*{#strings.contains(comboList[__${rowStat.index}__].nom, 'Base')}">
+						<input type="hidden" th:field="*{comboList[__${rowStat.index}__].bouclier}" value="Pas_de_bouclier"/>
+					</div>
+				
+				</td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].endBouclier}"/> </td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].endPerso}"/> </td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].IBdef}"/> </td>

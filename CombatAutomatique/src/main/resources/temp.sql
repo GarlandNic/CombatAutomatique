@@ -2,7 +2,8 @@
 use azurhyan;
 
 alter table combos
-MODIFY COLUMN TYPEDGTS enum('NOR','CTD','PRF','GLB','BOUSCUL','CAPTURE');
+drop column ELEMENT,
+add column ELEMENT enum('NORMAL','FEU','ACIDE','FROID','ELECTRICITE','PSYCHIQUE') NOT NULL DEFAULT 'NORMAL';
 
 commit;
 

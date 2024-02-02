@@ -1,7 +1,9 @@
 package com.azurhyan.CombatAutomatique.dto;
 
 import com.azurhyan.CombatAutomatique.model.ComboDB;
+import com.azurhyan.CombatAutomatique.model.ComboDB.Bouclier;
 import com.azurhyan.CombatAutomatique.model.ComboDB.Dgts;
+import com.azurhyan.CombatAutomatique.model.ComboDB.Element;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 
 import lombok.Data;
@@ -33,6 +35,8 @@ public class ComboDto {
 		this.nom = combo.getNom();
 		this.init = combo.getInit();
 		this.typeDgts = combo.getTypeDgts();
+		this.globaux = combo.isGlobaux();
+		this.element = combo.getElement();
 		this.CaC = combo.isCaC();
 		this.toucher = combo.getToucher();
 		this.prdEnnemie = combo.getPrdEnnemie();
@@ -41,6 +45,7 @@ public class ComboDto {
 		this.defense = combo.getDefense();
 		this.esquive = combo.getEsquive();
 		this.parade = combo.getParade();
+		this.bouclier = combo.getBouclier();
 		this.endBouclier = combo.getEndBouclier();
 		this.endPerso = combo.getEndPerso();
 		this.IBdef = combo.getIBdef();
@@ -51,6 +56,8 @@ public class ComboDto {
 		ComboDB comb = new ComboDB(this.nom, perso, false);
 		comb.setInit(init);
 		comb.setTypeDgts(typeDgts);
+		comb.setGlobaux(globaux);
+		comb.setElement(element);
 		comb.setCaC(CaC);
 		comb.setToucher(toucher);
 		comb.setPrdEnnemie(prdEnnemie);
@@ -59,6 +66,7 @@ public class ComboDto {
 		comb.setDefense(defense);
 		comb.setEsquive(esquive);
 		comb.setParade(parade);
+		comb.setBouclier(bouclier);
 		comb.setEndBouclier(endBouclier);
 		comb.setEndPerso(endPerso);
 		comb.setIBdef(IBdef);
@@ -71,6 +79,8 @@ public class ComboDto {
 	int init=15;
 
 	Dgts typeDgts=Dgts.NOR;
+	boolean globaux=false;
+	Element element=Element.NORMAL;
 	
 	boolean CaC=true;
 	
@@ -81,6 +91,7 @@ public class ComboDto {
 	int defense=15;
 	int esquive=15;
 	int parade=0;
+	Bouclier bouclier=Bouclier.Pas_de_bouclier;
 	int endBouclier=15;
 	int endPerso=15;
 	int IBdef=15;

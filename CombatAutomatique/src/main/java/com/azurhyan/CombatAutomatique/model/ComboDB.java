@@ -20,10 +20,98 @@ public class ComboDB {
 	public static enum Dgts {
 		NOR,
 		CTD,
-		PRF,
-		GLB,
-		BOUSCUL,
-		CAPTURE
+		PRF;
+		
+		@Override
+		public String toString() {
+			switch (this) {
+	        	case NOR:
+	        		return "Normaux";
+	        	case CTD:
+	        		return "Contondants";
+	        	case PRF:
+	        		return "Perforants";
+	        	default:
+	        		return null;
+			}
+		}
+	}
+	
+	public static enum Bouclier {
+		Pas_de_bouclier,
+		Dague,
+		Targe,
+		Bouclier,
+		Grand_bouclier,
+		Bouclier_tour;
+		
+		@Override
+		public String toString() {
+			switch (this) {
+				case Pas_de_bouclier:
+					return "Pas de bouclier";
+				case Dague:
+					return "Dague";
+				case Targe:
+					return "Targe";
+				case Bouclier:
+					return "Bouclier";
+				case Grand_bouclier:
+					return "Grand bouclier";
+				case Bouclier_tour:
+					return "Bouclier-tour";
+	        	default:
+	        		return null;
+			}
+		}
+
+		public int BonusEndGlb() {
+			switch (this) {
+				case Pas_de_bouclier:
+					return 0;
+				case Dague:
+					return 0;
+				case Targe:
+					return 1;
+				case Bouclier:
+					return 2;
+				case Grand_bouclier:
+					return 3;
+				case Bouclier_tour:
+					return 4;
+				default:
+					return 0;
+			}
+		}
+	}
+
+	public static enum Element {
+		NORMAL,
+		FEU,
+		ACIDE,
+		FROID,
+		ELECTRICITE,
+		PSYCHIQUE;
+		
+		@Override
+		public String toString() {
+			switch (this) {
+				case NORMAL:
+					return "";
+				case FEU:
+					return "de Feu";
+				case ACIDE:
+					return "d'Acide";
+				case FROID:
+					return "de Froid";
+				case ELECTRICITE:
+					return "Electriques";
+				case PSYCHIQUE:
+					return "Psychiques";
+	        	default:
+	        		return null;
+			}
+		}
 	}
 
 	public ComboDB() {
@@ -69,6 +157,13 @@ public class ComboDB {
 	@Column(name="TYPEDGTS")
 	@Enumerated(EnumType.STRING)
 	Dgts typeDgts=Dgts.NOR;
+	
+	@Column(name="GLOBAUX")
+	boolean globaux=false;
+	
+	@Column(name="ELEMENT")
+	@Enumerated(EnumType.STRING)
+	Element element=Element.NORMAL;
 
 	@Column(name="CAC")
 	boolean CaC=true;
@@ -93,6 +188,10 @@ public class ComboDB {
 	
 	@Column(name="PARADE")
 	int parade=0;
+	
+	@Column(name="BOUCLIER")
+	@Enumerated(EnumType.STRING)
+	Bouclier bouclier=Bouclier.Pas_de_bouclier;
 	
 	@Column(name="ENDBOUCLIER")
 	int endBouclier=15;
@@ -135,6 +234,9 @@ public class ComboDB {
 		combo.setPrdEnnemie(prdEnnemie);
 		combo.setToucher(toucher);
 		combo.setTypeDgts(typeDgts);
+		combo.setGlobaux(globaux);
+		combo.setElement(element);
+		combo.setBouclier(bouclier);
 		combo.setActif(actif);
 		combo.setPerso(newPerso);
 		return combo;

@@ -1,7 +1,13 @@
 
 TODO list
   
-  o dégâts globaux
+  o supprimer perso / archive
+  o PP
+  	- supprimer dernière action
+  	- modifier dernière attaque
+  
+  o modifier calcul combat : 
+  	- dégâts globaux (+1 niv, répartit entre 6 parties du corps)
   
  o classer les perso ?
   
@@ -39,8 +45,9 @@ DONE :
  o incapacité
  o test incapacité
  o combo a switcher
-  o bug : calcul des attaques (parade ? 
   o bug : dans visibilité, modif incapacité
   o ligne combo noirifiée automatiquement
+  o tester modifs affichage bouclier & types de dégâts
+  o ajouter bl/# au-dessus des carrées
 
 
