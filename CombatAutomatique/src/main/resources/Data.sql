@@ -23,6 +23,7 @@ create table personnages(
 
 create table blessures(
  BLESSID integer NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ REFACTION integer DEFAULT 0,
  PERSONNAGE integer,
  DEMINIVEAU integer unsigned,
  PTDECHOC integer unsigned,
@@ -35,7 +36,9 @@ create table combos(
  PERSONNAGE integer,
  NOM varchar(255),
  INIT integer NOT NULL DEFAULT 15,
- TYPEDGTS enum('NOR','CTD','PRF','BOUSCUL','CAPTURE') DEFAULT 'NOR',
+ TYPEDGTS enum('NOR','CTD','PRF') DEFAULT 'NOR',
+ GLOBAUX boolean DEFAULT FALSE,
+ ELEMENT enum('NORMAL','FEU','ACIDE','FROID','ELECTRICITE','NECROTIQUE') NOT NULL DEFAULT 'NORMAL',
  CAC boolean DEFAULT TRUE,
  TOUCHER integer NOT NULL DEFAULT 15,
  PRDENNEMIE integer NOT NULL DEFAULT 0,
@@ -44,6 +47,7 @@ create table combos(
  DEFENSE integer NOT NULL DEFAULT 15,
  ESQUIVE integer NOT NULL DEFAULT 15,
  PARADE integer NOT NULL DEFAULT 0,
+ BOUCLIER enum('Pas_de_bouclier','Dague','Targe','Bouclier','Grand_bouclier','Bouclier_tour') NOT NULL DEFAULT 'NORMAL',
  ENDBOUCLIER integer NOT NULL DEFAULT 15,
  ENDPERSO integer NOT NULL DEFAULT 15,
  IBDEF integer NOT NULL DEFAULT 15,
@@ -53,9 +57,14 @@ create table combos(
 
 create table actions(
  ACTIOID integer NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ REFATTAQUE integer default 0,
  PARTIE varchar(255) NOT NULL,
  ACTEURID integer,
  ACTEURNOM varchar(255),
+ ACTEURDE integer,
+ CIBLEID integer default 0,
+ CIBLENOM varchar(255),
+ CIBLEDE integer default 0,
  ACTIONTIME datetime NOT NULL,
  DESCRIPTION varchar(1023),
  FOREIGN KEY (ACTEURID) REFERENCES personnages (PERSOID) ON DELETE CASCADE ON UPDATE CASCADE

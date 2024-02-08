@@ -34,5 +34,7 @@ public class ActionDto {
 	LocalDateTime actionTime;
 
 	String description;
+	
+	int de20;
 
 }

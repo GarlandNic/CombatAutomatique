@@ -97,6 +97,12 @@ public class PersonnageService {
 		if(perso.isEmpty()) return null;
 		return perso.get();
 	}
+	
+	public EtatDB findByPersonnage(int persoId) {
+		Optional<EtatDB> etat = etatRepo.findById(persoId);
+		if(etat.isEmpty()) return new EtatDB(persoId);
+		return etat.get();
+	}
 
 	public ComboDB comboHandicap(PersonnageDB perso) {
 		int demiH = Math.max(0, perso.getHfatigue() - perso.getCCinfatigable());

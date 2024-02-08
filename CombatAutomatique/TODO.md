@@ -1,13 +1,9 @@
 
 TODO list
-  
+
+  o PP :  annuler bousculade ?? (on verra à la fin)
+
   o supprimer perso / archive
-  o PP
-  	- supprimer dernière action
-  	- modifier dernière attaque
-  
-  o modifier calcul combat : 
-  	- dégâts globaux (+1 niv, répartit entre 6 parties du corps)
   
  o classer les perso ?
   
@@ -49,5 +45,20 @@ DONE :
   o ligne combo noirifiée automatiquement
   o tester modifs affichage bouclier & types de dégâts
   o ajouter bl/# au-dessus des carrées
+  o modifier calcul combat : 
+  	- dégâts globaux (+1 niv, répartit entre 6 parties du corps)
+  o PP
+  	X modif table action !!!!!!! temp.sql
+  	X modif objet java actionDB
+  	X nouvelle route : azurhyan/partie/annulerAttaque avec lastAttaque=refAttaque
+  	X nouvelle route : azurhyan/partie/modifierAttaque avec lastAttaque=refAttaque
+  	X ActionService : annulerAction :
+  		annuler chaque blessure
+  		o modifier H-
+  		o supprimer blessure
+  		o supprimer action
+  	X modifier lancerAttaque pour que actionDB enregistre les bonnes infos (dé et cible et refattaque)
+  		et blessureDB (refAction)
+  o type de dégâts
 
-
+  

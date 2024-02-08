@@ -8,4 +8,6 @@ import com.azurhyan.CombatAutomatique.model.BlessureDB;
 @Repository
 public interface BlessureRepository extends CrudRepository<BlessureDB, Integer> {
 
+	Iterable<BlessureDB> findByRefAction(int actionId);
+
 }

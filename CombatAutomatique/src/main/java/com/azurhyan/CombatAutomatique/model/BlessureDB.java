@@ -20,6 +20,10 @@ public class BlessureDB {
 	@Column(name="BLESSID")
 	int blessureId;
 	
+//	add FOREIGN KEY (REFACTION) REFERENCES actions (ACTIOID) ON DELETE SET NULL ON UPDATE SET NULL;
+	@Column(name="REFACTION")
+	int refAction=0;
+	
 //	@Column(name="PERSONNAGE")
 //	int persoId;
 	

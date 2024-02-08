@@ -85,8 +85,21 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="action : ${actions}">
-				<td><div th:utext="${action.description}"> action </div></td>
+			<tr th:each="action, iStat : ${actions}">
+				<td>
+					<div th:utext="${action.description}"> action </div>
+					<form th:if="${iStat.last}" action="#" th:action="@{'/azurhyan/'+${partie}+'/annulerAttaque'}" method="post">
+						<button type="submit" name="lastAttaque" th:value="${action.refAttaque}" style="float: right;">Annuler dernière attaque</button> 
+					</form>
+					<form th:if="${iStat.last}" action="#" th:action="@{'/azurhyan/'+${partie}+'/modifierAttaque'}" method="post">
+						<button type="submit" name="lastAttaque" th:value="${action.refAttaque}" style="float: right;">Modifier dernière attaque</button> 
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<form action="#" th:action="@{'/azurhyan/'+${partie}+'/0/attaque'}" method="get">
+					<button type="submit" style="float: right;">Attaque manuelle</button> 
+				</form>
 			</tr>
 		</tbody>
 	</table>

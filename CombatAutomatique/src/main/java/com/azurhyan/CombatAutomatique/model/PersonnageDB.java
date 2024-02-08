@@ -150,6 +150,12 @@ public class PersonnageDB {
 		this.CCtoujoursPret = (int) Math.round(hd*2);
 	}
 	
+	public float getMinPourMineure() {
+		double res = 0.2*this.CON - 1 + 0.01;
+		res = Math.ceil(res)/2;
+		return (float) res;
+	}
+	
 	public PersonnageDB copy() {
 		PersonnageDB newPerso = new PersonnageDB();
 	    newPerso.setNom(this.getNom());
@@ -176,4 +182,5 @@ public class PersonnageDB {
 		
 		return newPerso;
 	}
+
 }

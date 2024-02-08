@@ -20,19 +20,34 @@ public class ActionDB {
 	@Column(name="ACTIOID")
 	int actionId;
 	
+	@Column(name="REFATTAQUE")
+	int refAttaque=0;
+
+	@Column(name="PARTIE")
+	String partie;
+	
 //	 FOREIGN KEY (ACTEURID) REFERENCES personnages (ID) ON DELETE CASCADE ON UPDATE CASCADE
 	@Column(name="ACTEURID")
 	int persoId;
 	
-	@Column(name="PARTIE")
-	String partie;
+	@Column(name="ACTEURNOM")
+	String acteurNom;
 	
+	@Column(name="ACTEURDE")
+	int acteurDe=0;
+	
+	@Column(name="CIBLEID")
+	int cibleId;
+	
+	@Column(name="CIBLENOM")
+	String cibleNom;
+	
+	@Column(name="CIBLEDE")
+	int cibleDe;
+
 //	@ManyToOne
 //	@JoinColumn(name="ACTEURID")
 //	PersonnageDB acteur;
-	
-	@Column(name="ACTEURNOM")
-	String acteurNom;
 	
 	@Column(name="ACTIONTIME")
 	LocalDateTime actionTime;

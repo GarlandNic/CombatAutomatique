@@ -40,6 +40,11 @@ public class EtatDB {
 		this.turnOrder = p.getPersoId();
 	}
 	
+	public EtatDB(int persoId) {
+		this.personnage = persoId;
+		this.turnOrder = persoId;
+	}
+	
 	public EtatDB() {
 	}
 }

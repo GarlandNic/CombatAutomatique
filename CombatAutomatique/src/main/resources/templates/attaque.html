@@ -21,7 +21,7 @@
 						</form>
 					</td>
 					<td>
-						<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${attaque.attaquantId}}" method="get">
+						<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${numPerso}}" method="get">
 							<button type="submit">Retourner à la fiche de perso</button> 
 						</form>
 					</td>
@@ -30,58 +30,68 @@
 		</table>
 	</aside>
 	
-	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${attaque.attaquantId}+'/attaque'}" th:object="${attaque}" method="post">
-		<input type="hidden" th:field="*{attaquantId}"/>
-		<input type="hidden" th:field="*{attaquantNom}"/>
-		<input type="hidden" th:field="*{attaquantPdc}"/>
+	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${numPerso}+'/attaque'}" th:object="${attaque}" method="post">
+<!-- 		<input type="hidden" th:field="*{attaquantId}"/> -->
+<!-- 		<input type="hidden" th:field="*{attaquantNom}"/> -->
+<!-- 		<input type="hidden" th:field="*{attaquantPdc}"/> -->
 		<input type="hidden" th:field="*{partie}"/>
 	
-	<h1> <span th:text="*{attaquantNom}">acteur</span> lance une attaque : </h1>
+	<h1> Attaque : </h1>
+<!-- 	<h1> <span th:text="*{attaquantNom}">acteur</span> lance une attaque : </h1> -->
 	
-	<h3>Rappel du combo :</h3>
+<!-- 	<h3>Rappel du combo :</h3> -->
 	
-	<table>
-		<thead>
-			<tr>
-				<th> </th>
-				<th> Init </th>
-				<th> Toucher </th>
-				<th> Parade<br/>ennemie </th>
-				<th> Force </th>
-				<th> IB att </th>
-				<th> </th>
-				<th> Défense </th>
-				<th> Esquive </th>
-				<th> Parade </th>
-				<th> Endurance<br/>du bouclier </th>
-				<th> Endurance<br/>du perso </th>
-				<th> IB def </th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th> 
-					Combo total
-					<br/> 	<input type="text" th:value="*{attaquantCombo.CaC ? 'C-à-c' : 'Dist'}" style="width: 3em;" disabled/> /
-							<input type="text" th:value="*{attaquantCombo.typeDgts.toString()}" style="width: 3em;" disabled/>
-							<input type="hidden" th:field="*{attaquantCombo.CaC}" style="width: 3em;"/> /
-							<input type="hidden" th:field="*{attaquantCombo.typeDgts}" style="width: 3em;"/>
-				</th>
-				<td> <input type="number" th:field="*{attaquantCombo.init}" readonly/> </td>
-				<td> <input type="number" th:field="*{attaquantCombo.toucher}" readonly/> </td>
-				<td> <input type="number" th:field="*{attaquantCombo.prdEnnemie}" readonly/> </td>
-				<td> <input type="number" th:field="*{attaquantCombo.force}" readonly/> </td>
-				<td> <input type="number" th:field="*{attaquantCombo.IBatt}" readonly/> </td>
-				<td> </td>
-				<td> <input type="number" th:field="*{attaquantCombo.defense}" readonly/> </td>
-				<td> <input type="number" th:field="*{attaquantCombo.esquive}" readonly/> </td>
-				<td> <input type="number" th:field="*{attaquantCombo.parade}" readonly/> </td>
-				<td> <input type="number" th:field="*{attaquantCombo.endBouclier}" readonly/> </td>
-				<td> <input type="number" th:field="*{attaquantCombo.endPerso}" readonly/> </td>
-				<td> <input type="number" th:field="*{attaquantCombo.IBdef}" readonly/> </td>
-			</tr>
-		</tbody>
-	</table>
+<!-- 	<table> -->
+<!-- 		<thead> -->
+<!-- 			<tr> -->
+<!-- 				<th> </th> -->
+<!-- 				<th> Init </th> -->
+<!-- 				<th> Toucher </th> -->
+<!-- 				<th> Parade<br/>ennemie </th> -->
+<!-- 				<th> Force </th> -->
+<!-- 				<th> IB att </th> -->
+<!-- 				<th> </th> -->
+<!-- 				<th> Défense </th> -->
+<!-- 				<th> Esquive </th> -->
+<!-- 				<th> Parade </th> -->
+<!-- 				<th> Endurance<br/>du bouclier </th> -->
+<!-- 				<th> Endurance<br/>du perso </th> -->
+<!-- 				<th> IB def </th> -->
+<!-- 			</tr> -->
+<!-- 		</thead> -->
+<!-- 		<tbody> -->
+<!-- 			<tr> -->
+<!-- 				<th>  -->
+<!-- 					Combo total -->
+<!-- 					<br/> 	<input type="text" th:value="*{attaquantCombo.CaC ? 'C-à-c' : 'Dist'}" disabled/> / -->
+<!-- 							<input type="text" th:value="*{attaquantCombo.typeDgts.toString()}" disabled/> -->
+<!-- 							<input type="text" th:value="*{attaquantCombo.globaux ? 'Globaux' : ''}" disabled/> -->
+<!-- 							<input type="text" th:value="*{attaquantCombo.element.toString()}" disabled/> -->
+<!-- 							<input type="hidden" th:field="*{attaquantCombo.CaC}"/> -->
+<!-- 							<input type="hidden" th:field="*{attaquantCombo.typeDgts}"/> -->
+<!-- 							<input type="hidden" th:field="*{attaquantCombo.globaux}"/>  -->
+<!-- 							<input type="hidden" th:field="*{attaquantCombo.element}"/> -->
+<!-- 				</th> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.init}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.toucher}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.prdEnnemie}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.force}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.IBatt}" readonly/> </td> -->
+<!-- 				<td> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.defense}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.esquive}" readonly/> </td> -->
+<!-- 				<td>  -->
+<!-- 					<input type="number" th:field="*{attaquantCombo.parade}" readonly/>  -->
+<!-- 					<br/> -->
+<!-- 					<input type="text" th:value="*{attaquantCombo.bouclier.toString()}" disabled/> -->
+<!-- 					<input type="hidden" th:field="*{attaquantCombo.bouclier}" disabled/> -->
+<!-- 				</td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.endBouclier}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.endPerso}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.IBdef}" readonly/> </td> -->
+<!-- 			</tr> -->
+<!-- 		</tbody> -->
+<!-- 	</table> -->
 	
 	<h3>Cibles de l'attaque : </h3>
 	
@@ -101,9 +111,10 @@
 							<td>
 								<span th:text="*{attaquantList[__${itemStat.index}__].cibleNom}"> nom </span>
 								<input type="hidden" th:field="*{attaquantList[__${itemStat.index}__].cibleId}"/>
-								<input type="hidden" th:field="*{attaquantList[__${itemStat.index}__].cibleNom}"/>							
+								<input type="hidden" th:field="*{attaquantList[__${itemStat.index}__].cibleNom}"/>
+								<input th:type="${numPerso==0 ? 'number' : 'hidden'}" th:field="*{attaquantList[__${itemStat.index}__].de}"/>
 							</td>
-		                    <td> <button type="submit" name="removeAttacker" th:value="${itemStat.index}" th:unless="${itemStat.first}"> &#x1F872; </button> </td>
+		                    <td> <button type="submit" name="removeAttacker" th:value="${itemStat.index}"> &#x1F872; </button> </td>
 						</tr>					
 					</table>
 					<div th:if="*{#lists.size(attaquantList) > 1}"> <em>
@@ -121,6 +132,7 @@
 								<span th:text="*{cibleList[__${itemStat.index}__].cibleNom}"> nom </span>
 								<input type="hidden" th:field="*{cibleList[__${itemStat.index}__].cibleId}"/>
 								<input type="hidden" th:field="*{cibleList[__${itemStat.index}__].cibleNom}"/>							
+								<input th:type="${numPerso==0 ? 'number' : 'hidden'}" th:field="*{cibleList[__${itemStat.index}__].de}"/>							
 							</td>
 							<td th:if="${n > 1}"><em>
 								(-
@@ -142,7 +154,8 @@
 							<td>
 								<span th:text="*{autreList[__${rowStat.index}__].cibleNom}"> nom </span>
 								<input type="hidden" th:field="*{autreList[__${rowStat.index}__].cibleId}"/>
-								<input type="hidden" th:field="*{autreList[__${rowStat.index}__].cibleNom}"/>							
+								<input type="hidden" th:field="*{autreList[__${rowStat.index}__].cibleNom}"/>
+								<input type="hidden" th:field="*{autreList[__${rowStat.index}__].de}"/>							
 							</td>
             		    </tr>						
 					</table>

@@ -35,6 +35,37 @@ public class ComboDB {
 	        		return null;
 			}
 		}
+
+		public int calculPtChoc(int margeBless) {
+			switch (this) {
+        	case NOR:
+        	case PRF:
+        		return (margeBless+1)/2;
+        	case CTD:
+        		return margeBless;
+        	default:
+        		return 0;
+			}
+		}
+
+		public float calculNvBl(int margeBless, boolean isObjet) {
+			int resDemi = 0;
+			switch (this) {
+        	case NOR:
+        		resDemi = margeBless;
+        		break;
+        	case CTD:
+        		resDemi = margeBless - 2;
+        		resDemi = (resDemi > 0 ? resDemi : 0);
+        		break;
+        	case PRF:
+        		resDemi = (isObjet ? margeBless/2 : margeBless);
+        		break;
+        	default:
+        		resDemi = 0;
+			}
+			return (float) (resDemi/2.0);
+		}
 	}
 	
 	public static enum Bouclier {
@@ -91,7 +122,7 @@ public class ComboDB {
 		ACIDE,
 		FROID,
 		ELECTRICITE,
-		PSYCHIQUE;
+		NECROTIQUE;
 		
 		@Override
 		public String toString() {
@@ -106,11 +137,56 @@ public class ComboDB {
 					return "de Froid";
 				case ELECTRICITE:
 					return "Electriques";
-				case PSYCHIQUE:
-					return "Psychiques";
+				case NECROTIQUE:
+					return "Nécrotiques";
 	        	default:
 	        		return null;
 			}
+		}
+
+		public int modifPtChoc(int ptChoc, boolean isCTD) {
+			switch (this) {
+			case NORMAL:
+				return ptChoc;
+			case FEU:
+			case ACIDE:
+				return ptChoc + (isCTD ? ptChoc/4 : ptChoc/2);
+			case FROID:
+				return ptChoc + (isCTD ? 0 : ptChoc);
+			case ELECTRICITE:
+				return 0 + (isCTD ? ptChoc/2 : ptChoc);
+			case NECROTIQUE:
+				return ptChoc + (isCTD ? ptChoc/4 : ptChoc/2);
+        	default:
+        		return ptChoc;
+			}
+		}
+
+		public float modifNvBl(float nvBl, boolean isCTD, boolean isObjet) {
+			int resDemi = (int) (nvBl*2);
+			switch (this) {
+			case NORMAL:
+			case FEU:
+				break;
+			case ACIDE:
+				resDemi += (isObjet ? (resDemi+1)/2 : 0);
+				break;
+			case FROID:
+				if(!isCTD) resDemi -= 2;
+				resDemi = (resDemi>0 ? resDemi : 0);
+				resDemi += (isObjet ? (resDemi+1)/2 : 0);
+				break;
+			case ELECTRICITE:
+				if(isCTD) resDemi += 2;
+				resDemi = (isObjet ? resDemi/2 : 0);
+				break;
+			case NECROTIQUE:
+				resDemi += (isObjet ? (resDemi+1)/2 : 0);
+				break;
+        	default:
+        		break;
+			}
+			return (float) (resDemi/2.0);
 		}
 	}
 
