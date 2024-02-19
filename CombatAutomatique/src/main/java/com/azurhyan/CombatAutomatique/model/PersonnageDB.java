@@ -3,6 +3,8 @@ package com.azurhyan.CombatAutomatique.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.azurhyan.CombatAutomatique.model.ComboDB.Bouclier;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -110,6 +112,25 @@ public class PersonnageDB {
 		return this.blessureList.stream().mapToInt(bl -> 
 			( !(bl.partieTouchee.equals("Bouclier") || bl.partieTouchee.equals("Armure")) ? 
 					bl.getPtDeChoc() : 0) ).sum();
+	}
+	
+	public int totalHandicaps() {
+		int Hfat = this.Hfatigue - this.CCinfatigable;
+		Hfat = (Hfat > 0 ? Hfat : 0);
+		int Hmob = this.Hmobilite - this.CCincoercible;
+		Hmob = (Hmob > 0 ? Hmob : 0);
+		int Hsen = this.Hsens - this.CCtoujoursPret;
+		Hsen = (Hsen > 0 ? Hsen : 0);
+		return (Hfat+Hmob+Hsen)/2;
+	}
+	
+	public boolean hasBouclier() {
+		boolean res = false;
+		for(ComboDB comb : this.comboList) {
+			if(comb.isActif() && comb.getNom().contains("Base"))
+				res = (comb.getBouclier() != Bouclier.Pas_de_bouclier); 
+		}
+		return res;
 	}
 	
 	public float getHfatigue2() {

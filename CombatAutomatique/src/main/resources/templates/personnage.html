@@ -216,30 +216,87 @@
 	<h3>Blessures</h3>
 	<p>
 		CON de combat : <input type="number" th:field="*{CON}"/>
+		&nbsp;
 		Total niveaux : <input type="number" th:value="*{totalBlessures()}" disabled/>
+		&nbsp;
 		Total points de chocs : <input type="number" th:value="*{totalPtsDeChoc()}" disabled/>
+		&nbsp;
+		Niveaux sur Bouclier : <input type="number" th:value="*{totalNvBouclier()}" disabled/>
+		&nbsp;
+		Niveaux sur Armure : <input type="number" th:value="*{totalNvArmure()}" disabled/>
 	</p> 
 	
-	<table>
+	<div>
+	<table style="display: inline-block; vertical-align:top;">
 		<thead>
 			<tr>
-				<th> Niveaux </th>
-				<th> Points de choc </th>
+				<th> Niv </th>
+				<th> # </th>
 				<th> Gravité </th>
 				<th> Partie touchée </th>
-				<th> <button type="submit" name="addBless">Ajouter une ligne</button> </th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="row,rowStat : *{blessureList}">
+			<tr th:each="row,rowStat : *{blessureList}" th:unless="${row.partieTouchee == 'Bouclier' or row.partieTouchee == 'Armure'}">
 				<td> <input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/> </td>
 				<td> <input type="number" th:field="*{blessureList[__${rowStat.index}__].ptDeChoc}"/> </td>
 				<td> <input type="text" th:value="${perso.getGravite(row)}" disabled/> </td>
 				<td> <input type="text" th:field="*{blessureList[__${rowStat.index}__].partieTouchee}"/> </td>
 				<td> <button type="submit" name="removeBless" th:value="${rowStat.index}">Supprimer la ligne</button> </td>
 			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td> <button type="submit" name="addBless" value="">Ajouter une ligne</button> </td>
+			</tr>
 		</tbody>
 	</table>
+	&nbsp; &nbsp; &nbsp;
+	<table style="display: inline-block; vertical-align:top;">
+		<thead>
+			<tr>
+				<th colspan="2"> Bouclier </th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="row,rowStat : *{blessureList}" th:if="${row.partieTouchee == 'Bouclier'}">
+				<td> 
+					<input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/>
+					<input type="hidden" th:field="*{blessureList[__${rowStat.index}__].ptDeChoc}"/>
+					<input type="hidden" th:field="*{blessureList[__${rowStat.index}__].partieTouchee}"/>
+				</td>
+				<td> <button type="submit" name="removeBless" th:value="${rowStat.index}">Supprimer</button> </td>
+			</tr>
+			<tr>
+				<td colspan="2" style="text-align:right;"> <button type="submit" name="addBless" value="Bouclier">Ajouter une ligne</button> </td>
+			</tr>
+		</tbody>
+	</table>
+	&nbsp; &nbsp; &nbsp;
+	<table style="display: inline-block; vertical-align:top;">
+		<thead>
+			<tr>
+				<th colspan="2"> Armure </th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="row,rowStat : *{blessureList}" th:if="${row.partieTouchee == 'Armure'}">
+				<td> 
+					<input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/>
+					<input type="hidden" th:field="*{blessureList[__${rowStat.index}__].ptDeChoc}"/>
+					<input type="hidden" th:field="*{blessureList[__${rowStat.index}__].partieTouchee}"/>
+				</td>
+				<td> <button type="submit" name="removeBless" th:value="${rowStat.index}">Supprimer</button> </td>
+			</tr>
+			<tr>
+				<td colspan="2" style="text-align:right;"> <button type="submit" name="addBless" value="Armure">Ajouter une ligne</button> </td>
+			</tr>
+		</tbody>
+	</table>
+	</div>
 	
 	<button type="submit" name="actu">Actualiser la fiche</button>
 	<br/>

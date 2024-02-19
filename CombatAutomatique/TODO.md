@@ -1,15 +1,11 @@
 
 TODO list
 
-  o PP :  annuler bousculade ?? (on verra à la fin)
+  o bousculade et attaques spéciales (coup dans le bouclier, etc.)
+  	- html : fieldset lors de l'attaque
+  	- objet pour regrouper les flag d'attaque spéciale ? dans attaque Dto
+  	- 
 
-  o supprimer perso / archive
-  
- o classer les perso ?
-  
- o access different pour le MJ (-> page visibilité ?)
- o reset bonus temporaire 
- o bonus juste pour cette attaque
  
 
 DONE :
@@ -60,5 +56,19 @@ DONE :
   	X modifier lancerAttaque pour que actionDB enregistre les bonnes infos (dé et cible et refattaque)
   		et blessureDB (refAction)
   o type de dégâts
+  o séparer dégâts armure et bouclier
+  o nouveau round => séparateur dans la liste des évènements
+  o afficher marge Tch / marge bl (modif Degat.java pour les enregistrer)
+  o couleur des évènements
+  o supprimer perso / archive :
+	- bouton Supprimer à droite de Dupliquer ssi joueur == PNJ
+  	- à gauche : flèches pour archiver
+  	- en bas : Archive, en dessous des boutons
+  	- confirmation pour la suppression
+  o page d'attaque : plus d'info sur les persos
+  
+
+  
+
 
   

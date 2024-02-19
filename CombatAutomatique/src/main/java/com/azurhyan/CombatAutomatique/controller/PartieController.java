@@ -31,20 +31,14 @@ public class PartieController {
 		return filledPage_Partie(model, partie);
 	}
 	
-//	@GetMapping("/azurhyan/{game}/annulerAction") // pas encore implémenté TODO
-//	public String annulerAction(Model model, @PathVariable("game") final String partie) {
-//		actionServ.annulerDerniereAction();
-//		return filledPage_Partie(model, partie);
-//	}
-	
-	@GetMapping("/azurhyan/{game}/effacerActions") // pas encore implémenté TODO
+	@GetMapping("/azurhyan/{game}/effacerActions")
 	public String effacerLesActions(Model model, @PathVariable("game") final String partie) {
 		actionServ.effacerLesActions(partie);
 		return filledPage_Partie(model, partie);
 	}
 	
 	@GetMapping("/azurhyan/{game}/visibilitePerso")
-	public String switchVisibilitePersos(Model model, @PathVariable("game") final String partie) {
+	public String visibilitePersos(Model model, @PathVariable("game") final String partie) {
 		model.addAttribute("partie", partie);
 		PersosVisiblesDto persosVisibles = persoServ.withVisibilite(partie);
 		model.addAttribute("persosVisibles", persosVisibles);
@@ -53,12 +47,20 @@ public class PartieController {
 	
 	@PostMapping("/azurhyan/{game}/visibilitePerso")
 	public String changeVisibilitePersos(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles) {
-		persoServ.setAllVisibilite(persosVisibles);
+		persoServ.setAllEtat(persosVisibles);
 		return filledPage_Partie(model, partie);
 	}
 	
+	@PostMapping(value="/azurhyan/{game}/visibilitePerso", params={"archiver"})
+	public String archiverPerso(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles, 
+			final HttpServletRequest req) {
+	    final Integer id = Integer.valueOf(req.getParameter("archiver"));
+	    persoServ.switchArchivage(id);
+	    return "redirect:/azurhyan/"+partie+"/visibilitePerso";
+	}
+	
 	@PostMapping(value="/azurhyan/{game}/visibilitePerso", params={"dupliquer"})
-	public String removeRow(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles, 
+	public String duppliquerPerso(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles, 
 			final HttpServletRequest req) {
 	    final Integer id = Integer.valueOf(req.getParameter("dupliquer"));
 	    PersonnageDB perso = persoServ.findById(id);
@@ -66,9 +68,26 @@ public class PartieController {
 	    return "redirect:/azurhyan/"+partie+"/visibilitePerso";
 	}
 	
+	@PostMapping(value="/azurhyan/{game}/visibilitePerso", params={"supprimer"})
+	public String supprimerPerso(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles, 
+			final HttpServletRequest req) {
+	    final Integer id = Integer.valueOf(req.getParameter("supprimer"));
+	    model.addAttribute("confirme", id);
+	    return visibilitePersos(model, partie);
+	}
+	
+	@PostMapping(value="/azurhyan/{game}/visibilitePerso", params={"confirmeSuppr"})
+	public String confirmeSupprPerso(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles, 
+			final HttpServletRequest req) {
+	    final Integer id = Integer.valueOf(req.getParameter("confirmeSuppr"));
+	    persoServ.deleteById(id);
+	    return "redirect:/azurhyan/"+partie+"/visibilitePerso";
+	}
+	
 	@GetMapping("/azurhyan/{game}/defenseReset")
 	public String nouveauRound(Model model, @PathVariable("game") final String partie) {
 		persoServ.resetDefense(partie);
+		actionServ.nouveauRound(partie);
 		return "redirect:/azurhyan/"+partie;
 	}
 	

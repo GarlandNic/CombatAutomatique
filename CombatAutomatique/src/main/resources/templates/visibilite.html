@@ -24,14 +24,19 @@
 					<th>  </th>
 					<th> Déf </th>
 					<th></th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
-			    <tr th:each="perso, itemStat : *{persoList}">
+			    <tr th:each="perso, itemStat : *{persoList}" th:if="*{persoList[__${itemStat.index}__].turnOrder > 0}">
                     <td>
+                    	<button type="submit" name="archiver" th:value="${perso.id}" style="cursor: help;" 
+                    		title="archivage"> &#11163; </button>
                     	<input type="hidden" th:field="*{persoList[__${itemStat.index}__].id}"/>
                     	<input type="hidden" th:field="*{persoList[__${itemStat.index}__].nom}"/>
+                    	<input type="hidden" th:field="*{persoList[__${itemStat.index}__].joueur}"/>
                     	<input type="hidden" th:field="*{persoList[__${itemStat.index}__].init}"/>
+                    	<input type="hidden" th:field="*{persoList[__${itemStat.index}__].turnOrder}"/>
                     	<input type="checkbox" th:field="*{persoList[__${itemStat.index}__].visible}" />
                     </td>
                     <td>
@@ -48,22 +53,78 @@
 						</select> </td>
 					<td> <input type="number" th:field="*{persoList[__${itemStat.index}__].deDef}" min="0"/> </td>
                     <td> <button type="submit" name="dupliquer" th:value="${perso.id}">Dupliquer le perso</button> </td>
+                    <td> 
+                    	<th:block th:if="${perso.joueur == 'PNJ'}">
+                    		<button th:unless="${confirme != null && confirme == perso.id}"  type="submit" name="supprimer" 
+                    			th:value="${perso.id}">Supprimer</button> 
+       		            	<button th:if="${confirme != null && confirme == perso.id}" type="submit" name="confirmeSuppr" 
+       		            		th:value="${perso.id}">Confirme ?</button> 
+                    	</th:block>
+                    </td>
                 </tr>
 			</tbody>
 		</table>
 		
+		</br>
 		<button type="submit">Enregistrer les modifications</button> 
-	</form>	
-	
-	<form action="#" th:action="@{/azurhyan/{partie}/nouveauPerso(partie=${partie})}" method="get">
 		</br>
-		<button type="submit">Créer un nouveau perso</button> 
-	</form>
-	
-	
-	<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get">
 		</br>
-		<button type="submit">Retourner sans enregistrer</button> 
+		<button type="submit" formmethod="get" th:formaction="@{/azurhyan/{partie}/nouveauPerso(partie=${partie})}">
+			Créer un nouveau perso</button> 
+		</br>
+		</br>
+		<button type="submit" th:formaction="@{'/azurhyan/'+${partie}}" formmethod="get">Retourner sans enregistrer</button> 
+		<br/>
+		
+		<h2> Persos / templates archivés : </h2>
+		
+		<table>
+		    <tr th:each="perso, itemStat : *{persoList}" th:if="*{persoList[__${itemStat.index}__].turnOrder < 0}">
+	            <td>
+                   	<button type="submit" name="archiver" th:value="${perso.id}" style="cursor: help;" 
+                    		title="désarchivage"> &#11161; </button>
+                </td>
+                <td>
+                   	<span th:text="*{persoList[__${itemStat.index}__].nom}"> nom </span>
+                </td>
+                <td>
+					<button type="submit" th:formaction="@{'/azurhyan/'+${partie}+'/'+${perso.id}}" formmethod="get">Voir combo</button>
+				</td>
+                <td> <button type="submit" name="dupliquer" th:value="${perso.id}">Générer un perso</button> </td>
+                <td> 
+                  	<th:block th:if="${perso.joueur == 'PNJ'}">
+                   		<button th:unless="${confirme != null && confirme == perso.id}"  type="submit" name="supprimer" 
+                   			th:value="${perso.id}">Supprimer</button> 
+   		            	<button th:if="${confirme != null && confirme == perso.id}" type="submit" name="confirmeSuppr" 
+   		            		th:value="${perso.id}">Confirme ?</button> 
+                   	</th:block>
+                </td>
+            </tr>
+		</table>
+		<table>
+		    <tr th:each="perso, itemStat : *{persoList}" th:if="*{persoList[__${itemStat.index}__].turnOrder == 0}">
+	            <td>
+                   	<button type="submit" name="archiver" th:value="${perso.id}" style="cursor: help;" 
+                    		title="désarchivage"> &#11161; </button>
+                </td>
+                <td>
+                   	<span th:text="*{persoList[__${itemStat.index}__].nom}"> nom </span>
+                </td>
+                <td>
+					<button type="submit" th:formaction="@{'/azurhyan/'+${partie}+'/'+${perso.id}}" formmethod="get">Voir combo</button>
+				</td>
+                <td> <button type="submit" name="dupliquer" th:value="${perso.id}">Générer un perso</button> </td>
+                <td> 
+                  	<th:block th:if="${perso.joueur == 'PNJ'}">
+                   		<button th:unless="${confirme != null && confirme == perso.id}"  type="submit" name="supprimer" 
+                   			th:value="${perso.id}">Supprimer</button> 
+   		            	<button th:if="${confirme != null && confirme == perso.id}" type="submit" name="confirmeSuppr" 
+   		            		th:value="${perso.id}">Confirme ?</button> 
+                   	</th:block>
+                </td>
+            </tr>
+		</table>
+		
 	</form>	
 		
 </body>

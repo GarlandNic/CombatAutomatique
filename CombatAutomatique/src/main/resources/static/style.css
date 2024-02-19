@@ -4,6 +4,10 @@ input[type=number] {
     width: 3em;
 }
 
+pre {
+    margin: 0em 0px;
+}
+
 .alert {
 	color: red;
 }

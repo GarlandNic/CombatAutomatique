@@ -23,12 +23,17 @@ public class PersoPartieDto {
 		this.deDef = (null != perso.getEtat() ? perso.getEtat().getDeDef() : 0);
 		this.bles = perso.totalDemiNiveauxBlessures()*2/perso.getCON();
 		this.choc = perso.totalPtsDeChoc()*4/(perso.getCON()+1);
+		this.hand = perso.totalHandicaps();
 		this.incapacite = (null != perso.getEtat() ? perso.getEtat().getIncapacite() : 0);
+		this.turnOrder = (null != perso.getEtat() ? perso.getEtat().getTurnOrder() : perso.getPersoId());
+		this.joueur = perso.getJoueur();
+		this.bouclier = perso.hasBouclier();
 	}
 
 	int id;
 	
 	String nom;
+	String joueur;
 	
 	int init;
 	
@@ -37,9 +42,13 @@ public class PersoPartieDto {
 	int deDef;
 	
 	int bles;
-	
 	int choc;
+	int hand;
 	
 	int incapacite;
+	
+	int turnOrder;
+	
+	boolean bouclier;
 
 }

@@ -1,6 +1,7 @@
 package com.azurhyan.CombatAutomatique.model;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -61,6 +62,44 @@ public class ActionDB {
 	
 	public void addDescription(String txt) {
 		this.description += txt;
+	}
+
+	public ActionDB(String partie, String descr) {
+		this.setPartie(partie);
+		this.setActionTime(LocalDateTime.now());
+		this.setDescription(descr);
+	}
+
+	public ActionDB() {
+	}
+	
+	public String getCouleur() {
+		if(null == this.getActeurNom() || this.getActeurNom().isBlank()) {
+			return "#ffff00";
+		} else {
+//			int max = 46656; // 6^6
+			Long res = 12345L;
+			for(char a : this.getActeurNom().toCharArray()) {
+				res *= (int) a;
+				res += 1;
+//				res = res % max;
+			}
+			Random alea = new Random();
+			alea.setSeed(res);
+			char[] result = {'#', 'a', 'a', 'a', 'a', 'a', 'a'};
+			for(int i = 1 ; i<result.length ; i++) {
+				int num = alea.nextInt(6);
+				switch(num) {
+				case 0 : result[i] = 'a'; break;
+				case 1 : result[i] = 'b'; break;
+				case 2 : result[i] = 'c'; break;
+				case 3 : result[i] = 'd'; break;
+				case 4 : result[i] = 'e'; break;
+				case 5 : result[i] = 'f'; break;
+				}
+			}
+			return String.valueOf(result);
+		}
 	}
 
 }

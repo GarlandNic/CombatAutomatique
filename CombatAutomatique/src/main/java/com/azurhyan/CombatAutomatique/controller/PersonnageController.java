@@ -65,8 +65,8 @@ public class PersonnageController {
 
 	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"addBless"})
 	public String addBless(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
-			@ModelAttribute("perso") PersoCompletDto perso) {
-	    perso.getBlessureList().add(new BlessureDto(0, 0));
+			@ModelAttribute("perso") PersoCompletDto perso, final HttpServletRequest req) {
+	    perso.getBlessureList().add(new BlessureDto(0, 0, req.getParameter("addBless")));
 	    return filledPage_Personnage(model, partie, perso);
 	}
 

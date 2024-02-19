@@ -32,6 +32,8 @@ import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
 @Service
 public class ActionService {
 	
+	private static int ROUND = 0;
+	
 	@Autowired
 	ActionRepository actionRepo;
 
@@ -87,7 +89,7 @@ public class ActionService {
 			}
 		});
 		
-		Iterable<PersonnageDB> listPersos = persoRepo.findByPartie(partie);
+		Iterable<PersonnageDB> listPersos = persoRepo.findByPartieAndVisible(partie, true);
 		listPersos.forEach(pers -> {
 			boolean nouveau = true;
 			for(CibleDto attl : attaque.getAttaquantList()) {
@@ -108,10 +110,11 @@ public class ActionService {
 	@Transactional
 	public void effacerLesActions(String partie) {
 		actionRepo.removeByPartie(partie);
+		ROUND = 0;
 	}
 
 	public Iterable<ActionDB> listForPartie(String partie) {
-		return actionRepo.findByPartie(partie);
+		return actionRepo.findByPartieOrderByActionTimeDesc(partie);
 	}
 
 	public void lancerAttaque(AttaqueDto attaque) {
@@ -266,16 +269,17 @@ public class ActionService {
 		int refAction = act.getActionId();
 		
 		if(degats.getBlessList().isEmpty()) {
-			if(degats.isToucher())
-				descr += "touché, pas de dégâts. ";
+			if(degats.getMargeToucher() >= 0)
+				descr += "touché ("+modifToString(degats.getMargeToucher())+"), pas de dégâts ("+modifToString(degats.getMargeBlesser())+").";
 			else
-				descr += "raté ! ";
+				descr += "raté ("+modifToString(degats.getMargeToucher())+") !";
 		} else {
+			descr += "touché ("+modifToString(degats.getMargeToucher())+"), dégâts ("+modifToString(degats.getMargeBlesser())+") : ";
 			for(BlessureDto bl : degats.getBlessList()) {
 				BlessureDB blToSave = bl.blessureToDB(defenseur);
 				blToSave.setRefAction(refAction);
 				blessRepo.save(blToSave);
-				descr += blToSave.blessureToString()+" ";
+				descr += blToSave.blessureToString()+" ; ";
 				if(blToSave.getHandicap() > 0) {
 					defenseur.setHfatigue2(defenseur.getHfatigue2() + blToSave.getHandicap());
 					if(defenseur.getEtat() == null) {
@@ -294,38 +298,41 @@ public class ActionService {
 				}
 			}
 		}
-		
-		if(degats.getBousculadeH() > 0) {
-			descr += "(Bousculade : "+degats.getBousculadeH()+" H-) ";
-			defenseur.setHmobilite2(defenseur.getHmobilite2() + degats.getBousculadeH());
-			persoRepo.save(defenseur);
-		}
+//		
+//		if(degats.getBousculadeH() > 0) {
+//			descr += "(Bousculade : "+degats.getBousculadeH()+" H-) ";
+//			defenseur.setHmobilite2(defenseur.getHmobilite2() + degats.getBousculadeH());
+//			persoRepo.save(defenseur);
+//		}
 		
 		act.setDescription(descr);
 		act = actionRepo.save(act);
 		return act;
 	}
 	
+	private String modifToString(int modif) {
+		return ""+(modif >= 0 ? "+" : "")+modif+"";
+	}
+
 	public Degat attaqueUnique(ComboDto comboAtt, ComboDto comboDef) {
 		Degat result = new Degat();
 	
 		int margeTch = comboAtt.getToucher() - (comboAtt.isCaC() ? comboDef.getDefense() : comboDef.getEsquive());
 		int endu = 0;
-		
+		result.setMargeToucher(margeTch);
 		if(margeTch < 0) {
 			return result;
 		} else {
-			result.setToucher(true);
-			int bonusForce = (margeTch-1 - (comboDef.getBouclier() != Bouclier.Pas_de_bouclier ? comboDef.getParade() + comboAtt.getPrdEnnemie() : 0))/3;
+			margeTch -= (comboDef.getBouclier() != Bouclier.Pas_de_bouclier ? comboDef.getParade() + comboAtt.getPrdEnnemie() : 0);
+			result.setMargeToucher(margeTch);
+			int bonusForce = (margeTch-1)/3;
 			bonusForce = (bonusForce > 0 ? bonusForce : 0);
-			boolean isPare = (comboDef.getBouclier() != Bouclier.Pas_de_bouclier) && (comboDef.getParade() + comboAtt.getPrdEnnemie() >= margeTch);
+			boolean isPare = (comboDef.getBouclier() != Bouclier.Pas_de_bouclier) && (margeTch <= 0);
 			String partieTouchee ="";
-			int bousculade = 0;
 			if(isPare) {
 				BlessureDto blBcl = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), 
 						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), true);
-				
-				bousculade = bonusForce+comboAtt.getForce() - comboDef.getEndBouclier() + comboAtt.getIBatt() - comboDef.getIBdef();
+				result.setMargeBlesser(bonusForce+comboAtt.getForce() - comboDef.getEndBouclier());
 
 				if(blBcl != null) {
 					partieTouchee = "Bouclier";
@@ -335,7 +342,7 @@ public class ActionService {
 					if(blBcl.getNiveau() > 0) result.getBlessList().add(blBcl);
 				}
 				
-				partieTouchee = "bras-bouclier";
+				partieTouchee = "Bras-bouclier";
 				endu = 4 + (comboDef.getEndPerso() > comboDef.getEndBouclier() ? comboDef.getEndPerso() : comboDef.getEndBouclier());
 			} else {
 				partieTouchee = partieTouchee();
@@ -343,8 +350,8 @@ public class ActionService {
 			}
 			BlessureDto bl = calculDegats(bonusForce+comboAtt.getForce(), endu, 
 					comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false);
-			if(bousculade == 0)
-				bousculade = bonusForce+comboAtt.getForce() - endu + comboAtt.getIBatt() - comboDef.getIBdef();
+			if(!isPare)
+				result.setMargeBlesser(bonusForce+comboAtt.getForce() - endu);
 			
 			if(bl != null) {
 				bl.setPartieTouchee(partieTouchee);
@@ -358,9 +365,9 @@ public class ActionService {
 				if(blArmure.getNiveau() > 0) result.getBlessList().add(blArmure);
 			}
 
-			if(bousculade > 1 && comboAtt.getTypeDgts() == Dgts.CTD) {
-				result.setBousculadeH( ((float) (bousculade/2))/2 );
-			}
+//			if(bousculade > 1 && comboAtt.getTypeDgts() == Dgts.CTD) {
+//				result.setBousculadeH( ((float) (bousculade/2))/2 );
+//			}
 			
 			return result;
 		}
@@ -564,6 +571,13 @@ public class ActionService {
 			case 2: return 1+force;
 			default: return combaPlusMalusForceRec(nb-2, force+1);
 		}
+	}
+
+	public void nouveauRound(String partie) {	
+		actionRepo.save(new ActionDB(partie, "<pre>##########     Fin du round "+ROUND+"     ##########</pre>"));
+		actionRepo.save(new ActionDB(partie, "<pre>#         Round "+(ROUND+1)+" : faites vos ATR         #</pre>"));
+		ROUND += 2;
+		actionRepo.save(new ActionDB(partie, "<pre>##########    Début du round "+ROUND+"    ##########</pre>"));
 	}
 
 }

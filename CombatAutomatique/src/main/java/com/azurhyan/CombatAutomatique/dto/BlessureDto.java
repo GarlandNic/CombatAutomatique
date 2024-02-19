@@ -15,6 +15,12 @@ public class BlessureDto {
 	
 	String partieTouchee;
 	
+	public BlessureDto(float niv, int pdc, String partie) {
+		this.niveau = niv;
+		this.ptDeChoc = pdc;
+		this.partieTouchee = partie;
+	}
+	
 	public BlessureDto(float niv, int pdc) {
 		this.niveau = niv;
 		this.ptDeChoc = pdc;

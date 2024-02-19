@@ -37,13 +37,13 @@ public class PersonnageService {
 	}
 
 	public PersosVisiblesDto withVisibilite(String partie) {
-		Iterable<PersonnageDB> persoListBD = persoRepo.findByPartie(partie);
+		Iterable<PersonnageDB> persoListBD = persoRepo.findByPartieOrderByEtatTurnOrder(partie);
 		PersosVisiblesDto persosVisibles = new PersosVisiblesDto();
 		persoListBD.forEach(perso -> persosVisibles.getPersoList().add(new PersoPartieDto(perso)));
 		return persosVisibles;
 	}
 
-	public void setAllVisibilite(PersosVisiblesDto persosVisibles) {
+	public void setAllEtat(PersosVisiblesDto persosVisibles) {
 		persosVisibles.getPersoList().forEach(persoPartie -> {
 			Optional<PersonnageDB> persoDB = persoRepo.findById(persoPartie.getId());
 			if(persoDB.isPresent()) {
@@ -56,12 +56,14 @@ public class PersonnageService {
 				if(etat != null) {
 					etat.setDeDef(persoPartie.getDeDef());
 					etat.setIncapacite(persoPartie.getIncapacite());
+					etat.setTurnOrder(persoPartie.getTurnOrder());
 					etatRepo.save(etat);
 				}
 				if(etat == null) {
 					EtatDB newEtat = new EtatDB(perso);
 					newEtat.setDeDef(persoPartie.getDeDef());
 					newEtat.setIncapacite(persoPartie.getIncapacite());
+					newEtat.setTurnOrder(persoPartie.getTurnOrder());
 					perso.setEtat(newEtat);
 					persoRepo.save(perso);
 				}
@@ -136,7 +138,8 @@ public class PersonnageService {
 	public void saveCopy(PersonnageDB oldPerso) {
 	    PersonnageDB newPerso = oldPerso.copy();
 	    newPerso.setNom(incrementeNom(newPerso.getNom()));
-		persoRepo.save(newPerso);
+	    newPerso = persoRepo.save(newPerso);
+		newPerso.setEtat(etatRepo.save(new EtatDB(newPerso)));
 	}
 
 	public void resetDefense(String partie) {
@@ -170,6 +173,16 @@ public class PersonnageService {
 			nom += " 1";			
 		}
 		return nom;
+	}
+
+	public void deleteById(Integer id) {
+		persoRepo.deleteById(id);
+	}
+
+	public void switchArchivage(Integer id) {
+		PersonnageDB perso = persoRepo.findById(id).get();
+		perso.getEtat().setTurnOrder( - perso.getEtat().getTurnOrder());
+		persoRepo.save(perso);
 	}
 
 }

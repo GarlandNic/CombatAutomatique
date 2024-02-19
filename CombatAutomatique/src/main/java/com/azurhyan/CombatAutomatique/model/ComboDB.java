@@ -178,7 +178,7 @@ public class ComboDB {
 				break;
 			case ELECTRICITE:
 				if(isCTD) resDemi += 2;
-				resDemi = (isObjet ? resDemi/2 : 0);
+				resDemi -= (isObjet ? resDemi/2 : 0);
 				break;
 			case NECROTIQUE:
 				resDemi += (isObjet ? (resDemi+1)/2 : 0);

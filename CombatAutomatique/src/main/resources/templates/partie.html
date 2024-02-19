@@ -23,6 +23,8 @@
 				<th> bl / # </th>
 				<th></th>
 				<th></th>
+				<th></th>
+				<th></th>
 				<td> Déf </td>
 			</tr>
 		</thead>
@@ -46,12 +48,16 @@
 						</tr>
 					</table>
 				</td>
+				<td>
+					&#x1F6E1;<span th:unless="${perso.bouclier}" style="position:relative; left:-0.5em; top:0.1em; font-size: 1.4em;">&frasl;</span>
+				</td>
 				<td style="text-align:center;">
 					<span style="color:green;font-weight: bolder;" th:if="${perso.incapacite == 0}"> &xcirc; </span>
 					<span style="color:grey;font-weight: bolder;" th:if="${perso.incapacite == 1}"> &check; </span>
 					<span style="color:orange;font-weight: bolder;" th:if="${perso.incapacite == 2}"> &olcross; </span>
 					<span style="color:red;font-weight: bolder;" th:if="${perso.incapacite == 3}"> &cross; </span>
 				</td>
+				<td>H<span th:text="${perso.hand}">0</span></td>
 				<td>
 					<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${perso.id}}" method="get">
 						<button type="submit">Voir combo</button>
@@ -63,6 +69,8 @@
 				<td> </td>
 				<td> </td>
 				<td> </td>
+				<td></td>
+				<td></td>
 				<td></td>
 				<td> <form action="#" th:action="@{'/azurhyan/'+${partie}+'/defenseReset'}" method="get">
 						<button type="submit">Nouveau round</button>
@@ -81,25 +89,32 @@
 	<table>
 		<thead>
 			<tr>
-				<th> Evènements </th>
+				<th> 
+					Evènements 
+					<span style="cursor: help;" title="Perso attaque (jet d'attaque) cible (jet de défense) : toucher (marge pour toucher), dégâts (marge pour blesser) : dégâts sur le bouclie ; sur la cible ; sur l'armure ;"> &#9432; </span>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="action, iStat : ${actions}">
-				<td>
-					<div th:utext="${action.description}"> action </div>
-					<form th:if="${iStat.last}" action="#" th:action="@{'/azurhyan/'+${partie}+'/annulerAttaque'}" method="post">
-						<button type="submit" name="lastAttaque" th:value="${action.refAttaque}" style="float: right;">Annuler dernière attaque</button> 
-					</form>
-					<form th:if="${iStat.last}" action="#" th:action="@{'/azurhyan/'+${partie}+'/modifierAttaque'}" method="post">
-						<button type="submit" name="lastAttaque" th:value="${action.refAttaque}" style="float: right;">Modifier dernière attaque</button> 
+			<tr>
+				<td style="text-align: right;">
+					<form action="#" th:action="@{'/azurhyan/'+${partie}+'/0/attaque'}" method="get">
+						<button type="submit">Attaque manuelle</button> 
 					</form>
 				</td>
 			</tr>
-			<tr>
-				<form action="#" th:action="@{'/azurhyan/'+${partie}+'/0/attaque'}" method="get">
-					<button type="submit" style="float: right;">Attaque manuelle</button> 
-				</form>
+			<tr th:each="action, iStat : ${actions}">
+				<td th:style="${'background-color: '+action.couleur}">
+					<div th:utext="${action.description}"> action </div>
+					<div th:if="${action.refAttaque != 0 and action.refAttaque == actions[0].refAttaque and (iStat.last or action.refAttaque != actions[__${iStat.index}__ +1].refAttaque)}" style="text-align: right;">
+						<form action="#" th:action="@{'/azurhyan/'+${partie}+'/annulerAttaque'}" method="post" style="display:inline-block;">
+							<button type="submit" name="lastAttaque" th:value="${action.refAttaque}" style="display:inline-block;">Annuler dernière attaque</button> 
+						</form>
+						<form action="#" th:action="@{'/azurhyan/'+${partie}+'/modifierAttaque'}" method="post" style="display:inline-block;">
+							<button type="submit" name="lastAttaque" th:value="${action.refAttaque}" style="display:inline-block;">Modifier dernière attaque</button> 
+						</form>
+					</div>
+				</td>
 			</tr>
 		</tbody>
 	</table>

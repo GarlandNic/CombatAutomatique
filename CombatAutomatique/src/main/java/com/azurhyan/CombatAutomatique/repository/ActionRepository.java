@@ -8,7 +8,7 @@ import com.azurhyan.CombatAutomatique.model.ActionDB;
 @Repository
 public interface ActionRepository extends CrudRepository<ActionDB, Integer>{
 	
-	Iterable<ActionDB> findByPartie(String partie);
+	Iterable<ActionDB> findByPartieOrderByActionTimeDesc(String partie);
 
 	Iterable<ActionDB> removeByPartie(String partie);
 

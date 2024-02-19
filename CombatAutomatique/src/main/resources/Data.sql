@@ -65,9 +65,8 @@ create table actions(
  CIBLEID integer default 0,
  CIBLENOM varchar(255),
  CIBLEDE integer default 0,
- ACTIONTIME datetime NOT NULL,
- DESCRIPTION varchar(1023),
- FOREIGN KEY (ACTEURID) REFERENCES personnages (PERSOID) ON DELETE CASCADE ON UPDATE CASCADE
+ ACTIONTIME datetime(6) NOT NULL,
+ DESCRIPTION varchar(1023)
 );
 
 commit;

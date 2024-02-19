@@ -131,7 +131,25 @@ public class PersoCompletDto {
 		}
 		return res;
 	}
-	
+
+	public float totalNvBouclier() {
+		float res = (float) 0.0;
+		for(BlessureDto bl : blessureList) {
+			if( bl.getPartieTouchee().equals("Bouclier") )
+				res += bl.getNiveau();
+		}
+		return res;
+	}
+
+	public float totalNvArmure() {
+		float res = (float) 0.0;
+		for(BlessureDto bl : blessureList) {
+			if( bl.getPartieTouchee().equals("Armure") )
+				res += bl.getNiveau();
+		}
+		return res;
+	}
+
 	public float getHandicap(BlessureDto bl) {
 		if(bl.getPartieTouchee().equals("Bouclier")) return 0;
 		if(bl.getPartieTouchee().equals("Armure")) return 0;

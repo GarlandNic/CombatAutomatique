@@ -116,6 +116,7 @@ public class ActionController {
 	
 	private String filledPage_Attaque(Model model, String partie, AttaqueDto attaque, int numPerso) {
 		model.addAttribute("partie", partie);
+		model.addAttribute("persos", persoServ.listForPartie(partie));
 		model.addAttribute("attaque", attaque);
 		model.addAttribute("numPerso", numPerso);
 		return "attaque";
