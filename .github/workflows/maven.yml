@@ -30,7 +30,7 @@ jobs:
     - name: Start MySQL
       run: |
         sudo /etc/init.d/mysql start
-        mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
+        mysql -u$DB_USER -p$DB_PASSWORD < CombatAutomatique/src/main/resources/Data.sql
 
     - name: Set up JDK 17
       uses: actions/setup-java@v3
