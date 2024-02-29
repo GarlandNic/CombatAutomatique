@@ -47,7 +47,7 @@ create table combos(
  DEFENSE integer NOT NULL DEFAULT 15,
  ESQUIVE integer NOT NULL DEFAULT 15,
  PARADE integer NOT NULL DEFAULT 0,
- BOUCLIER enum('Pas_de_bouclier','Dague','Targe','Bouclier','Grand_bouclier','Bouclier_tour') NOT NULL DEFAULT 'NORMAL',
+ BOUCLIER enum('Pas_de_bouclier','Dague','Targe','Bouclier','Grand_bouclier','Bouclier_tour') NOT NULL DEFAULT 'Pas_de_bouclier',
  ENDBOUCLIER integer NOT NULL DEFAULT 15,
  ENDPERSO integer NOT NULL DEFAULT 15,
  IBDEF integer NOT NULL DEFAULT 15,
