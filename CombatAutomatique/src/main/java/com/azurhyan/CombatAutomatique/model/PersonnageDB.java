@@ -181,17 +181,17 @@ public class PersonnageDB {
 	    newPerso.setCCtoujoursPret(this.getCCtoujoursPret());
 	    newPerso.setCCcombatPlusieurs(this.getCCcombatPlusieurs());
 		
-		List<BlessureDB> blList = new ArrayList<>();
+		List<BlessureDB> blList = newPerso.getBlessureList();
+		blList.clear();
 		this.getBlessureList().forEach(bl -> blList.add(bl.copy(newPerso)));
-		newPerso.setBlessureList(blList);
 		
-		List<HandicapDB> hList = new ArrayList<>();
+		List<HandicapDB> hList = newPerso.getHandicapList();
+		hList.clear();
 		this.getHandicapList().forEach(h -> hList.add(h.copy(newPerso)));
-		newPerso.setHandicapList(hList);
 		
-		List<ComboDB> combList = new ArrayList<>();
+		List<ComboDB> combList = newPerso.getComboList();
+		combList.clear();
 		this.getComboList().forEach(comb -> combList.add(comb.copy(newPerso)));
-		newPerso.setComboList(combList);
 		
 		return newPerso;
 	}

@@ -150,17 +150,18 @@ public class PersonnageService {
 		newPerso.setCCtoujoursPret2(perso.getCCtoujoursPret());
 		newPerso.setCCcombatPlusieurs(perso.getCCcombatPlusieurs());
 		
-		List<BlessureDB> blList = new ArrayList<>();
+		List<BlessureDB> blList = newPerso.getBlessureList();
+		blList.clear();
 		perso.getBlessureList().forEach(bl -> blList.add(bl.blessureToDB(newPerso)));
-		newPerso.setBlessureList(blList);
-		List<ComboDB> combList = new ArrayList<>();
+		
+		List<ComboDB> combList = newPerso.getComboList();
+		combList.clear();
 		perso.getComboList().forEach(comb -> combList.add(comb.comboToDB(newPerso)));
-		newPerso.setComboList(combList);
 		
 		// TODO
-		List<HandicapDB> hList = new ArrayList<>();
+		List<HandicapDB> hList = newPerso.getHandicapList();
+		hList.clear();
 		perso.getHandicapList().forEach(h -> hList.add(h.handicapToDB(newPerso)));
-		newPerso.setHandicapList(hList);
 		
 		return newPerso;
 	}
