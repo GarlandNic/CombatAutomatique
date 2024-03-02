@@ -158,7 +158,7 @@ public class PersonnageService {
 		combList.clear();
 		perso.getComboList().forEach(comb -> combList.add(comb.comboToDB(newPerso)));
 		
-		// TODO
+		// TODO ??
 		List<HandicapDB> hList = newPerso.getHandicapList();
 		hList.clear();
 		perso.getHandicapList().forEach(h -> hList.add(h.handicapToDB(newPerso)));

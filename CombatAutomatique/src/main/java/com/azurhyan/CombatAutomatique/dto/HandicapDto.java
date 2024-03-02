@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class HandicapDto {
 	
+	int refAction=0;
+	
 	float nombre = 0;
 	
 	TypeHand typeHand = TypeHand.FATIGUE;
@@ -30,10 +32,12 @@ public class HandicapDto {
 		this.nombre = h.getNombre();
 		this.typeHand = h.getTypeHand();
 		this.nomHand = h.getNomHand();
+		this.refAction = h.getRefAction();
 	}
 	
 	public HandicapDB handicapToDB(PersonnageDB perso) {
 		HandicapDB h = new HandicapDB(perso, this.nombre, this.typeHand, this.nomHand);
+		h.setRefAction(refAction);
 		return h;
 	}
 

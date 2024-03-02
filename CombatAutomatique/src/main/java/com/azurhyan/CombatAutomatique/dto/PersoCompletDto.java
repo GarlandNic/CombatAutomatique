@@ -2,6 +2,7 @@ package com.azurhyan.CombatAutomatique.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.azurhyan.CombatAutomatique.model.ActionDB;
 import com.azurhyan.CombatAutomatique.model.BlessureDB;
@@ -65,13 +66,13 @@ public class PersoCompletDto {
 	
 	private void addToHandicapList(HandicapDto hNew) {
 		boolean nouveaute = true;
-		for(HandicapDto h : this.getHandicapList()) {
-			if(hNew.getNomHand().equals(h.getNomHand())) {
-				nouveaute = false;
-				h.setNombre(h.getNombre() + hNew.getNombre());
-				break;
-			}
-		}
+//		for(HandicapDto h : this.getHandicapList()) {
+//			if(hNew.getNomHand().equals(h.getNomHand())) {
+//				nouveaute = false;
+//				h.setNombre(h.getNombre() + hNew.getNombre());
+//				break;
+//			}
+//		}
 		if(nouveaute) {
 			this.getHandicapList().add(hNew);
 		}
@@ -212,21 +213,21 @@ public class PersoCompletDto {
 //		this.Hfatigue += this.getHandicap(bl);
 //	}
 	public float getHfatigue() {
-		return this.getHblessure() + ((float) this.handicapList.stream()
-				.mapToInt(h -> (h.getTypeHand() == TypeHand.FATIGUE ? h.getDemiNombre() : 0) )
-				.sum())/2;
+		return this.getHblessure() + ((float) this.handicapList.stream().filter(h -> h.getTypeHand() == TypeHand.FATIGUE)
+				.collect(Collectors.toMap(HandicapDto::getNomHand, HandicapDto::getDemiNombre, (i, j) -> (i > j ? i : j)))
+				.values().stream().mapToInt(i -> (int) i).sum())/2;
 	}
 
 	public float getHmobilite() {
-		return ((float) this.handicapList.stream()
-				.mapToInt(h -> (h.getTypeHand() == TypeHand.MOBILITE ? h.getDemiNombre() : 0) )
-				.sum())/2;
+		return ((float) this.handicapList.stream().filter(h -> h.getTypeHand() == TypeHand.MOBILITE)
+				.collect(Collectors.toMap(HandicapDto::getNomHand, HandicapDto::getDemiNombre, (i, j) -> (i > j ? i : j)))
+				.values().stream().mapToInt(i -> (int) i).sum())/2;
 	}
 
 	public float getHsens() {
-		return ((float) this.handicapList.stream()
-				.mapToInt(h -> (h.getTypeHand() == TypeHand.SENS ? h.getDemiNombre() : 0) )
-				.sum())/2;
+		return ((float) this.handicapList.stream().filter(h -> h.getTypeHand() == TypeHand.SENS)
+				.collect(Collectors.toMap(HandicapDto::getNomHand, HandicapDto::getDemiNombre, (i, j) -> (i > j ? i : j)))
+				.values().stream().mapToInt(i -> (int) i).sum())/2;
 	}
 	
 	public ComboDto getComboHandicap() {

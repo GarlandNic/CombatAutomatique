@@ -121,6 +121,7 @@ public class BlessureDB {
 		bl.setDemiNiveau(this.getDemiNiveau());
 		bl.setPartieTouchee(this.getPartieTouchee());
 		bl.setPtDeChoc(this.getPtDeChoc());
+		bl.setRefAction(this.getRefAction());
 		bl.setPerso(newPerso);
 		return bl;
 	}

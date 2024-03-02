@@ -239,7 +239,8 @@
 		</thead>
 		<tbody>
 			<tr th:each="row,rowStat : *{blessureList}" th:unless="${row.partieTouchee == 'Bouclier' or row.partieTouchee == 'Armure'}">
-				<td> <input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/> </td>
+				<td> <input type="hidden" th:field="*{blessureList[__${rowStat.index}__].refAction}"/>
+					 <input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/> </td>
 				<td> <input type="number" th:field="*{blessureList[__${rowStat.index}__].ptDeChoc}"/> </td>
 				<td> <input type="text" th:value="${perso.getGravite(row)}" disabled/> </td>
 				<td> <input type="text" th:field="*{blessureList[__${rowStat.index}__].partieTouchee}"/> </td>
@@ -264,6 +265,7 @@
 		<tbody>
 			<tr th:each="row,rowStat : *{blessureList}" th:if="${row.partieTouchee == 'Bouclier'}">
 				<td> 
+					<input type="hidden" th:field="*{blessureList[__${rowStat.index}__].refAction}"/>
 					<input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/>
 					<input type="hidden" th:field="*{blessureList[__${rowStat.index}__].ptDeChoc}"/>
 					<input type="hidden" th:field="*{blessureList[__${rowStat.index}__].partieTouchee}"/>
@@ -285,6 +287,7 @@
 		<tbody>
 			<tr th:each="row,rowStat : *{blessureList}" th:if="${row.partieTouchee == 'Armure'}">
 				<td> 
+					<input type="hidden" th:field="*{blessureList[__${rowStat.index}__].refAction}"/>
 					<input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/>
 					<input type="hidden" th:field="*{blessureList[__${rowStat.index}__].ptDeChoc}"/>
 					<input type="hidden" th:field="*{blessureList[__${rowStat.index}__].partieTouchee}"/>
@@ -328,7 +331,8 @@
 				<td colspan="3"> <button type="submit" name="actu">&circlearrowleft;</button> </td>
 			</tr>
 			<tr th:each="hand, hStat : *{handicapList}" th:if="${hand.typeHand == T(com.azurhyan.CombatAutomatique.model.HandicapDB.TypeHand).FATIGUE}">
-				<td> &nbsp; o &nbsp; <input type="hidden" th:field="*{handicapList[__${hStat.index}__].typeHand}"/> </td>
+				<td> &nbsp; o &nbsp; <input type="hidden" th:field="*{handicapList[__${hStat.index}__].refAction}"/>
+					 <input type="hidden" th:field="*{handicapList[__${hStat.index}__].typeHand}"/> </td>
 				<td> <input type="text" th:field="*{handicapList[__${hStat.index}__].nomHand}"/> </td>
 				<td> <input type="number" th:field="*{handicapList[__${hStat.index}__].nombre}" min="0" step="0.5"/> </td>
 				<td colspan="3"> <button type="submit" name="removeHand" th:value="${hStat.index}"> &#x1F5D1; </button> </td>
@@ -341,7 +345,8 @@
 				<td> <button type="submit" name="addHand" value="MOBILITE"> &#x2795; </button> </td>
 			</tr>
 			<tr th:each="hand, hStat : *{handicapList}" th:if="${hand.typeHand == T(com.azurhyan.CombatAutomatique.model.HandicapDB.TypeHand).MOBILITE}">
-				<td> &nbsp; o &nbsp; <input type="hidden" th:field="*{handicapList[__${hStat.index}__].typeHand}"/> </td>
+				<td> &nbsp; o &nbsp; <input type="hidden" th:field="*{handicapList[__${hStat.index}__].refAction}"/>
+					 <input type="hidden" th:field="*{handicapList[__${hStat.index}__].typeHand}"/> </td>
 				<td> <input type="text" th:field="*{handicapList[__${hStat.index}__].nomHand}"/> </td>
 				<td> <input type="number" th:field="*{handicapList[__${hStat.index}__].nombre}" min="0" step="0.5"/> </td>
 				<td colspan="3"> <button type="submit" name="removeHand" th:value="${hStat.index}"> &#x1F5D1; </button> </td>
@@ -354,7 +359,8 @@
 				<td> <button type="submit" name="addHand" value="SENS"> &#x2795; </button> </td>
 			</tr>
 			<tr th:each="hand, hStat : *{handicapList}" th:if="${hand.typeHand == T(com.azurhyan.CombatAutomatique.model.HandicapDB.TypeHand).SENS}">
-				<td> &nbsp; o &nbsp; <input type="hidden" th:field="*{handicapList[__${hStat.index}__].typeHand}"/> </td>
+				<td> &nbsp; o &nbsp; <input type="hidden" th:field="*{handicapList[__${hStat.index}__].refAction}"/>
+					 <input type="hidden" th:field="*{handicapList[__${hStat.index}__].typeHand}"/> </td>
 				<td> <input type="text" th:field="*{handicapList[__${hStat.index}__].nomHand}"/> </td>
 				<td> <input type="number" th:field="*{handicapList[__${hStat.index}__].nombre}" min="0" step="0.5"/> </td>
 				<td colspan="3"> <button type="submit" name="removeHand" th:value="${hStat.index}"> &#x1F5D1; </button> </td>

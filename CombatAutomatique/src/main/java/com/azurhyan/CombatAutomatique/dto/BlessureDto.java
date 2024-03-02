@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class BlessureDto {
 	
+	int refAction=0;
+	
 	float niveau=0;
 	
 	int ptDeChoc=0;
@@ -34,11 +36,13 @@ public class BlessureDto {
 		this.niveau = bl.getNiveau();
 		this.ptDeChoc = bl.getPtDeChoc();
 		this.partieTouchee = bl.getPartieTouchee();
+		this.refAction = bl.getRefAction();
 	}
 	
 	public BlessureDB blessureToDB(PersonnageDB perso) {
 		BlessureDB bl = new BlessureDB(perso, this.niveau, this.ptDeChoc);
 		bl.setPartieTouchee(partieTouchee);
+		bl.setRefAction(refAction);
 		return bl;
 	}
 

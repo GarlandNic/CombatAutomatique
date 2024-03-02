@@ -1,9 +1,6 @@
 
 TODO list
 
- o blessures et handicaps : sauvegarder les liens pour pouvoir toujours annuler l'attaque (modif dto & html & convertion Dto/DB)
-  o regrouper handicaps : modif PersoDB -> PersoDto & PersoDto -> PersoDB
-  
   o couleur des persos : nouveau champ dans la DB + permettre de choisir + proposer un truc pour les PNJ
  
 
@@ -70,6 +67,11 @@ DONE :
   o implémenter bousculade
   o data2.sql + tester coup dans le bouclier et dernières modifs (handicaps, nouveau round) et bousculade
     o handicap blessure (pas dans la liste des handicaps mais compté quand même)
-
+  o regrouper handicaps : modif PersoDB -> PersoDto & PersoDto -> PersoDB
+  	o annuler précédent !!!
+  	o on stocke tous les handicaps comme les blessures mais quand on calcule combien ça fait, on ne garde que le max de chaque
+   o blessures et handicaps : sauvegarder les liens pour pouvoir toujours annuler l'attaque (modif dto & html & convertion Dto/DB)
+ 
+  
 
   

@@ -93,6 +93,7 @@ public class HandicapDB {
 		hand.setDemiNombre(this.getDemiNombre());
 		hand.setNomHand(this.getNomHand());
 		hand.setTypeHand(this.getTypeHand());
+		hand.setRefAction(this.getRefAction());
 		hand.setPerso(newPerso);
 		return hand;
 	}

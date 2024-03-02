@@ -207,11 +207,11 @@ public class PersonnageDB {
 		this.getHandicapList().add(newHand);
 	}
 	public void replaceHandicap(int refAction, float nombreH, TypeHand typ, String nom) {
-		for(HandicapDB h : this.getHandicapList()) {
-			if(h.getTypeHand() == typ && h.getNomHand().equals(nom)) {
-				nombreH -= h.getNombre();
-			}
-		}
+//		for(HandicapDB h : this.getHandicapList()) {
+//			if(h.getTypeHand() == typ && h.getNomHand().equals(nom)) {
+//				nombreH -= h.getNombre();
+//			}
+//		}
 		HandicapDB newHand = new HandicapDB(this, nombreH, typ, nom);
 		newHand.setRefAction(refAction);
 		this.getHandicapList().add(newHand);
