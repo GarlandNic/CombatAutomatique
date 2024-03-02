@@ -13,11 +13,9 @@ public class PersoPartieDto {
 	public PersoPartieDto(PersonnageDB perso) {
 		this.id = perso.getPersoId();
 		this.nom = perso.getNom();
-		this.init = -(perso.getHfatigue() > perso.getCCinfatigable() ? (perso.getHfatigue() - perso.getCCinfatigable())/2 : 0) 
-				-(perso.getHmobilite() > perso.getCCincoercible() ? (perso.getHmobilite() - perso.getCCincoercible())/2 : 0)
-				-(perso.getHsens() > perso.getCCtoujoursPret() ? (perso.getHsens() - perso.getCCtoujoursPret())/2 : 0);
+		this.init = -perso.totalHandicaps();
 		perso.getComboList().forEach(combo -> {
-			if(combo.isActif()) this.init = this.init + combo.getInit();
+			if(combo.isActif()) this.init += combo.getInit();
 		});
 		this.visible = perso.isVisible();
 		this.deDef = (null != perso.getEtat() ? perso.getEtat().getDeDef() : 0);

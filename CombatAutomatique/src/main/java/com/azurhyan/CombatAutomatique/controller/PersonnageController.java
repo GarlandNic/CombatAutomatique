@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.azurhyan.CombatAutomatique.dto.BlessureDto;
 import com.azurhyan.CombatAutomatique.dto.ComboDto;
+import com.azurhyan.CombatAutomatique.dto.HandicapDto;
 import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
+import com.azurhyan.CombatAutomatique.model.HandicapDB.TypeHand;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 import com.azurhyan.CombatAutomatique.service.ActionService;
 import com.azurhyan.CombatAutomatique.service.PersonnageService;
@@ -78,6 +80,21 @@ public class PersonnageController {
 	    return filledPage_Personnage(model, partie, perso);
 	}
 
+	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"addHand"})
+	public String addHand(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
+			@ModelAttribute("perso") PersoCompletDto perso, final HttpServletRequest req) {
+	    perso.getHandicapList().add(new HandicapDto(0, TypeHand.valueOf(req.getParameter("addHand")), ""));
+	    return filledPage_Personnage(model, partie, perso);
+	}
+
+	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"removeHand"})
+	public String removeHand(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
+			@ModelAttribute("perso") PersoCompletDto perso, final HttpServletRequest req) {
+	    final Integer rowId = Integer.valueOf(req.getParameter("removeHand"));
+	    perso.getHandicapList().remove(rowId.intValue());
+	    return filledPage_Personnage(model, partie, perso);
+	}
+
 	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"addCombo"})
 	public String addCombo(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
 			@ModelAttribute("perso") PersoCompletDto perso) {
@@ -100,8 +117,8 @@ public class PersonnageController {
 			perso = new PersoCompletDto(partie);
 		}
 		model.addAttribute("perso", perso);
-		model.addAttribute("combohandicap", perso.getComboHandicap());
-		model.addAttribute("combototal", perso.getComboTotal());
+//		model.addAttribute("combohandicap", perso.getComboHandicap());
+//		model.addAttribute("combototal", perso.getComboTotal());
 		return "personnage";
 	}
 	

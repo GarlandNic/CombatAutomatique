@@ -12,11 +12,8 @@ create table personnages(
  VISIBLE boolean NOT NULL DEFAULT TRUE,
  CON integer unsigned NOT NULL DEFAULT 10,
  PDCCOMBAT integer unsigned NOT NULL DEFAULT 3,
- HFATIGUE integer unsigned NOT NULL DEFAULT 0,
  CCINFATIGABLE integer unsigned NOT NULL DEFAULT 0,
- HMOBILITE integer unsigned NOT NULL DEFAULT 0,
  CCINCOERCIBLE integer unsigned NOT NULL DEFAULT 0,
- HSENS integer unsigned NOT NULL DEFAULT 0,
  CCTOUJOURSPRET integer unsigned NOT NULL DEFAULT 0,
  CCCOMBATPLUSIEURS integer unsigned NOT NULL DEFAULT 0
 );
@@ -28,6 +25,16 @@ create table blessures(
  DEMINIVEAU integer unsigned,
  PTDECHOC integer unsigned,
  PARTIETOUCHEE varchar(255),
+ FOREIGN KEY (PERSONNAGE) REFERENCES personnages (PERSOID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+create table handicaps(
+ HANDID integer NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ REFACTION integer DEFAULT 0,
+ PERSONNAGE integer NOT NULL,
+ DEMINOMBRE integer unsigned NOT NULL,
+ TYPEHAND enum('FATIGUE','MOBILITE','SENS') NOT NULL DEFAULT 'FATIGUE',
+ NOMHAND varchar(255),
  FOREIGN KEY (PERSONNAGE) REFERENCES personnages (PERSOID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -47,7 +54,7 @@ create table combos(
  DEFENSE integer NOT NULL DEFAULT 15,
  ESQUIVE integer NOT NULL DEFAULT 15,
  PARADE integer NOT NULL DEFAULT 0,
- BOUCLIER enum('Pas_de_bouclier','Dague','Targe','Bouclier','Grand_bouclier','Bouclier_tour') NOT NULL DEFAULT 'NORMAL',
+ BOUCLIER enum('Pas_de_bouclier','Dague','Targe','Bouclier','Grand_bouclier','Bouclier_tour') NOT NULL DEFAULT 'Pas_de_bouclier',
  ENDBOUCLIER integer NOT NULL DEFAULT 15,
  ENDPERSO integer NOT NULL DEFAULT 15,
  IBDEF integer NOT NULL DEFAULT 15,
@@ -67,6 +74,15 @@ create table actions(
  CIBLEDE integer default 0,
  ACTIONTIME datetime(6) NOT NULL,
  DESCRIPTION varchar(1023)
+);
+
+create table etat(
+ PERSONNAGE integer NOT NULL PRIMARY KEY,
+ DEDEF integer,
+ TURNORDER integer NOT NULL,
+ INCAPACITE integer DEFAULT 0,
+ UNIQUE (PERSONNAGE),
+ FOREIGN KEY (PERSONNAGE) REFERENCES personnages (PERSOID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 commit;

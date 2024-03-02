@@ -86,8 +86,8 @@ public class PartieController {
 	
 	@GetMapping("/azurhyan/{game}/defenseReset")
 	public String nouveauRound(Model model, @PathVariable("game") final String partie) {
-		persoServ.resetDefense(partie);
-		actionServ.nouveauRound(partie);
+		int newRd = actionServ.nouveauRound(partie);
+		persoServ.resetDefense(partie, newRd);
 		return "redirect:/azurhyan/"+partie;
 	}
 	

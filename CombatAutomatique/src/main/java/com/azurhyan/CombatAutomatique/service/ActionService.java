@@ -16,10 +16,13 @@ import com.azurhyan.CombatAutomatique.dto.BlessureDto;
 import com.azurhyan.CombatAutomatique.dto.CibleDto;
 import com.azurhyan.CombatAutomatique.dto.ComboDto;
 import com.azurhyan.CombatAutomatique.dto.Degat;
+import com.azurhyan.CombatAutomatique.dto.HandicapDto;
 import com.azurhyan.CombatAutomatique.model.ComboDB.Bouclier;
 import com.azurhyan.CombatAutomatique.model.ComboDB.Dgts;
 import com.azurhyan.CombatAutomatique.model.ComboDB.Element;
 import com.azurhyan.CombatAutomatique.model.EtatDB;
+import com.azurhyan.CombatAutomatique.model.HandicapDB;
+import com.azurhyan.CombatAutomatique.model.HandicapDB.TypeHand;
 import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
 import com.azurhyan.CombatAutomatique.model.ActionDB;
 import com.azurhyan.CombatAutomatique.model.BlessureDB;
@@ -27,6 +30,7 @@ import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 import com.azurhyan.CombatAutomatique.repository.ActionRepository;
 import com.azurhyan.CombatAutomatique.repository.BlessureRepository;
 import com.azurhyan.CombatAutomatique.repository.EtatRepository;
+import com.azurhyan.CombatAutomatique.repository.HandicapRepository;
 import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
 
 @Service
@@ -42,6 +46,8 @@ public class ActionService {
 	
 	@Autowired
 	BlessureRepository blessRepo;
+	@Autowired
+	HandicapRepository handiRepo;
 	
 	@Autowired
 	EtatRepository etatRepo;
@@ -53,16 +59,20 @@ public class ActionService {
 
 	@Transactional
 	private void annulerAction(ActionDB act) {
+		Iterable<HandicapDB> listHandicaps = handiRepo.findByRefAction(act.getActionId());
+		listHandicaps.forEach(h -> annulerHandicap(h));
 		Iterable<BlessureDB> listBlessures = blessRepo.findByRefAction(act.getActionId());
 		listBlessures.forEach(bl -> annulerBlessure(bl));
 		actionRepo.delete(act);
 	}
 
 	private void annulerBlessure(BlessureDB bl) {
-		float handic = bl.getHandicap();
-		bl.getPerso().setHfatigue2(bl.getPerso().getHfatigue2() - handic);
 		bl.getPerso().getBlessureList().remove(bl);
 		persoRepo.save(bl.getPerso());
+	}
+	private void annulerHandicap(HandicapDB h) {
+		h.getPerso().getHandicapList().remove(h);
+		persoRepo.save(h.getPerso());
 	}
 
 	public AttaqueDto fetchAttaque(int refAttaque, String partie) {
@@ -200,11 +210,11 @@ public class ActionService {
 		int n = 0;
 		for(int i=0; i<na; i++) {
 			for(int j=0; j<nd; j++) {
-				Degat dgt = attaqueUnique(comboAttList.get(n), comboDefList.get(n));
+				Degat dgt = attaqueUnique(comboAttList.get(n), comboDefList.get(n), attaque);
 				PersonnageDB defenseur = persoRepo.findById(attaque.getCibleList().get(j).getCibleId()).get();
 				if(comboAttList.get(n).isGlobaux()) dgt = diviseBlGlobaux(dgt, defenseur);
 				ActionDB act = appliqueAttaque(dgt, attaque.getAttaquantList().get(i), defenseur, 
-						attaque.getCibleList().get(j).getDe(), descrList.get(n), refAttaque);
+						attaque.getCibleList().get(j).getDe(), descrList.get(n), refAttaque, attaque);
 				refAttaque = act.getRefAttaque();
 				n++;
 			}
@@ -250,7 +260,7 @@ public class ActionService {
 		return repartition;
 	}
 
-	public ActionDB appliqueAttaque(Degat degats, CibleDto attaquant, PersonnageDB defenseur, int de, String descr, int refAttaque) {
+	public ActionDB appliqueAttaque(Degat degats, CibleDto attaquant, PersonnageDB defenseur, int de, String descr, int refAttaque, final AttaqueDto attaque) {
 		ActionDB act = new ActionDB();
 		act.setPersoId(attaquant.getCibleId());
 		act.setActeurNom(attaquant.getCibleNom());
@@ -281,7 +291,7 @@ public class ActionService {
 				blessRepo.save(blToSave);
 				descr += blToSave.blessureToString()+" ; ";
 				if(blToSave.getHandicap() > 0) {
-					defenseur.setHfatigue2(defenseur.getHfatigue2() + blToSave.getHandicap());
+//					defenseur.addHandicap(refAction, blToSave.getHandicap(), TypeHand.FATIGUE, "Blessure");
 					if(defenseur.getEtat() == null) {
 						Optional<EtatDB> etatOpt = etatRepo.findById(defenseur.getPersoId());
 						if(etatOpt.isPresent()) defenseur.setEtat(etatOpt.get());
@@ -298,12 +308,12 @@ public class ActionService {
 				}
 			}
 		}
-//		
-//		if(degats.getBousculadeH() > 0) {
-//			descr += "(Bousculade : "+degats.getBousculadeH()+" H-) ";
-//			defenseur.setHmobilite2(defenseur.getHmobilite2() + degats.getBousculadeH());
-//			persoRepo.save(defenseur);
-//		}
+		
+		for(HandicapDto h : degats.getHandList()) {
+			descr += "("+h.getNomHand()+" : "+h.getNombre()+" H-) ";
+			defenseur.replaceHandicap(refAction, h.getNombre(), h.getTypeHand(), h.getNomHand());
+			persoRepo.save(defenseur);
+		}
 		
 		act.setDescription(descr);
 		act = actionRepo.save(act);
@@ -314,7 +324,7 @@ public class ActionService {
 		return ""+(modif >= 0 ? "+" : "")+modif+"";
 	}
 
-	public Degat attaqueUnique(ComboDto comboAtt, ComboDto comboDef) {
+	public Degat attaqueUnique(ComboDto comboAtt, ComboDto comboDef, final AttaqueDto attaque) {
 		Degat result = new Degat();
 	
 		int margeTch = comboAtt.getToucher() - (comboAtt.isCaC() ? comboDef.getDefense() : comboDef.getEsquive());
@@ -323,11 +333,13 @@ public class ActionService {
 		if(margeTch < 0) {
 			return result;
 		} else {
-			margeTch -= (comboDef.getBouclier() != Bouclier.Pas_de_bouclier ? comboDef.getParade() + comboAtt.getPrdEnnemie() : 0);
+			if(!attaque.isCoupDansLeBouclier())
+				margeTch -= (comboDef.getBouclier() != Bouclier.Pas_de_bouclier ? comboDef.getParade() + comboAtt.getPrdEnnemie() : 0);
 			result.setMargeToucher(margeTch);
 			int bonusForce = (margeTch-1)/3;
 			bonusForce = (bonusForce > 0 ? bonusForce : 0);
 			boolean isPare = (comboDef.getBouclier() != Bouclier.Pas_de_bouclier) && (margeTch <= 0);
+			if(attaque.isCoupDansLeBouclier()) isPare = true;
 			String partieTouchee ="";
 			if(isPare) {
 				BlessureDto blBcl = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), 
@@ -358,16 +370,14 @@ public class ActionService {
 				result.getBlessList().add(bl);
 				BlessureDto blArmure = calculDegats(bonusForce+comboAtt.getForce(), endu, 
 						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), true);
-//				BlessureDto blArmure = new BlessureDto();
-//				blArmure.setDemiNiveau((comboAtt.getTypeDgts()==Dgts.PRF ? bl.getDemiNiveau()/2 : bl.getDemiNiveau()));
-//				blArmure.setPtDeChoc(0);
 				blArmure.setPartieTouchee("Armure");
 				if(blArmure.getNiveau() > 0) result.getBlessList().add(blArmure);
 			}
 
-//			if(bousculade > 1 && comboAtt.getTypeDgts() == Dgts.CTD) {
-//				result.setBousculadeH( ((float) (bousculade/2))/2 );
-//			}
+			if(attaque.isBousculade()) {
+				int demiH = (result.getMargeBlesser() + comboAtt.getIBatt() - comboDef.getIBdef())/2;
+				if(demiH > 0)	result.getHandList().add(new HandicapDto((float) demiH/2, TypeHand.MOBILITE, "Bousculade"));
+			}
 			
 			return result;
 		}
@@ -383,18 +393,7 @@ public class ActionService {
 		if(isGlb) nvBl += 1;
 		ptChoc = element.modifPtChoc(ptChoc, (dgts == Dgts.CTD));
 		nvBl = element.modifNvBl(nvBl, (dgts == Dgts.CTD), isObjet);
-		
-//		if(isCtd) {
-//			ptChoc = margeBless;
-//			nvBl = (float) (margeBless/2.0) - 1;
-//			nvBl = (nvBl > 0 ? nvBl : 0);
-//		} else {
-//			ptChoc = (margeBless+1)/2;
-//			nvBl = (float) (margeBless/2.0);
-//		}
-//		if(isGlb) {
-//			nvBl += 1;
-//		}
+
 		BlessureDto bl = new BlessureDto(nvBl, ptChoc);
 		return bl;
 	}
@@ -573,11 +572,12 @@ public class ActionService {
 		}
 	}
 
-	public void nouveauRound(String partie) {	
-		actionRepo.save(new ActionDB(partie, "<pre>##########     Fin du round "+ROUND+"     ##########</pre>"));
-		actionRepo.save(new ActionDB(partie, "<pre>#         Round "+(ROUND+1)+" : faites vos ATR         #</pre>"));
-		ROUND += 2;
-		actionRepo.save(new ActionDB(partie, "<pre>##########    Début du round "+ROUND+"    ##########</pre>"));
+	public int nouveauRound(String partie) {
+		if(ROUND != 0) 		actionRepo.save(new ActionDB(partie, "<pre>##########     Fin du round "+ROUND+"     ##########</pre>"));
+		ROUND += 1;
+		if(ROUND % 2 == 1)	actionRepo.save(new ActionDB(partie, "<pre>#         Round "+ROUND+" : faites vos ATR         #</pre>"));
+		else 				actionRepo.save(new ActionDB(partie, "<pre>##########    Début du round "+ROUND+"    ##########</pre>"));
+		return ROUND;
 	}
 
 }

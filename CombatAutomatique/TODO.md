@@ -1,11 +1,10 @@
 
 TODO list
 
-  o bousculade et attaques spéciales (coup dans le bouclier, etc.)
-  	- html : fieldset lors de l'attaque
-  	- objet pour regrouper les flag d'attaque spéciale ? dans attaque Dto
-  	- 
-
+  o handicap blessure (pas dans la liste des handicaps mais compté quand même)
+  o regrouper handicaps : modif PersoDB -> PersoDto & PersoDto -> PersoDB
+  
+  o couleur des persos : nouveau champ dans la DB + permettre de choisir + proposer un truc pour les PNJ
  
 
 DONE :
@@ -66,6 +65,10 @@ DONE :
   	- en bas : Archive, en dessous des boutons
   	- confirmation pour la suppression
   o page d'attaque : plus d'info sur les persos
+  o coup dans le bouclier
+  o handicap détaillés comme blessures
+  o implémenter bousculade
+  o data2.sql + tester coup dans le bouclier et dernières modifs (handicaps, nouveau round) et bousculade
   
 
   

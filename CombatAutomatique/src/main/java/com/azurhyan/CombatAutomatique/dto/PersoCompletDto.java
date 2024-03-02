@@ -7,7 +7,9 @@ import com.azurhyan.CombatAutomatique.model.ActionDB;
 import com.azurhyan.CombatAutomatique.model.BlessureDB;
 import com.azurhyan.CombatAutomatique.model.ComboDB;
 import com.azurhyan.CombatAutomatique.model.EtatDB;
+import com.azurhyan.CombatAutomatique.model.HandicapDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
+import com.azurhyan.CombatAutomatique.model.HandicapDB.TypeHand;
 
 import jakarta.persistence.Entity;
 
@@ -36,11 +38,8 @@ public class PersoCompletDto {
 		this.visible = perso.isVisible();
 		this.CON=perso.getCON();
 		this.pdcCombat=perso.getPdcCombat();
-		this.Hfatigue=perso.getHfatigue2();
 		this.CCinfatigable=perso.getCCinfatigable2();
-		this.Hmobilite=perso.getHmobilite2();
 		this.CCincoercible=perso.getCCincoercible2();
-		this.Hsens=perso.getHsens2();
 		this.CCtoujoursPret=perso.getCCtoujoursPret2();
 		this.CCcombatPlusieurs=perso.getCCcombatPlusieurs();
 		
@@ -52,6 +51,10 @@ public class PersoCompletDto {
 		for(BlessureDB bl : perso.getBlessureList()) {
 			this.blessureList.add(new BlessureDto(bl));
 		}
+		this.handicapList = new ArrayList<>();
+		for(HandicapDB h : perso.getHandicapList()) {
+			this.addToHandicapList(new HandicapDto(h));
+		}
 //		this.actionList = new ArrayList<>();
 //		for(ActionDB action : perso.getActionList()) {
 //			this.actionList.add(new ActionDto(action));
@@ -60,39 +63,53 @@ public class PersoCompletDto {
 
 	}
 	
-	public PersonnageDB persoToDB() {
-		PersonnageDB perso = new PersonnageDB();
-		perso.setPersoId(persoId);
-		perso.setNom(nom);
-		perso.setJoueur(joueur);
-		perso.setPartie(partie);
-		perso.setVisible(visible);
-		perso.setCON(CON);
-		perso.setPdcCombat(pdcCombat);
-		perso.setHfatigue2(this.Hfatigue);
-		perso.setCCinfatigable2(this.CCinfatigable);
-		perso.setHmobilite2(this.Hmobilite);
-		perso.setCCincoercible2(this.CCincoercible);
-		perso.setHsens2(this.Hsens);
-		perso.setCCtoujoursPret2(this.CCtoujoursPret);
-		perso.setCCcombatPlusieurs(CCcombatPlusieurs);
-		
-//		List<ActionDB> actList = new ArrayList<>();
-//		this.actionList.forEach(act -> actList.add(act.actionToDB(perso)));
-//		perso.setActionList(actList);
-		
-		List<BlessureDB> blList = new ArrayList<>();
-		this.blessureList.forEach(bl -> blList.add(bl.blessureToDB(perso)));
-		perso.setBlessureList(blList);
-		
-		List<ComboDB> combList = new ArrayList<>();
-		this.comboList.forEach(comb -> combList.add(comb.comboToDB(perso)));
-		perso.setComboList(combList);
-		
-//		if(etat != null) perso.setEtat(etat.etatToDB(perso));
-		
-		return perso;
+	private void addToHandicapList(HandicapDto hNew) {
+		boolean nouveaute = true;
+		for(HandicapDto h : this.getHandicapList()) {
+			if(hNew.getNomHand().equals(h.getNomHand())) {
+				nouveaute = false;
+				h.setNombre(h.getNombre() + hNew.getNombre());
+				break;
+			}
+		}
+		if(nouveaute) {
+			this.getHandicapList().add(hNew);
+		}
 	}
+
+//	public PersonnageDB persoToDB() {
+//		PersonnageDB perso = new PersonnageDB();
+//		perso.setPersoId(persoId);
+//		perso.setNom(nom);
+//		perso.setJoueur(joueur);
+//		perso.setPartie(partie);
+//		perso.setVisible(visible);
+//		perso.setCON(CON);
+//		perso.setPdcCombat(pdcCombat);
+//		perso.setCCinfatigable2(this.CCinfatigable);
+//		perso.setCCincoercible2(this.CCincoercible);
+//		perso.setCCtoujoursPret2(this.CCtoujoursPret);
+//		perso.setCCcombatPlusieurs(CCcombatPlusieurs);
+//		
+////		List<ActionDB> actList = new ArrayList<>();
+////		this.actionList.forEach(act -> actList.add(act.actionToDB(perso)));
+////		perso.setActionList(actList);
+//		
+//		List<BlessureDB> blList = new ArrayList<>();
+//		this.blessureList.forEach(bl -> blList.add(bl.blessureToDB(perso)));
+//		perso.setBlessureList(blList);
+//		List<HandicapDB> hList = new ArrayList<>();
+//		this.handicapList.forEach(h -> hList.add(h.handicapToDB(perso)));
+//		perso.setHandicapList(hList);
+//		
+//		List<ComboDB> combList = new ArrayList<>();
+//		this.comboList.forEach(comb -> combList.add(comb.comboToDB(perso)));
+//		perso.setComboList(combList);
+//		
+////		if(etat != null) perso.setEtat(etat.etatToDB(perso));
+//		
+//		return perso;
+//	}
 	
 	int persoId;
 	String nom="Perso";
@@ -102,16 +119,14 @@ public class PersoCompletDto {
 
 	List<ComboDto> comboList = new ArrayList<>();
 	List<BlessureDto> blessureList = new ArrayList<>();
+	List<HandicapDto> handicapList = new ArrayList<>();
 //	List<ActionDto> actionList = new ArrayList<>();
 //	EtatDto etat;
 	
 	int CON=10;
 	int pdcCombat=3;
-	float Hfatigue=0;
 	float CCinfatigable=0;
-	float Hmobilite=0;
 	float CCincoercible=0;
-	float Hsens=0;
 	float CCtoujoursPret=0;
 	int CCcombatPlusieurs=0;
 	
@@ -196,6 +211,23 @@ public class PersoCompletDto {
 //		this.blessureList.add(bl);
 //		this.Hfatigue += this.getHandicap(bl);
 //	}
+	public float getHfatigue() {
+		return this.getHblessure() + ((float) this.handicapList.stream()
+				.mapToInt(h -> (h.getTypeHand() == TypeHand.FATIGUE ? h.getDemiNombre() : 0) )
+				.sum())/2;
+	}
+
+	public float getHmobilite() {
+		return ((float) this.handicapList.stream()
+				.mapToInt(h -> (h.getTypeHand() == TypeHand.MOBILITE ? h.getDemiNombre() : 0) )
+				.sum())/2;
+	}
+
+	public float getHsens() {
+		return ((float) this.handicapList.stream()
+				.mapToInt(h -> (h.getTypeHand() == TypeHand.SENS ? h.getDemiNombre() : 0) )
+				.sum())/2;
+	}
 	
 	public ComboDto getComboHandicap() {
 		float handicap = Math.max(0, this.getHfatigue() - this.getCCinfatigable());
@@ -234,6 +266,13 @@ public class PersoCompletDto {
 		
 		return comboTot;
 	}
-
+	
+	public float getHblessure() {
+		float sum = 0;
+		for(BlessureDto bl : this.blessureList) {
+			sum += this.getHandicap(bl);
+		}
+		return sum;
+	}
 
 }

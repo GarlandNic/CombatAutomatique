@@ -23,6 +23,8 @@ public class AttaqueDto {
 	List<CibleDto> autreList = new ArrayList<>();
 
 	boolean lePlusPossible = false;
+	boolean bousculade = false;
+	boolean coupDansLeBouclier = false;
 	
 	String partie="";
 	

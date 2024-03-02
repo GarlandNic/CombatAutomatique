@@ -9,6 +9,8 @@ import lombok.Data;
 public class Degat {
 	
 	List<BlessureDto> blessList = new ArrayList<>();
+
+	List<HandicapDto> handList = new ArrayList<>();
 	
 	int margeBlesser = 0;
 	

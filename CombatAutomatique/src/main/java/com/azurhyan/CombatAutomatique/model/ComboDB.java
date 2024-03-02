@@ -281,8 +281,7 @@ public class ComboDB {
 	@Column(name="ACTIF")
 	boolean actif=true;
 	
-	public void addHandicap(int demiH) {
-		int h = demiH/2;
+	public void addHandicap(int h) {
 		this.init = this.init - h;
 		this.toucher = this.toucher - h;
 		this.force = this.force - h;

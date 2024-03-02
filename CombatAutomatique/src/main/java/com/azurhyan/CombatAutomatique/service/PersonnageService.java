@@ -16,6 +16,7 @@ import com.azurhyan.CombatAutomatique.dto.PersosVisiblesDto;
 import com.azurhyan.CombatAutomatique.model.BlessureDB;
 import com.azurhyan.CombatAutomatique.model.ComboDB;
 import com.azurhyan.CombatAutomatique.model.EtatDB;
+import com.azurhyan.CombatAutomatique.model.HandicapDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 import com.azurhyan.CombatAutomatique.repository.EtatRepository;
 import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
@@ -107,11 +108,8 @@ public class PersonnageService {
 	}
 
 	public ComboDB comboHandicap(PersonnageDB perso) {
-		int demiH = Math.max(0, perso.getHfatigue() - perso.getCCinfatigable());
-		demiH = demiH + Math.max(0, perso.getHmobilite() - perso.getCCincoercible());
-		demiH = demiH + Math.max(0, perso.getHsens() - perso.getCCtoujoursPret());
 		ComboDB comboH = new ComboDB("Handicap", perso, true);
-		comboH.addHandicap(demiH);
+		comboH.addHandicap(perso.totalHandicaps());
 		return comboH;
 	}
 
@@ -127,12 +125,44 @@ public class PersonnageService {
 	}
 
 	public PersoCompletDto saveDto(PersoCompletDto perso) {
-		PersonnageDB pp = perso.persoToDB();
+		PersonnageDB pp = convertPersoDtoToDB(perso);
 		if(pp.getEtat() == null && perso.getPersoId() != 0) {
 			Optional<EtatDB> etat = etatRepo.findByPerso(pp);
 			if(etat.isPresent()) pp.setEtat(etat.get());
 		}
 		return (new PersoCompletDto(persoRepo.save(pp)));
+	}
+
+	private PersonnageDB convertPersoDtoToDB(PersoCompletDto perso) {
+		Optional<PersonnageDB> optPerso = persoRepo.findById(perso.getPersoId());
+		PersonnageDB newPerso;
+		if(optPerso.isEmpty()) newPerso = new PersonnageDB();
+		else newPerso = optPerso.get();
+		
+		newPerso.setNom(perso.getNom());
+		newPerso.setJoueur(perso.getJoueur());
+		newPerso.setPartie(perso.getPartie());
+		newPerso.setVisible(perso.isVisible());
+		newPerso.setCON(perso.getCON());
+		newPerso.setPdcCombat(perso.getPdcCombat());
+		newPerso.setCCinfatigable2(perso.getCCinfatigable());
+		newPerso.setCCincoercible2(perso.getCCincoercible());
+		newPerso.setCCtoujoursPret2(perso.getCCtoujoursPret());
+		newPerso.setCCcombatPlusieurs(perso.getCCcombatPlusieurs());
+		
+		List<BlessureDB> blList = new ArrayList<>();
+		perso.getBlessureList().forEach(bl -> blList.add(bl.blessureToDB(newPerso)));
+		newPerso.setBlessureList(blList);
+		List<ComboDB> combList = new ArrayList<>();
+		perso.getComboList().forEach(comb -> combList.add(comb.comboToDB(newPerso)));
+		newPerso.setComboList(combList);
+		
+		// TODO
+		List<HandicapDB> hList = new ArrayList<>();
+		perso.getHandicapList().forEach(h -> hList.add(h.handicapToDB(newPerso)));
+		newPerso.setHandicapList(hList);
+		
+		return newPerso;
 	}
 
 	public void saveCopy(PersonnageDB oldPerso) {
@@ -142,7 +172,7 @@ public class PersonnageService {
 		newPerso.setEtat(etatRepo.save(new EtatDB(newPerso)));
 	}
 
-	public void resetDefense(String partie) {
+	public void resetDefense(String partie, int newRd) {
 		Iterable<PersonnageDB> persoListBD = persoRepo.findByPartieAndVisible(partie, true);
 		List<EtatDB> etatListBD = new ArrayList<>();
 		persoListBD.forEach(perso -> {
@@ -152,13 +182,14 @@ public class PersonnageService {
 					etat.setDeDef(0);
 					etatListBD.add(etat);
 				}
-				switch(etat.getIncapacite()) {
-					case 0: break;
-					case 1: etat.setIncapacite(0); break;
-					case 2: etat.setIncapacite(0); break;
-					case 3: etat.setIncapacite(1); break;
+				if(newRd % 2 ==0) {
+					switch(etat.getIncapacite()) {
+						case 0: break;
+						case 1: etat.setIncapacite(0); break;
+						case 2: etat.setIncapacite(0); break;
+						case 3: etat.setIncapacite(1); break;
+					}
 				}
-
 			}
 		});
 		etatRepo.saveAll(etatListBD);		

@@ -192,14 +192,22 @@
 		</tbody>
 	</table>
 	
-	<p>
-		Attaque multiple (par défaut, on attaque tous les ennemis de la même manière) : 
-		<br/>
+	<br/>
+	<fieldset>
+		<legend> Particularités de l'attaque </legend>
 		<label>
-	  		<input type="checkbox" th:field="*{lePlusPossible}" />
-	  		Le plus possible (l'ordre ci-dessus est pris en compte, les malus sont à remplacer par du -2/-1 cumulatifs)
+	  		<input type="checkbox" th:field="*{lePlusPossible}" title="l'ordre ci-dessus est pris en compte, les malus sont à remplacer par du -2/-1 cumulatifs"/>
+	  		Le plus possible
   		</label>
-	</p>
+		<label>
+	  		<input type="checkbox" th:field="*{bousculade}" title="pas encore implémenté"/>
+	  		Bousculade
+  		</label>
+		<label>
+	  		<input type="checkbox" th:field="*{coupDansLeBouclier}" title="automatiquement paré, mais la parade ne réduit pas la marge de toucher"/>
+	  		Coup dans le bouclier
+  		</label>
+	</fieldset>
 	
 	<p th:with="d=*{#lists.size(cibleList)},a=*{#lists.size(attaquantList)}">
 		<span th:if="${a==0}" class="alert">Il faut au moins 1 attaquant !</span>

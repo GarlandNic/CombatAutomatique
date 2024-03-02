@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.azurhyan.CombatAutomatique.model.ComboDB.Bouclier;
+import com.azurhyan.CombatAutomatique.model.HandicapDB.TypeHand;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -57,6 +58,12 @@ public class PersonnageDB {
 			   mappedBy = "perso")
 	List<BlessureDB> blessureList = new ArrayList<>();
 	
+	@OneToMany(cascade = CascadeType.ALL, 
+			   orphanRemoval = true, 
+			   fetch = FetchType.EAGER, 
+			   mappedBy = "perso")
+	List<HandicapDB> handicapList = new ArrayList<>();
+	
 	@OneToOne(mappedBy = "perso", 
 			  cascade = CascadeType.ALL, 
 			  orphanRemoval = true, 
@@ -73,20 +80,11 @@ public class PersonnageDB {
 	@Column(name="PDCCOMBAT")
 	int pdcCombat=3;
 	
-	@Column(name="HFATIGUE")
-	int Hfatigue=0; // nb de demi-Handicap
-	
 	@Column(name="CCINFATIGABLE")
 	int CCinfatigable=0;
 	
-	@Column(name="HMOBILITE")
-	int Hmobilite=0;
-	
 	@Column(name="CCINCOERCIBLE")
 	int CCincoercible=0;
-	
-	@Column(name="HSENS")
-	int Hsens=0;
 	
 	@Column(name="CCTOUJOURSPRET")
 	int CCtoujoursPret=0;
@@ -115,11 +113,11 @@ public class PersonnageDB {
 	}
 	
 	public int totalHandicaps() {
-		int Hfat = this.Hfatigue - this.CCinfatigable;
+		int Hfat = this.getHfatigue2() - this.CCinfatigable;
 		Hfat = (Hfat > 0 ? Hfat : 0);
-		int Hmob = this.Hmobilite - this.CCincoercible;
+		int Hmob = this.getHmobilite2() - this.CCincoercible;
 		Hmob = (Hmob > 0 ? Hmob : 0);
-		int Hsen = this.Hsens - this.CCtoujoursPret;
+		int Hsen = this.getHsens2() - this.CCtoujoursPret;
 		Hsen = (Hsen > 0 ? Hsen : 0);
 		return (Hfat+Hmob+Hsen)/2;
 	}
@@ -133,23 +131,16 @@ public class PersonnageDB {
 		return res;
 	}
 	
-	public float getHfatigue2() {
-		return (float) ((float) this.Hfatigue/2.0);
+	public int getHfatigue2() {
+		return this.handicapList.stream().mapToInt(h -> (h.getTypeHand() == TypeHand.FATIGUE ? h.getDemiNombre() : 0) ).sum();
 	}
-	public void setHfatigue2(float hd) {
-		this.Hfatigue = (int) Math.round(hd*2);
+
+	public int getHmobilite2() {
+		return this.handicapList.stream().mapToInt(h -> (h.getTypeHand() == TypeHand.MOBILITE ? h.getDemiNombre() : 0) ).sum();
 	}
-	public float getHmobilite2() {
-		return (float) ((float) this.Hmobilite/2.0);
-	}
-	public void setHmobilite2(float hd) {
-		this.Hmobilite = (int) Math.round(hd*2);
-	}
-	public float getHsens2() {
-		return (float) ((float) this.Hsens/2.0);
-	}
-	public void setHsens2(float hd) {
-		this.Hsens = (int) Math.round(hd*2);
+
+	public int getHsens2() {
+		return this.handicapList.stream().mapToInt(h -> (h.getTypeHand() == TypeHand.SENS ? h.getDemiNombre() : 0) ).sum();
 	}
 	
 	public float getCCinfatigable2() {
@@ -185,11 +176,8 @@ public class PersonnageDB {
 	    newPerso.setVisible(this.isVisible());
 	    newPerso.setCON(this.getCON());
 	    newPerso.setPdcCombat(this.getPdcCombat());
-	    newPerso.setHfatigue(this.getHfatigue());
 	    newPerso.setCCinfatigable(this.getCCinfatigable());
-	    newPerso.setHmobilite(this.getHmobilite());
 	    newPerso.setCCincoercible(this.getCCincoercible());
-	    newPerso.setHsens(this.getHsens());
 	    newPerso.setCCtoujoursPret(this.getCCtoujoursPret());
 	    newPerso.setCCcombatPlusieurs(this.getCCcombatPlusieurs());
 		
@@ -197,11 +185,36 @@ public class PersonnageDB {
 		this.getBlessureList().forEach(bl -> blList.add(bl.copy(newPerso)));
 		newPerso.setBlessureList(blList);
 		
+		List<HandicapDB> hList = new ArrayList<>();
+		this.getHandicapList().forEach(h -> hList.add(h.copy(newPerso)));
+		newPerso.setHandicapList(hList);
+		
 		List<ComboDB> combList = new ArrayList<>();
 		this.getComboList().forEach(comb -> combList.add(comb.copy(newPerso)));
 		newPerso.setComboList(combList);
 		
 		return newPerso;
+	}
+
+	public void addHandicap(int refAction, float nombreH, TypeHand typ, String nom) {
+//		for(HandicapDB h : this.getHandicapList()) {
+//			if(h.getTypeHand() == typ && h.getNomHand().equals(nom)) {
+//				nombreH -= h.getNombre();
+//			}
+//		}
+		HandicapDB newHand = new HandicapDB(this, nombreH, typ, nom);
+		newHand.setRefAction(refAction);
+		this.getHandicapList().add(newHand);
+	}
+	public void replaceHandicap(int refAction, float nombreH, TypeHand typ, String nom) {
+		for(HandicapDB h : this.getHandicapList()) {
+			if(h.getTypeHand() == typ && h.getNomHand().equals(nom)) {
+				nombreH -= h.getNombre();
+			}
+		}
+		HandicapDB newHand = new HandicapDB(this, nombreH, typ, nom);
+		newHand.setRefAction(refAction);
+		this.getHandicapList().add(newHand);
 	}
 
 }
