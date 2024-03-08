@@ -1,6 +1,8 @@
 
 TODO list
 
+tester les corrections
+
   o couleur des persos : nouveau champ dans la DB + permettre de choisir + proposer un truc pour les PNJ
  
 
@@ -71,6 +73,9 @@ DONE :
   	o annuler précédent !!!
   	o on stocke tous les handicaps comme les blessures mais quand on calcule combien ça fait, on ne garde que le max de chaque
    o blessures et handicaps : sauvegarder les liens pour pouvoir toujours annuler l'attaque (modif dto & html & convertion Dto/DB)
+ corriger bousculade quand raté
+ corriger init handicap blessure
+
  
   
 

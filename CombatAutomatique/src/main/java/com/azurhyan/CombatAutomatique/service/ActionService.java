@@ -279,12 +279,18 @@ public class ActionService {
 		int refAction = act.getActionId();
 		
 		if(degats.getBlessList().isEmpty()) {
-			if(degats.getMargeToucher() >= 0)
-				descr += "touché ("+modifToString(degats.getMargeToucher())+"), pas de dégâts ("+modifToString(degats.getMargeBlesser())+").";
-			else
-				descr += "raté ("+modifToString(degats.getMargeToucher())+") !";
+			if(degats.isPare()) {
+				descr += "paré ("+modifToString(degats.getMargeToucher())+"), pas de dégâts ("+modifToString(degats.getMargeBlesser())+").";								
+			} else if(degats.getMargeToucher() >= 0) {
+				descr += "touché ("+modifToString(degats.getMargeToucher())+"), pas de dégâts ("+modifToString(degats.getMargeBlesser())+").";				
+			} else {
+				descr += "raté ("+modifToString(degats.getMargeToucher())+") !";				
+			}
 		} else {
-			descr += "touché ("+modifToString(degats.getMargeToucher())+"), dégâts ("+modifToString(degats.getMargeBlesser())+") : ";
+			if(degats.isPare())
+				descr += "paré ("+modifToString(degats.getMargeToucher())+"), dégâts ("+modifToString(degats.getMargeBlesser())+") : ";
+			else
+				descr += "touché ("+modifToString(degats.getMargeToucher())+"), dégâts ("+modifToString(degats.getMargeBlesser())+") : ";
 			for(BlessureDto bl : degats.getBlessList()) {
 				BlessureDB blToSave = bl.blessureToDB(defenseur);
 				blToSave.setRefAction(refAction);
@@ -340,6 +346,7 @@ public class ActionService {
 			bonusForce = (bonusForce > 0 ? bonusForce : 0);
 			boolean isPare = (comboDef.getBouclier() != Bouclier.Pas_de_bouclier) && (margeTch <= 0);
 			if(attaque.isCoupDansLeBouclier()) isPare = true;
+			result.setPare(isPare);
 			String partieTouchee ="";
 			if(isPare) {
 				BlessureDto blBcl = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), 

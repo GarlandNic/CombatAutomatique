@@ -2,7 +2,9 @@ package com.azurhyan.CombatAutomatique.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.azurhyan.CombatAutomatique.dto.HandicapDto;
 import com.azurhyan.CombatAutomatique.model.ComboDB.Bouclier;
 import com.azurhyan.CombatAutomatique.model.HandicapDB.TypeHand;
 
@@ -132,15 +134,25 @@ public class PersonnageDB {
 	}
 	
 	public int getHfatigue2() {
-		return this.handicapList.stream().mapToInt(h -> (h.getTypeHand() == TypeHand.FATIGUE ? h.getDemiNombre() : 0) ).sum();
+		return this.getHblessure2() + this.getH2type(TypeHand.FATIGUE);
+	}
+
+	private int getHblessure2() {
+		return this.blessureList.stream().mapToInt(bl -> ((int) bl.getHandicap()*2)).sum();
 	}
 
 	public int getHmobilite2() {
-		return this.handicapList.stream().mapToInt(h -> (h.getTypeHand() == TypeHand.MOBILITE ? h.getDemiNombre() : 0) ).sum();
+		return this.getH2type(TypeHand.MOBILITE);
 	}
 
 	public int getHsens2() {
-		return this.handicapList.stream().mapToInt(h -> (h.getTypeHand() == TypeHand.SENS ? h.getDemiNombre() : 0) ).sum();
+		return this.getH2type(TypeHand.SENS);
+	}
+	
+	private int getH2type(TypeHand type) {
+		return this.getHblessure2() + this.handicapList.stream().filter(h -> h.getTypeHand() == type)
+				.collect(Collectors.toMap(HandicapDB::getNomHand, HandicapDB::getDemiNombre, (i, j) -> (i > j ? i : j)))
+				.values().stream().mapToInt(i -> (int) i).sum();
 	}
 	
 	public float getCCinfatigable2() {

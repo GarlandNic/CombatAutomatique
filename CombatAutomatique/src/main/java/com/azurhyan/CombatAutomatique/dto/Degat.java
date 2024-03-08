@@ -15,5 +15,7 @@ public class Degat {
 	int margeBlesser = 0;
 	
 	int margeToucher = 0;
+	
+	boolean isPare = false;
 
 }
