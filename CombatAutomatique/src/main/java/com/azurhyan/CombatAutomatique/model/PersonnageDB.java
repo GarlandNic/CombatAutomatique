@@ -138,7 +138,7 @@ public class PersonnageDB {
 	}
 
 	private int getHblessure2() {
-		return this.blessureList.stream().mapToInt(bl -> ((int) bl.getHandicap()*2)).sum();
+		return this.blessureList.stream().mapToInt(bl -> ((int) (bl.getHandicap()*2))).sum();
 	}
 
 	public int getHmobilite2() {
@@ -150,7 +150,7 @@ public class PersonnageDB {
 	}
 	
 	private int getH2type(TypeHand type) {
-		return this.getHblessure2() + this.handicapList.stream().filter(h -> h.getTypeHand() == type)
+		return this.handicapList.stream().filter(h -> h.getTypeHand() == type)
 				.collect(Collectors.toMap(HandicapDB::getNomHand, HandicapDB::getDemiNombre, (i, j) -> (i > j ? i : j)))
 				.values().stream().mapToInt(i -> (int) i).sum();
 	}

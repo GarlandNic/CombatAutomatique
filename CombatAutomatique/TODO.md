@@ -1,9 +1,7 @@
 
 TODO list
 
-tester les corrections
-
-  o couleur des persos : nouveau champ dans la DB + permettre de choisir + proposer un truc pour les PNJ
+  o ?? couleur des persos : nouveau champ dans la DB + permettre de choisir + proposer un truc pour les PNJ
  
 
 DONE :
