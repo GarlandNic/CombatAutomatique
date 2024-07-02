@@ -14,7 +14,7 @@ import com.azurhyan.CombatAutomatique.dto.HandicapDto;
 import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
 import com.azurhyan.CombatAutomatique.model.HandicapDB.TypeHand;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
-import com.azurhyan.CombatAutomatique.service.ActionService;
+import com.azurhyan.CombatAutomatique.service.ActionService_v6;
 import com.azurhyan.CombatAutomatique.service.PersonnageService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ public class PersonnageController {
 	PersonnageService persoServ;
 	
 	@Autowired
-	ActionService actionServ;
+	ActionService_v6 actionServ;
 	
 	@GetMapping("/azurhyan/{game}/nouveauPerso")
 	public String formNouvPerso(Model model, @PathVariable("game") final String partie) {
@@ -63,6 +63,14 @@ public class PersonnageController {
 	public String actu(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
 			@ModelAttribute("perso") PersoCompletDto perso) {
 	    return filledPage_Personnage(model, partie, perso);
+	}
+
+	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"save"})
+	public String save(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
+			@ModelAttribute("perso") PersoCompletDto perso) {
+		PersoCompletDto persoSaved = persoServ.saveDto(perso);
+		if(perso.getPersoId()==0) return "redirect:/azurhyan/"+partie+"/"+persoSaved.getPersoId();
+	    return filledPage_Personnage(model, partie, persoSaved);
 	}
 
 	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"addBless"})

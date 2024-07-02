@@ -1,7 +1,8 @@
 
 TODO list
 
-  o ?? couleur des persos : nouveau champ dans la DB + permettre de choisir + proposer un truc pour les PNJ
+  o bug : Toll n'est pas marqué comme ayant agit, et ses ennemis ne mettent pas à jour leur état (des fois ?)
+  o choix des couleurs ?
  
 
 DONE :
@@ -73,6 +74,11 @@ DONE :
    o blessures et handicaps : sauvegarder les liens pour pouvoir toujours annuler l'attaque (modif dto & html & convertion Dto/DB)
  corriger bousculade quand raté
  corriger init handicap blessure
+  o fiche de perso : confusion quand ça enregistre ou pas => rajout de symboles
+  o tri des perso par init, pour l'affichage
+  o bouclier qui se casse automatiquement ?
+  	=> title des nv de bouclier reçus (modif PersoPartie)
+
 
  
   

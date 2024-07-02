@@ -1,5 +1,6 @@
 package com.azurhyan.CombatAutomatique.dto;
 
+import com.azurhyan.CombatAutomatique.model.ActionDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 
 import lombok.Data;
@@ -26,6 +27,7 @@ public class PersoPartieDto {
 		this.turnOrder = (null != perso.getEtat() ? perso.getEtat().getTurnOrder() : perso.getPersoId());
 		this.joueur = perso.getJoueur();
 		this.bouclier = perso.hasBouclier();
+		this.nivBcl = ((float) perso.demiNiveauxBouclier())/2;
 	}
 
 	int id;
@@ -48,5 +50,10 @@ public class PersoPartieDto {
 	int turnOrder;
 	
 	boolean bouclier;
+	float nivBcl;
+	
+	public String getCouleur() {
+		return ActionDB.getCouleur(this.nom);
+	}
 
 }

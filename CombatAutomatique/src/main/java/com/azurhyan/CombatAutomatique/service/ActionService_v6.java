@@ -34,7 +34,7 @@ import com.azurhyan.CombatAutomatique.repository.HandicapRepository;
 import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
 
 @Service
-public class ActionService {
+public class ActionService_v6 {
 	
 	private static int ROUND = 0;
 	

@@ -73,13 +73,13 @@ public class ActionDB {
 	public ActionDB() {
 	}
 	
-	public String getCouleur() {
-		if(null == this.getActeurNom() || this.getActeurNom().isBlank()) {
+	public static String getCouleur(String acteurNom) {
+		if(null == acteurNom || acteurNom.isBlank()) {
 			return "#ffff00";
 		} else {
 //			int max = 46656; // 6^6
 			Long res = 12345L;
-			for(char a : this.getActeurNom().toCharArray()) {
+			for(char a : acteurNom.toCharArray()) {
 				res *= (int) a;
 				res += 1;
 //				res = res % max;
@@ -101,5 +101,8 @@ public class ActionDB {
 			return String.valueOf(result);
 		}
 	}
-
+	
+	public String getCouleur() {
+		return getCouleur(this.acteurNom);
+	}
 }

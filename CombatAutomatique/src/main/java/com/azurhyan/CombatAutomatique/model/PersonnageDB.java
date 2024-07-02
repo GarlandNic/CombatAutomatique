@@ -107,6 +107,10 @@ public class PersonnageDB {
 			( !(bl.partieTouchee.equals("Bouclier") || bl.partieTouchee.equals("Armure")) ? 
 					bl.getDemiNiveau() : 0) ).sum();
 	}
+	public int demiNiveauxBouclier() {
+		return this.blessureList.stream().mapToInt(bl -> 
+		( bl.partieTouchee.equals("Bouclier") ? bl.getDemiNiveau() : 0) ).sum();
+	}
 
 	public int totalPtsDeChoc() {
 		return this.blessureList.stream().mapToInt(bl -> 

@@ -2,6 +2,7 @@ package com.azurhyan.CombatAutomatique.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -34,6 +35,7 @@ public class PersonnageService {
 		Iterable <PersonnageDB> persoListBD = persoRepo.findByPartieAndVisible(partieName, true);
 		List<PersoPartieDto> persosList = new ArrayList<PersoPartieDto>();
 		persoListBD.forEach(perso -> persosList.add(new PersoPartieDto(perso)));
+		persosList.sort(Comparator.comparing(PersoPartieDto::getInit).reversed());
 		return persosList;
 	}
 

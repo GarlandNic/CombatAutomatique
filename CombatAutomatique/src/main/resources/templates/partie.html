@@ -31,7 +31,9 @@
 		<tbody>
 			<tr th:each="perso : ${persos}">
 				<td><span th:text="${perso.init}"> init </span></td>
-				<td><span th:text="${perso.nom}" th:style="${ (perso.bles > 3 || perso.choc > 3) ? 'text-decoration-line: line-through;' : ''}"> nom </span></td>
+				<td><span th:text="${perso.nom}" th:style="${ (perso.bles > 3 || perso.choc > 3) ? 
+						  	'text-decoration-line: line-through; background-color: '+perso.couleur+';' : 
+						  	'background-color: '+perso.couleur+';'}"> nom </span></td>
 				<td> 
 					<table style="border-collapse: collapse;margin: 0;">
 						<tr><td class="carre c11" th:style="${perso.bles > 0 ? 'background-color: red;' : ''}"></td>
@@ -48,7 +50,7 @@
 						</tr>
 					</table>
 				</td>
-				<td>
+				<td style="cursor: help;" th:title="${'Dégâts au bouclier : '+perso.nivBcl}">
 					&#x1F6E1;<span th:unless="${perso.bouclier}" style="position:relative; left:-0.5em; top:0.1em; font-size: 1.4em;">&frasl;</span>
 				</td>
 				<td style="text-align:center;">

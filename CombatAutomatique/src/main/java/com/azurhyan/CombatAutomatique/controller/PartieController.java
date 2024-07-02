@@ -12,7 +12,7 @@ import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
 import com.azurhyan.CombatAutomatique.dto.PersoPartieDto;
 import com.azurhyan.CombatAutomatique.dto.PersosVisiblesDto;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
-import com.azurhyan.CombatAutomatique.service.ActionService;
+import com.azurhyan.CombatAutomatique.service.ActionService_v6;
 import com.azurhyan.CombatAutomatique.service.PersonnageService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class PartieController {
 	
 	@Autowired
-	ActionService actionServ;
+	ActionService_v6 actionServ;
 	
 	@Autowired
 	PersonnageService persoServ;

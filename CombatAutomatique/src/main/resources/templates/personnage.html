@@ -7,15 +7,19 @@
 </head>
 <body>
 
-	<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get">
-		<button type="submit"> &#127968; </button> 
-	</form>
-	
-	<h1> Voici le combo de <span th:text="${perso.nom}">perso</span> </h1>
+<!-- 	<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get"> -->
+<!-- 		<button type="submit"> &#127968; </button>  -->
+<!-- 	</form> -->
 	
 	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${perso.persoId}}" th:object="${perso}" method="post">
 		<input type="hidden" th:field="*{visible}"/>
 
+	<button th:formaction="@{'/azurhyan/'+${partie}}" formmethod="get" type="submit"> &nbsp; &#127968; &nbsp; </button> 
+	&emsp; &emsp; 
+	<button type="submit" name="retour"> &#128190; + &#127968;</button> 
+
+	<h1> Voici le combo de <span th:text="${perso.nom}">perso</span> </h1>
+	
 	<aside style="float: right;">
 		<table>
 			<tbody>
@@ -301,7 +305,7 @@
 	</table>
 	</div>
 	
-	<button type="submit" name="actu">Actualiser la fiche</button>
+	<button type="submit" name="save"> &#128190; Actualiser la fiche</button>
 	<br/>
 	
 	<h3>Handicaps</h3>
@@ -374,6 +378,8 @@
 			</tr>
 		</tbody>
 	</table>
+	
+	<button type="submit" name="save"> &#128190; Actualiser la fiche</button>
 	
 	<button type="submit" style="float: right;" th:formaction="@{'/azurhyan/'+${partie}}" formmethod="get">Annuler les modifications</button> 
 	
