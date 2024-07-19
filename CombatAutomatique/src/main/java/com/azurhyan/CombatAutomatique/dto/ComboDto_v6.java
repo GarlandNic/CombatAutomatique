@@ -9,9 +9,9 @@ import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 import lombok.Data;
 
 @Data
-public class ComboDto {
+public class ComboDto_v6 {
 
-	public ComboDto(String nom, boolean mod) {
+	public ComboDto_v6(String nom, boolean mod) {
 		this.nom = nom;
 		if(mod) {
 			this.init = 0;
@@ -28,10 +28,10 @@ public class ComboDto {
 		}
 	}
 	
-	public ComboDto() {
+	public ComboDto_v6() {
 	}
 	
-	public ComboDto(ComboDB combo) {
+	public ComboDto_v6(ComboDB combo) {
 		this.nom = combo.getNom();
 		this.init = combo.getInit();
 		this.typeDgts = combo.getTypeDgts();
@@ -125,10 +125,6 @@ public class ComboDto {
 		this.endBouclier += bonus;
 		this.endPerso += bonus;
 		this.IBdef += bonus;
-	}
-	
-	public int getEndBouclier() {
-		return (this.getEndPerso() + this.getBouclier().BonusEndGlb());
 	}
 
 }

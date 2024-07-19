@@ -6,12 +6,12 @@ import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 import lombok.Data;
 
 @Data
-public class PersoPartieDto {
+public class PersoPartieDto_v6 {
 	
-	public PersoPartieDto() {
+	public PersoPartieDto_v6() {
 	}
 	
-	public PersoPartieDto(PersonnageDB perso) {
+	public PersoPartieDto_v6(PersonnageDB perso) {
 		this.id = perso.getPersoId();
 		this.nom = perso.getNom();
 		this.init = -perso.totalHandicaps();
@@ -21,7 +21,7 @@ public class PersoPartieDto {
 		this.visible = perso.isVisible();
 		this.deDef = (null != perso.getEtat() ? perso.getEtat().getDeDef() : 0);
 		this.bles = perso.totalDemiNiveauxBlessures()*2/perso.getCON();
-		this.choc = perso.totalPtsDeChoc()*4/(perso.getCON()*2+1);
+		this.choc = perso.totalPtsDeChoc()*4/(perso.getCON()+1);
 		this.hand = perso.totalHandicaps();
 		this.incapacite = (null != perso.getEtat() ? perso.getEtat().getIncapacite() : 0);
 		this.turnOrder = (null != perso.getEtat() ? perso.getEtat().getTurnOrder() : perso.getPersoId());

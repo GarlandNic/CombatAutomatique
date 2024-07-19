@@ -15,7 +15,7 @@ import com.azurhyan.CombatAutomatique.dto.AttaqueDto;
 import com.azurhyan.CombatAutomatique.dto.CibleDto;
 import com.azurhyan.CombatAutomatique.dto.ComboDto;
 import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
-import com.azurhyan.CombatAutomatique.service.ActionService_v6;
+import com.azurhyan.CombatAutomatique.service.ActionService;
 import com.azurhyan.CombatAutomatique.service.PersonnageService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ public class ActionController {
 	PersonnageService persoServ;
 	
 	@Autowired
-	ActionService_v6 actionServ;
+	ActionService actionServ;
 	
 	@GetMapping("/azurhyan/{game}/{persoId}/attaque")
 	public String formAttaque(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId) {

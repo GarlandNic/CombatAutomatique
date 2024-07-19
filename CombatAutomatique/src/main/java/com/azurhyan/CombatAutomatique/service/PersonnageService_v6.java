@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
 import com.azurhyan.CombatAutomatique.dto.PersoPartieDto;
@@ -21,20 +20,16 @@ import com.azurhyan.CombatAutomatique.model.EtatDB;
 import com.azurhyan.CombatAutomatique.model.HandicapDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
 import com.azurhyan.CombatAutomatique.repository.EtatRepository;
-import com.azurhyan.CombatAutomatique.repository.HandicapRepository;
 import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
 
 @Service
-public class PersonnageService {
+public class PersonnageService_v6 {
 	
 	@Autowired
 	PersonnageRepository persoRepo;
 	
 	@Autowired
 	EtatRepository etatRepo;
-
-	@Autowired
-	HandicapRepository handiRepo;
 
 	public Iterable<PersoPartieDto> listForPartie(String partieName) {
 		Iterable <PersonnageDB> persoListBD = persoRepo.findByPartieAndVisible(partieName, true);
@@ -222,13 +217,6 @@ public class PersonnageService {
 		PersonnageDB perso = persoRepo.findById(id).get();
 		perso.getEtat().setTurnOrder( - perso.getEtat().getTurnOrder());
 		persoRepo.save(perso);
-	}
-
-	public Iterable<Integer> listRefActionFromHandi(String partie) {
-		Iterable <HandicapDB> listHandi = handiRepo.findDistinctRefActionByPersoPartie(partie);
-		List<Integer> listRefAction = new ArrayList<Integer>();
-		listHandi.forEach(h -> listRefAction.add(h.getRefAction()));
-		return listRefAction;
 	}
 
 }

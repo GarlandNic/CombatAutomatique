@@ -108,11 +108,6 @@
 			<tr th:each="action, iStat : ${actions}">
 				<td th:style="${'background-color: '+action.couleur}">
 					<div th:utext="${action.description}"> action </div>
-					<th:block th:each="refA, iRef : ${refactionhandicap}" th:if="${refA == action.actionId}">
-						<form action="#" th:action="@{'/azurhyan/'+${partie}+'/supprimerHandicaps'}" method="post" style="display:inline-block;">
-							<button type="submit" name="refAction" th:value="${refA}" style="display:inline-block;">Supprimer les Handicaps temporaires</button> 
-						</form>
-					</th:block>
 					<div th:if="${action.refAttaque != 0 and action.refAttaque == actions[0].refAttaque and (iStat.last or action.refAttaque != actions[__${iStat.index}__ +1].refAttaque)}" style="text-align: right;">
 						<form action="#" th:action="@{'/azurhyan/'+${partie}+'/annulerAttaque'}" method="post" style="display:inline-block;">
 							<button type="submit" name="lastAttaque" th:value="${action.refAttaque}" style="display:inline-block;">Annuler dernière attaque</button> 

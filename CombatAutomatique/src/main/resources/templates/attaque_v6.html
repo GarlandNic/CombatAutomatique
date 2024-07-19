@@ -31,9 +31,67 @@
 	</aside>
 	
 	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${numPerso}+'/attaque'}" th:object="${attaque}" method="post">
+<!-- 		<input type="hidden" th:field="*{attaquantId}"/> -->
+<!-- 		<input type="hidden" th:field="*{attaquantNom}"/> -->
+<!-- 		<input type="hidden" th:field="*{attaquantPdc}"/> -->
 		<input type="hidden" th:field="*{partie}"/>
 	
 	<h1> Attaque : </h1>
+<!-- 	<h1> <span th:text="*{attaquantNom}">acteur</span> lance une attaque : </h1> -->
+	
+<!-- 	<h3>Rappel du combo :</h3> -->
+	
+<!-- 	<table> -->
+<!-- 		<thead> -->
+<!-- 			<tr> -->
+<!-- 				<th> </th> -->
+<!-- 				<th> Init </th> -->
+<!-- 				<th> Toucher </th> -->
+<!-- 				<th> Parade<br/>ennemie </th> -->
+<!-- 				<th> Force </th> -->
+<!-- 				<th> IB att </th> -->
+<!-- 				<th> </th> -->
+<!-- 				<th> Défense </th> -->
+<!-- 				<th> Esquive </th> -->
+<!-- 				<th> Parade </th> -->
+<!-- 				<th> Endurance<br/>du bouclier </th> -->
+<!-- 				<th> Endurance<br/>du perso </th> -->
+<!-- 				<th> IB def </th> -->
+<!-- 			</tr> -->
+<!-- 		</thead> -->
+<!-- 		<tbody> -->
+<!-- 			<tr> -->
+<!-- 				<th>  -->
+<!-- 					Combo total -->
+<!-- 					<br/> 	<input type="text" th:value="*{attaquantCombo.CaC ? 'C-à-c' : 'Dist'}" disabled/> / -->
+<!-- 							<input type="text" th:value="*{attaquantCombo.typeDgts.toString()}" disabled/> -->
+<!-- 							<input type="text" th:value="*{attaquantCombo.globaux ? 'Globaux' : ''}" disabled/> -->
+<!-- 							<input type="text" th:value="*{attaquantCombo.element.toString()}" disabled/> -->
+<!-- 							<input type="hidden" th:field="*{attaquantCombo.CaC}"/> -->
+<!-- 							<input type="hidden" th:field="*{attaquantCombo.typeDgts}"/> -->
+<!-- 							<input type="hidden" th:field="*{attaquantCombo.globaux}"/>  -->
+<!-- 							<input type="hidden" th:field="*{attaquantCombo.element}"/> -->
+<!-- 				</th> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.init}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.toucher}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.prdEnnemie}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.force}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.IBatt}" readonly/> </td> -->
+<!-- 				<td> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.defense}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.esquive}" readonly/> </td> -->
+<!-- 				<td>  -->
+<!-- 					<input type="number" th:field="*{attaquantCombo.parade}" readonly/>  -->
+<!-- 					<br/> -->
+<!-- 					<input type="text" th:value="*{attaquantCombo.bouclier.toString()}" disabled/> -->
+<!-- 					<input type="hidden" th:field="*{attaquantCombo.bouclier}" disabled/> -->
+<!-- 				</td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.endBouclier}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.endPerso}" readonly/> </td> -->
+<!-- 				<td> <input type="number" th:field="*{attaquantCombo.IBdef}" readonly/> </td> -->
+<!-- 			</tr> -->
+<!-- 		</tbody> -->
+<!-- 	</table> -->
 	
 	<h3>Cibles de l'attaque : </h3>
 	
@@ -62,7 +120,8 @@
 					<div th:if="*{#lists.size(attaquantList) > 1}"> <em>
 						<br/>
 						Attaques groupés : +
-						<span th:remove="tag" th:text="*{#lists.size(attaquantList)*2}"></span> tch
+						<span th:remove="tag" th:text="*{#lists.size(attaquantList)}"></span> tch / +
+						<span th:remove="tag" th:text="*{#lists.size(attaquantList)/2}"></span> for
 					</em> </div>
 				</td>
 				<td style="border: solid;">
@@ -136,13 +195,12 @@
 	<br/>
 	<fieldset>
 		<legend> Particularités de l'attaque </legend>
-<!-- 		<label> -->
-<!-- 	  		<input type="checkbox" th:field="*{lePlusPossible}" title="l'ordre ci-dessus est pris en compte, les malus sont à remplacer par du -2/-1 cumulatifs"/> -->
-<!-- 	  		Le plus possible -->
-<!--   		</label> -->
-<input type="hidden" th:field="*{lePlusPossible}"/>
 		<label>
-	  		<input type="checkbox" th:field="*{bousculade}" title="-1 niveau de blessure, mais H- temporaire équivalent à niv de blessure +1"/>
+	  		<input type="checkbox" th:field="*{lePlusPossible}" title="l'ordre ci-dessus est pris en compte, les malus sont à remplacer par du -2/-1 cumulatifs"/>
+	  		Le plus possible
+  		</label>
+		<label>
+	  		<input type="checkbox" th:field="*{bousculade}" title="pas encore implémenté"/>
 	  		Bousculade
   		</label>
 		<label>

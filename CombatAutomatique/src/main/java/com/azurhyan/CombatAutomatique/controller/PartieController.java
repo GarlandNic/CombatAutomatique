@@ -12,6 +12,7 @@ import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
 import com.azurhyan.CombatAutomatique.dto.PersoPartieDto;
 import com.azurhyan.CombatAutomatique.dto.PersosVisiblesDto;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
+import com.azurhyan.CombatAutomatique.service.ActionService;
 import com.azurhyan.CombatAutomatique.service.ActionService_v6;
 import com.azurhyan.CombatAutomatique.service.PersonnageService;
 
@@ -21,7 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class PartieController {
 	
 	@Autowired
-	ActionService_v6 actionServ;
+	ActionService actionServ;
 	
 	@Autowired
 	PersonnageService persoServ;
@@ -91,6 +92,14 @@ public class PartieController {
 		return "redirect:/azurhyan/"+partie;
 	}
 	
+	@PostMapping(value="/azurhyan/{game}/supprimerHandicaps", params={"refAction"})
+	public String modifierAttaque(Model model, @PathVariable("game") final String partie, final HttpServletRequest req) {
+	    final Integer refAction = Integer.valueOf(req.getParameter("refAction"));
+	    actionServ.supprimerHandicap(refAction);
+		return filledPage_Partie(model, partie);
+	}
+	
+
 	
 	
 	
@@ -98,6 +107,7 @@ public class PartieController {
 		model.addAttribute("partie", partie);
 		model.addAttribute("persos", persoServ.listForPartie(partie));
 		model.addAttribute("actions", actionServ.listForPartie(partie));
+		model.addAttribute("refactionhandicap", persoServ.listRefActionFromHandi(partie));
 		return "partie";
 	}
 	

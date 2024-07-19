@@ -34,7 +34,7 @@ import com.azurhyan.CombatAutomatique.repository.HandicapRepository;
 import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
 
 @Service
-public class ActionService_v7 {
+public class ActionService {
 	
 	private static int ROUND = 0;
 	
@@ -52,6 +52,9 @@ public class ActionService_v7 {
 	@Autowired
 	EtatRepository etatRepo;
 	
+	@Autowired
+	DegatsService dgtServ;
+	
 	public void annulerAttaque(int refAttaque) {
 		Iterable<ActionDB> listActions = actionRepo.findByRefAttaque(refAttaque);
 		listActions.forEach(act -> annulerAction(act));
@@ -64,6 +67,12 @@ public class ActionService_v7 {
 		Iterable<BlessureDB> listBlessures = blessRepo.findByRefAction(act.getActionId());
 		listBlessures.forEach(bl -> annulerBlessure(bl));
 		actionRepo.delete(act);
+	}
+	
+	@Transactional
+	public void supprimerHandicap(int refAction) {
+		Iterable<HandicapDB> listHandicaps = handiRepo.findByRefAction(refAction);
+		listHandicaps.forEach(h -> annulerHandicap(h));
 	}
 
 	private void annulerBlessure(BlessureDB bl) {
@@ -168,18 +177,18 @@ public class ActionService_v7 {
 
 				// mod tch/for
 				if(na > 1) {
-					modTch = na;
-					modFor = na/2;
+					modTch = 2*na;
+					modFor = 0;
 				} else if(nd > 1) {
-					if(attaque.isLePlusPossible()) {
-						modTch = -2 -2*j + combaPlusToucher(attaquant.getCCcombatPlusieurs());
-						modFor = -1 -j + combaPlusForce(attaquant.getCCcombatPlusieurs());
+					if(false && attaque.isLePlusPossible()) {
+//						modTch = -2 -2*j + combaPlusToucher(attaquant.getCCcombatPlusieurs());
+//						modFor = -1 -j + combaPlusForce(attaquant.getCCcombatPlusieurs());
 					} else {
-						modTch = -2 -(nd/2)*2 + combaPlusToucher(attaquant.getCCcombatPlusieurs());
-						modFor = -(nd+1)/2 + combaPlusForce(attaquant.getCCcombatPlusieurs());
+						modTch = -2*nd + combaPlusToucher(attaquant.getCCcombatPlusieurs());
+						modFor = -nd   + combaPlusForce(attaquant.getCCcombatPlusieurs());
 					}
-					modTch = (modTch > 0 ? 0 : modTch);
-					modFor = (modFor > 0 ? 0 : modFor);
+					modTch = (modTch > -2 ? -2 : modTch);
+					modFor = (modFor > -1 ? -1 : modFor);
 				}
 				//
 				ComboDto comboDef = defenseurDto.getComboTotal();
@@ -212,7 +221,7 @@ public class ActionService_v7 {
 			for(int j=0; j<nd; j++) {
 				Degat dgt = attaqueUnique(comboAttList.get(n), comboDefList.get(n), attaque);
 				PersonnageDB defenseur = persoRepo.findById(attaque.getCibleList().get(j).getCibleId()).get();
-				if(comboAttList.get(n).isGlobaux()) dgt = diviseBlGlobaux(dgt, defenseur);
+				if(comboAttList.get(n).isGlobaux()) dgt = dgtServ.diviseBlGlobaux(dgt, defenseur);
 				ActionDB act = appliqueAttaque(dgt, attaque.getAttaquantList().get(i), defenseur, 
 						attaque.getCibleList().get(j).getDe(), descrList.get(n), refAttaque, attaque);
 				refAttaque = act.getRefAttaque();
@@ -221,45 +230,6 @@ public class ActionService_v7 {
 		}
 	}
 	
-	private Degat diviseBlGlobaux(Degat degats, PersonnageDB defenseur) {
-		if(degats.getBlessList().isEmpty()) return degats;
-		float nivMin = defenseur.getMinPourMineure();
-		float nivToRep = 0;
-		for(BlessureDto bl : degats.getBlessList()) {
-			if(!bl.getPartieTouchee().equals("Bouclier") && !bl.getPartieTouchee().equals("Armure")) {
-				nivToRep += bl.getNiveau();
-				bl.setNiveau(0);
-				bl.setPartieTouchee("points de choc");
-			}
-		}
-		
-		float[] repartition = new float[] {0, 0, 0, 0, 0, 0};
-		String[] parties = new String[] {"Tête", "Tronc", "Bras droit", "Bras gauche", "Jambe droite", "Jambe gauche"};
-		
-		repartition = diviseNivGlob(repartition, nivToRep, nivMin);
-		
-		for(int i=0; i<repartition.length; i++) {
-			if(repartition[i] > 0) {
-				BlessureDto bl = new BlessureDto(repartition[i], 0);
-				bl.setPartieTouchee(parties[i]);
-				degats.getBlessList().add(bl);
-			}
-		}
-		return degats;
-	}
-
-	private float[] diviseNivGlob(float[] repartition, float nivToRep, float nivMin) {
-		int N = repartition.length;
-		int i =new Random().nextInt(N);
-		if(nivToRep <= nivMin) {
-			repartition[i] += nivToRep;
-		} else {
-			repartition[i] += nivMin;
-			repartition = diviseNivGlob(repartition, nivToRep - nivMin, nivMin);
-		}
-		return repartition;
-	}
-
 	public ActionDB appliqueAttaque(Degat degats, CibleDto attaquant, PersonnageDB defenseur, int de, String descr, int refAttaque, final AttaqueDto attaque) {
 		ActionDB act = new ActionDB();
 		act.setPersoId(attaquant.getCibleId());
@@ -287,10 +257,8 @@ public class ActionService_v7 {
 				descr += "raté ("+modifToString(degats.getMargeToucher())+") !";				
 			}
 		} else {
-			if(degats.isPare())
-				descr += "paré ("+modifToString(degats.getMargeToucher())+"), dégâts ("+modifToString(degats.getMargeBlesser())+") : ";
-			else
-				descr += "touché ("+modifToString(degats.getMargeToucher())+"), dégâts ("+modifToString(degats.getMargeBlesser())+") : ";
+			descr += (degats.isPare() ? "paré" : "touché");
+			descr += " ("+modifToString(degats.getMargeToucher())+"), dégâts ("+modifToString(degats.getMargeBlesser())+") : ";
 			for(BlessureDto bl : degats.getBlessList()) {
 				BlessureDB blToSave = bl.blessureToDB(defenseur);
 				blToSave.setRefAction(refAction);
@@ -334,8 +302,8 @@ public class ActionService_v7 {
 		Degat result = new Degat();
 	
 		int margeTch = comboAtt.getToucher() - (comboAtt.isCaC() ? comboDef.getDefense() : comboDef.getEsquive());
-		int endu = 0;
 		result.setMargeToucher(margeTch);
+		int endu;
 		if(margeTch < 0) {
 			return result;
 		} else {
@@ -348,58 +316,82 @@ public class ActionService_v7 {
 			if(attaque.isCoupDansLeBouclier()) isPare = true;
 			result.setPare(isPare);
 			String partieTouchee ="";
+			int modifDegre = 0;
+			if(attaque.isBousculade()) modifDegre--;
 			if(isPare) {
 				BlessureDto blBcl = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), 
-						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), true);
+						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), true, modifDegre);
 				result.setMargeBlesser(bonusForce+comboAtt.getForce() - comboDef.getEndBouclier());
 
 				if(blBcl != null) {
 					partieTouchee = "Bouclier";
 					blBcl.setPartieTouchee(partieTouchee);
 					blBcl.setPtDeChoc(0);
-					if(comboAtt.getTypeDgts()==Dgts.PRF) blBcl.setDemiNiveau(blBcl.getDemiNiveau()/2);
+					/////////////// coorectiopn
+//					if(comboAtt.getTypeDgts()==Dgts.PRF) blBcl.setDemiNiveau(blBcl.getDemiNiveau()/2);
+					// doit etre calculer dans calculDegats puisque on lui donne le type de degats et isObjet
 					if(blBcl.getNiveau() > 0) result.getBlessList().add(blBcl);
 				}
 				
+				if(attaque.isBousculade()) {
+					float handicaps = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), 
+							comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false, 
+							modifDegre+2+dgtServ.modifDegreBousc(comboAtt.getTypeDgts())).getNiveau();
+					if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.MOBILITE, "Bousculade"));
+				}
+
 				partieTouchee = "Bras-bouclier";
-				endu = 4 + (comboDef.getEndPerso() > comboDef.getEndBouclier() ? comboDef.getEndPerso() : comboDef.getEndBouclier());
+				modifDegre -= 2;
+				endu = comboDef.getEndBouclier();
 			} else {
 				partieTouchee = partieTouchee();
 				endu = comboDef.getEndPerso();
 			}
 			BlessureDto bl = calculDegats(bonusForce+comboAtt.getForce(), endu, 
-					comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false);
+					comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false, modifDegre);
 			if(!isPare)
 				result.setMargeBlesser(bonusForce+comboAtt.getForce() - endu);
 			
 			if(bl != null) {
 				bl.setPartieTouchee(partieTouchee);
 				result.getBlessList().add(bl);
+				
 				BlessureDto blArmure = calculDegats(bonusForce+comboAtt.getForce(), endu, 
-						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), true);
-				blArmure.setPartieTouchee("Armure");
-				if(blArmure.getNiveau() > 0) result.getBlessList().add(blArmure);
+						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), true, modifDegre);
+				if(blArmure != null) {
+					blArmure.setPartieTouchee("Armure");
+					blArmure.setPtDeChoc(0);
+					if(blArmure.getNiveau() > 0) result.getBlessList().add(blArmure);
+				}
 			}
 
-			if(attaque.isBousculade()) {
-				int demiH = (result.getMargeBlesser() + comboAtt.getIBatt() - comboDef.getIBdef())/2;
-				if(demiH > 0)	result.getHandList().add(new HandicapDto((float) demiH/2, TypeHand.MOBILITE, "Bousculade"));
+			if(attaque.isBousculade() && !isPare) {
+				float handicaps = calculDegats(bonusForce+comboAtt.getForce(), endu, 
+						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false, 
+						modifDegre+2+dgtServ.modifDegreBousc(comboAtt.getTypeDgts())).getNiveau();
+				if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.MOBILITE, "Bousculade"));
 			}
 			
 			return result;
 		}
 	}
 	
-	private BlessureDto calculDegats(int force, int endu, Dgts dgts, boolean isGlb, Element element, boolean isObjet) {
+	private BlessureDto calculDegats(int force, int endu, Dgts dgts, boolean isGlb, Element element, boolean isObjet, int modifDegre) {
 		int margeBless = force - endu;
 		if(margeBless <= 0) return null;
-		int ptChoc = 0;
-		float nvBl = (float) 0.0;
-		if(!isObjet) ptChoc = dgts.calculPtChoc(margeBless);
-		nvBl = dgts.calculNvBl(margeBless, isObjet);
-		if(isGlb) nvBl += 1;
-		ptChoc = element.modifPtChoc(ptChoc, (dgts == Dgts.CTD));
-		nvBl = element.modifNvBl(nvBl, (dgts == Dgts.CTD), isObjet);
+		dgts = dgtServ.checkTypeElement(dgts, element);
+		int degreDgts = dgtServ.calculDegre(margeBless, dgts, element, isObjet);
+		degreDgts += modifDegre;
+		int ptChoc = dgtServ.calculPtChoc(degreDgts, dgts);
+		float nvBl = dgtServ.calculNvBl(degreDgts, dgts);
+//		if(isGlb) {
+//			ptChoc = dgtServ.modifPtChocGlb(ptChoc);
+//			nvBl = dgtServ.modifNvBlGlb(nvBl);
+//		}
+		if(!element.equals(Element.NORMAL)) {
+			ptChoc = dgtServ.modifPtChoc(element, ptChoc, degreDgts);
+			nvBl = dgtServ.modifNvBl(element, nvBl);
+		}
 
 		BlessureDto bl = new BlessureDto(nvBl, ptChoc);
 		return bl;

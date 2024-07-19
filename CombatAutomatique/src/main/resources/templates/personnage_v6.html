@@ -72,14 +72,14 @@
 				<th> Toucher </th>
 				<th> Parade<br/>ennemie </th>
 				<th> Force </th>
-<!-- 				<th> IB att </th> -->
+				<th> IB att </th>
 				<th> </th>
 				<th> Défense </th>
 				<th> Esquive </th>
 				<th> Parade </th>
-<!-- 				<th> Endurance<br/>du bouclier </th> -->
+				<th> Endurance<br/>du bouclier </th>
 				<th> Endurance<br/>du perso </th>
-<!-- 				<th> IB def </th> -->
+				<th> IB def </th>
 				<th style="text-align: center;"> <span style="cursor: help;" title="Les combos désactivés ne seront pas pris en compte dans le calcul du combo total."> &#9432; </span> </th>
 				<th> </th>
 			</tr>
@@ -97,8 +97,8 @@
 				<td> <input type="number" th:value="${comboTmp.init}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.toucher}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.prdEnnemie}" disabled/> </td>
-				<td> <input type="number" th:value="${comboTmp.force}" disabled/>
-					 <input type="hidden" th:value="${comboTmp.IBatt}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.force}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.IBatt}" disabled/> </td>
 				<td> </td>
 				<td> <input type="number" th:value="${comboTmp.defense}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.esquive}" disabled/> </td>
@@ -106,9 +106,9 @@
 					 <br/>
 					 <span th:remove="tag" th:text="${comboTmp.bouclier.toString()}"></span>
 				</td>
-				<td> <input type="hidden" th:value="${comboTmp.endBouclier}" disabled/>
-					 <input type="number" th:value="${comboTmp.endPerso}" disabled/>
-					 <input type="hidden" th:value="${comboTmp.IBdef}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.endBouclier}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.endPerso}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.IBdef}" disabled/> </td>
 				<td> </td>
 				<td> </td>
 			</tr>
@@ -119,15 +119,15 @@
 				<td> <input type="number" th:value="${comboTmp.init}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.toucher}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.prdEnnemie}" disabled/> </td>
-				<td> <input type="number" th:value="${comboTmp.force}" disabled/>
-					 <input type="hidden" th:value="${comboTmp.IBatt}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.force}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.IBatt}" disabled/> </td>
 				<td> </td>
 				<td> <input type="number" th:value="${comboTmp.defense}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.esquive}" disabled/> </td>
 				<td> <input type="number" th:value="${comboTmp.parade}" disabled/> </td>
-				<td> <input type="hidden" th:value="${comboTmp.endBouclier}" disabled/>
-					 <input type="number" th:value="${comboTmp.endPerso}" disabled/>
-					 <input type="hidden" th:value="${comboTmp.IBdef}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.endBouclier}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.endPerso}" disabled/> </td>
+				<td> <input type="number" th:value="${comboTmp.IBdef}" disabled/> </td>
 				<td> </td>
 				<td> </td>
 			</tr>
@@ -167,8 +167,8 @@
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].init}"/> </td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].toucher}"/> </td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].prdEnnemie}"/> </td>
-				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].force}"/> 
-					 <input type="hidden" th:field="*{comboList[__${rowStat.index}__].IBatt}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].force}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].IBatt}"/> </td>
 				<td> </td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].defense}"/> </td>
 				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].esquive}"/> </td>
@@ -188,9 +188,9 @@
 					</div>
 				
 				</td>
-				<td> <input type="hidden" th:field="*{comboList[__${rowStat.index}__].endBouclier}"/>
-					 <input type="number" th:field="*{comboList[__${rowStat.index}__].endPerso}"/>
-					 <input type="hidden" th:field="*{comboList[__${rowStat.index}__].IBdef}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].endBouclier}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].endPerso}"/> </td>
+				<td> <input type="number" th:field="*{comboList[__${rowStat.index}__].IBdef}"/> </td>
 				<td> 
 					<input type="checkbox" th:field="*{comboList[__${rowStat.index}__].actif}" class="toggle">
 					<label class="checklab" th:for="${#ids.prev('comboList'+rowStat.index+'.actif')}"></label>
@@ -198,6 +198,9 @@
 				<td> <button type="submit" name="removeCombo" th:value="${rowStat.index}">Supprimer le combo</button> </td>
 			</tr>
 			<tr>
+				<td> </td>
+				<td> </td>
+				<td> </td>
 				<td> </td>
 				<td> </td>
 				<td> </td>
@@ -241,22 +244,9 @@
 		<tbody>
 			<tr th:each="row,rowStat : *{blessureList}" th:unless="${row.partieTouchee == 'Bouclier' or row.partieTouchee == 'Armure'}">
 				<td> <input type="hidden" th:field="*{blessureList[__${rowStat.index}__].refAction}"/>
-					 <input type="number" th:value="${row.niveau}" min="0" step="0.5" disabled/> </td>
+					 <input type="number" th:field="*{blessureList[__${rowStat.index}__].niveau}" min="0" step="0.5"/> </td>
 				<td> <input type="number" th:field="*{blessureList[__${rowStat.index}__].ptDeChoc}"/> </td>
-				<td> 
-				     <select th:field="*{blessureList[__${rowStat.index}__].niveau}">
-			         	<option value="0">égratignure</option>
-			         	<option value="0.5">mineure (0,5 H-)</option>
-			         	<option value="1">légère (1 H-)</option>
-			         	<option value="2">moyenne (2 H-)</option>
-			         	<option value="3">grave (3 H-)</option>
-			         	<option value="4.5">mortelle (4,5 H-)</option>
-			         	<option value="7">presque mort (7 H-)</option>
-			         	<option value="10">mort (10 H-)</option>
-			         	<option value="20">mort (20 H-)</option>
-			         	<option value="30">mort (30 H-)</option>
-			        </select>
-        		</td>
+				<td> <input type="text" th:value="${perso.getGravite(row)}" disabled/> </td>
 				<td> <input type="text" th:field="*{blessureList[__${rowStat.index}__].partieTouchee}"/> </td>
 				<td> <button type="submit" name="removeBless" th:value="${rowStat.index}">Supprimer la ligne</button> </td>
 			</tr>

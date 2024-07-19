@@ -17,12 +17,12 @@ import jakarta.persistence.Entity;
 import lombok.Data;
 
 @Data
-public class PersoCompletDto {
+public class PersoCompletDto_v6 {
 	
-	public PersoCompletDto() {
+	public PersoCompletDto_v6() {
 	}
 	
-	public PersoCompletDto(String partie) {
+	public PersoCompletDto_v6(String partie) {
 		this.partie = partie;
 		this.comboList = new ArrayList<>();
 		this.comboList.add(new ComboDto("Base", false));
@@ -31,7 +31,7 @@ public class PersoCompletDto {
 //		this.etat = new EtatDto();
 	}
 	
-	public PersoCompletDto(PersonnageDB perso) {
+	public PersoCompletDto_v6(PersonnageDB perso) {
 		this.persoId = perso.getPersoId();
 		this.nom = perso.getNom();
 		this.joueur = perso.getJoueur();
@@ -171,35 +171,41 @@ public class PersoCompletDto {
 		if(bl.getPartieTouchee().equals("Armure")) return 0;
 		float niv = bl.getNiveau();
 		int CON = this.CON;
-		if(CON >= 11) {
-			niv -= 0.5f;
+		if(niv+0.5 > 0.7*CON) {
+			return 10;
 		}
-		if(CON >= 16) {
-			niv -= 0.5f;
+		if(niv+0.5 > 0.5*CON) {
+			return (float) 4.5;
 		}
-		if(CON >= 21) {
-			niv -= 0.5f;
+		if(niv+0.5 > 0.4*CON) {
+			return 3;
 		}
-		if(CON >= 26) {
-			niv -= 0.5f;
+		if(niv+0.5 > 0.3*CON) {
+			return 2;
 		}
-		return (niv >= 0 ? niv : 0);
+		if(niv+0.5 > 0.2*CON) {
+			return 1;
+		}
+		if(niv+0.5 > 0.1*CON) {
+			return (float) 0.5;
+		}
+		return 0;
 	}
 
 	public String getGravite(BlessureDto bl) {
 		if(bl.getPartieTouchee().equals("Bouclier")) return "";
 		if(bl.getPartieTouchee().equals("Armure")) return "";
-		switch(bl.getDemiNiveau()) {
+		int demiHandicap = Math.max(0, Math.round(this.getHandicap(bl)*2));
+		switch(demiHandicap) {
 			case 0: return "égratignure";
 			case 1: return "mineure (0,5 H-)";
 			case 2: return "légère (1 H-)";
 			case 4: return "moyenne (2 H-)";
 			case 6: return "grave (3 H-)";
 			case 9: return "mortelle (4,5 H-)";
-			case 14: return "presque mort (7 H-)";
-			case 20: return "mort (10 H-)";
-			default: return "mort ("+bl.getDemiNiveau()/2+" H-)";
+			case 20: return "mort";
 		}
+		return "";
 	}
 
 //	public void addBlessure(BlessureDto bl) {

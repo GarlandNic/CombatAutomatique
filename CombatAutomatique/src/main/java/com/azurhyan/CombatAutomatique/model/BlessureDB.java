@@ -48,7 +48,7 @@ public class BlessureDB {
 		int CON = this.perso.getCON();
 		return this.getGravite(CON);
 	}
-	public String getGravite(int CON) {
+	public String getGravite_v6(int CON) {
 		if(this.partieTouchee.equals("Bouclier")) return "";
 		if(this.partieTouchee.equals("Armure")) return "";
 		int demiHandicap = Math.max(0, Math.round(this.getHandicap(CON)*2));
@@ -63,12 +63,27 @@ public class BlessureDB {
 		}
 		return "";
 	}
+	public String getGravite(int CON) {
+		if(this.partieTouchee.equals("Bouclier")) return "";
+		if(this.partieTouchee.equals("Armure")) return "";
+		int demiHandicap = Math.max(0, Math.round(this.getHandicap(CON)*2));
+		switch(demiHandicap) {
+			case 0: return "égratignure";
+			case 1: return "mineure (0,5 H-)";
+			case 2: return "légère (1 H-)";
+			case 4: return "moyenne (2 H-)";
+			case 6: return "grave (3 H-)";
+			case 9: return "mortelle (4,5 H-)";
+			case 14: return "presque mort (7 H-)";
+			default: return "mort ("+((float) demiHandicap)/2+" H-)";
+		}
+	}
 	
 	public float getHandicap() {
 		int CON = this.perso.getCON();
 		return this.getHandicap(CON);
 	}
-	public float getHandicap(int CON) {
+	public float getHandicap_v6(int CON) {
 		if(this.partieTouchee.equals("Bouclier")) return 0;
 		if(this.partieTouchee.equals("Armure")) return 0;
 		if(this.getNiveau()+0.5 > 0.7*CON) {
@@ -90,6 +105,24 @@ public class BlessureDB {
 			return (float) 0.5;
 		}
 		return 0;
+	}
+	public float getHandicap(int CON) {
+		if(this.partieTouchee.equals("Bouclier")) return 0;
+		if(this.partieTouchee.equals("Armure")) return 0;
+		float niv = this.getNiveau();
+		if(CON >= 11) {
+			niv -= 0.5f;
+		}
+		if(CON >= 16) {
+			niv -= 0.5f;
+		}
+		if(CON >= 21) {
+			niv -= 0.5f;
+		}
+		if(CON >= 26) {
+			niv -= 0.5f;
+		}
+		return (niv >= 0 ? niv : 0);
 	}
 	
 	public float getNiveau() {
@@ -130,11 +163,12 @@ public class BlessureDB {
 	public String blessureToString() {
 		String result = partieTouchee;
 		result += " (";
-		if(demiNiveau > 0) result += getNiveau()+" nv";
-		if(demiNiveau > 0 && ptDeChoc > 0) result += " & ";
-		if(ptDeChoc > 0) result += ptDeChoc+"#";
-		if( !(partieTouchee.equals("Bouclier") || partieTouchee.equals("Armure")) ) 
-			result += " ("+getGravite()+")"; 
+		if( (partieTouchee.equals("Bouclier") || partieTouchee.equals("Armure")) ) {
+			result += getNiveau()+" nv";
+		} else {
+			if(ptDeChoc > 0) result += ptDeChoc+"# ";
+			result += getGravite(); 
+		}
 		result += ")";
 		return result;
 	}

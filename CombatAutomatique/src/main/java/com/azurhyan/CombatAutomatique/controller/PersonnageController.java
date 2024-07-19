@@ -14,6 +14,7 @@ import com.azurhyan.CombatAutomatique.dto.HandicapDto;
 import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
 import com.azurhyan.CombatAutomatique.model.HandicapDB.TypeHand;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
+import com.azurhyan.CombatAutomatique.service.ActionService;
 import com.azurhyan.CombatAutomatique.service.ActionService_v6;
 import com.azurhyan.CombatAutomatique.service.PersonnageService;
 
@@ -26,7 +27,7 @@ public class PersonnageController {
 	PersonnageService persoServ;
 	
 	@Autowired
-	ActionService_v6 actionServ;
+	ActionService actionServ;
 	
 	@GetMapping("/azurhyan/{game}/nouveauPerso")
 	public String formNouvPerso(Model model, @PathVariable("game") final String partie) {
