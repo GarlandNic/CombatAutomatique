@@ -352,7 +352,7 @@ public class ActionService {
 			if(!isPare)
 				result.setMargeBlesser(bonusForce+comboAtt.getForce() - endu);
 			
-			if(bl != null) {
+			if(bl != null && (bl.getNiveau()+bl.getPtDeChoc()) > 0) {
 				bl.setPartieTouchee(partieTouchee);
 				result.getBlessList().add(bl);
 				
