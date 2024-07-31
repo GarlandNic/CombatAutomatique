@@ -2,10 +2,6 @@
 TODO list
 
   o armes qui font +0,5 H-
-  ok enlever colonnes inutiles (IBa,IBd, enduBoucl)
-  ok mort 7 -> presque mort
-  o egratignure 0 nv 0 #
-  ok total H- sur feuille principal
  
 
 DONE :
@@ -82,6 +78,10 @@ DONE :
   o bouclier qui se casse automatiquement ?
   	=> title des nv de bouclier reçus (modif PersoPartie)
   o supprimer handicap temporaire en 1 clic
+  ok enlever colonnes inutiles (IBa,IBd, enduBoucl)
+  ok mort 7 -> presque mort
+  ok total H- sur feuille principal
+  ok egratignure 0 nv 0 #
 
 
  

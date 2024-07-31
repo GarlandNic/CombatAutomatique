@@ -44,9 +44,9 @@ public class BlessureDB {
 //			 FOREIGN KEY (PERSONNAGE) REFERENCES personnages (ID) ON DELETE CASCADE ON UPDATE CASCADE
 //			);
 	
-	public String getGravite() {
+	public String getGravite_v6() {
 		int CON = this.perso.getCON();
-		return this.getGravite(CON);
+		return this.getGravite_v6(CON);
 	}
 	public String getGravite_v6(int CON) {
 		if(this.partieTouchee.equals("Bouclier")) return "";
@@ -63,11 +63,10 @@ public class BlessureDB {
 		}
 		return "";
 	}
-	public String getGravite(int CON) {
+	public String getGravite() {
 		if(this.partieTouchee.equals("Bouclier")) return "";
 		if(this.partieTouchee.equals("Armure")) return "";
-		int demiHandicap = Math.max(0, Math.round(this.getHandicap(CON)*2));
-		switch(demiHandicap) {
+		switch(this.demiNiveau) {
 			case 0: return "égratignure";
 			case 1: return "mineure (0,5 H-)";
 			case 2: return "légère (1 H-)";
@@ -75,7 +74,7 @@ public class BlessureDB {
 			case 6: return "grave (3 H-)";
 			case 9: return "mortelle (4,5 H-)";
 			case 14: return "presque mort (7 H-)";
-			default: return "mort ("+((float) demiHandicap)/2+" H-)";
+			default: return "mort ("+((float) this.demiNiveau)/2+" H-)";
 		}
 	}
 	
