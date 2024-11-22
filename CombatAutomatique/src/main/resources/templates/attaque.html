@@ -77,10 +77,10 @@
 							</td>
 							<td th:if="${n > 1}"><em>
 								(-
-								<span th:unless="*{lePlusPossible}" th:remove="tag" th:text="${(n/2)*2+2}"></span>
+								<span th:unless="*{lePlusPossible}" th:remove="tag" th:text="${n*2}"></span>
 								<span th:if="*{lePlusPossible}" th:remove="tag" th:text="${itemStat.count*2}"></span>
 								 tch / -
-								<span th:unless="*{lePlusPossible}" th:remove="tag" th:text="${(n+1)/2}"></span>
+								<span th:unless="*{lePlusPossible}" th:remove="tag" th:text="${n}"></span>
 								<span th:if="*{lePlusPossible}" th:remove="tag" th:text="${itemStat.count}"></span>
 								 for)
 							</em></td>

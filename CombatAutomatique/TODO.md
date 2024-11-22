@@ -1,6 +1,8 @@
 
 TODO list
 
+  o retour maison depuis fiche : truc dans barre navigateur
+
   o armes qui font +0,5 H-
  
 

@@ -334,9 +334,10 @@ public class ActionService {
 				}
 				
 				if(attaque.isBousculade()) {
-					float handicaps = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), 
+					BlessureDto handicapBl = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), 
 							comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false, 
-							modifDegre+2+dgtServ.modifDegreBousc(comboAtt.getTypeDgts())).getNiveau();
+							modifDegre+2+dgtServ.modifDegreBousc(comboAtt.getTypeDgts()));
+					float handicaps = (handicapBl != null ? handicapBl.getNiveau() : 0);
 					if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.MOBILITE, "Bousculade"));
 				}
 
@@ -366,9 +367,10 @@ public class ActionService {
 			}
 
 			if(attaque.isBousculade() && !isPare) {
-				float handicaps = calculDegats(bonusForce+comboAtt.getForce(), endu, 
+				BlessureDto handicapBl = calculDegats(bonusForce+comboAtt.getForce(), endu, 
 						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false, 
-						modifDegre+2+dgtServ.modifDegreBousc(comboAtt.getTypeDgts())).getNiveau();
+						modifDegre+2+dgtServ.modifDegreBousc(comboAtt.getTypeDgts()));
+				float handicaps = (handicapBl != null ? handicapBl.getNiveau() : 0);
 				if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.MOBILITE, "Bousculade"));
 			}
 			

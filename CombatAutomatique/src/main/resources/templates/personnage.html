@@ -14,7 +14,7 @@
 	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/'+${perso.persoId}}" th:object="${perso}" method="post">
 		<input type="hidden" th:field="*{visible}"/>
 
-	<button th:formaction="@{'/azurhyan/'+${partie}}" formmethod="get" type="submit"> &nbsp; &#127968; &nbsp; </button> 
+	<button type="submit" name="retourSansSave"> &nbsp; &#127968; &nbsp; </button> 
 	&emsp; &emsp; 
 	<button type="submit" name="retour"> &#128190; + &#127968;</button> 
 

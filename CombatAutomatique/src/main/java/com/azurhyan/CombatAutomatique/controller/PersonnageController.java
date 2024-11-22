@@ -46,6 +46,12 @@ public class PersonnageController {
 		return filledPage_Personnage(model, partie, pp);
 	}
 	
+	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"retourSansSave"})
+	public String DontsavePersoAndReturn(Model model, @PathVariable("game") final String partie, 
+			@ModelAttribute("perso") PersoCompletDto perso) {
+		return "redirect:/azurhyan/"+partie;
+	}
+	
 	@PostMapping(value="/azurhyan/{game}/{persoId}", params={"retour"})
 	public String savePersoAndReturn(Model model, @PathVariable("game") final String partie, 
 			@ModelAttribute("perso") PersoCompletDto perso) {
