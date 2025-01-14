@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.azurhyan.CombatAutomatique.dto.BlessureDto;
+import com.azurhyan.CombatAutomatique.dto.ComboDto;
 import com.azurhyan.CombatAutomatique.dto.PersoCompletDto;
 import com.azurhyan.CombatAutomatique.dto.PersoPartieDto;
 import com.azurhyan.CombatAutomatique.dto.PersosVisiblesDto;
@@ -20,6 +22,7 @@ import com.azurhyan.CombatAutomatique.model.ComboDB;
 import com.azurhyan.CombatAutomatique.model.EtatDB;
 import com.azurhyan.CombatAutomatique.model.HandicapDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
+import com.azurhyan.CombatAutomatique.model.ComboDB.Bouclier;
 import com.azurhyan.CombatAutomatique.repository.EtatRepository;
 import com.azurhyan.CombatAutomatique.repository.HandicapRepository;
 import com.azurhyan.CombatAutomatique.repository.PersonnageRepository;
@@ -82,7 +85,7 @@ public class PersonnageService {
 //	public ComboDB comboTotal(PersonnageDB perso) {
 //		ComboDB comboTot = comboHandicap(perso);
 //		perso.getComboList().forEach(combo -> {
-//			if(combo.getNom().equals("Base")) {
+//			if(combo.getNom().equals("BASE")) {
 //				comboTot.setCaC(combo.isCaC());
 //				comboTot.setTypeDgts(combo.getTypeDgts());
 //			}
@@ -229,6 +232,34 @@ public class PersonnageService {
 		List<Integer> listRefAction = new ArrayList<Integer>();
 		listHandi.forEach(h -> listRefAction.add(h.getRefAction()));
 		return listRefAction;
+	}
+
+	public ComboDB getBouclierCombo(PersonnageDB defenseur) {
+		List<ComboDB> combList = defenseur.getComboList();
+		ComboDB lastBcl = null;
+		for(ComboDB comb : combList) {
+			if( comb.isActif() && comb.getNom().contains("BOUCLIER") && !comb.getBouclier().equals(Bouclier.Pas_de_bouclier) )
+				lastBcl = comb;
+		}
+		return lastBcl;
+	}
+	
+	public boolean hasBouclierNow(PersonnageDB defenseur) {
+		// check si total blessure bouclier < qualit
+		List<BlessureDB> blList = defenseur.getBlessureList();
+		float res = (float) 0.0;
+		for(BlessureDB bl : blList) {
+			if( bl.getPartieTouchee().equals("Bouclier") )
+				res += bl.getNiveau();
+		}
+		ComboDB lastBcl = getBouclierCombo(defenseur);
+		int qualit2 = (lastBcl != null ? lastBcl.getBouclierQualit2() : 0);
+		return (res*2 < qualit2);
+	}
+
+	public void unableBouclier(PersonnageDB defenseur) {
+		ComboDB lastBcl = getBouclierCombo(defenseur);
+		if(lastBcl != null)	lastBcl.setActif(false);
 	}
 
 }

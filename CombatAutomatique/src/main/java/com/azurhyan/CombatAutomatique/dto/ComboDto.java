@@ -46,6 +46,7 @@ public class ComboDto {
 		this.esquive = combo.getEsquive();
 		this.parade = combo.getParade();
 		this.bouclier = combo.getBouclier();
+		this.bouclierQualit2 = combo.getBouclierQualit2();
 		this.endBouclier = combo.getEndBouclier();
 		this.endPerso = combo.getEndPerso();
 		this.IBdef = combo.getIBdef();
@@ -67,6 +68,7 @@ public class ComboDto {
 		comb.setEsquive(esquive);
 		comb.setParade(parade);
 		comb.setBouclier(bouclier);
+		comb.setBouclierQualit2(bouclierQualit2);
 		comb.setEndBouclier(endBouclier);
 		comb.setEndPerso(endPerso);
 		comb.setIBdef(IBdef);
@@ -92,6 +94,7 @@ public class ComboDto {
 	int esquive=15;
 	int parade=0;
 	Bouclier bouclier=Bouclier.Pas_de_bouclier;
+	int bouclierQualit2 = 0;
 	int endBouclier=15;
 	int endPerso=15;
 	int IBdef=15;
@@ -131,4 +134,11 @@ public class ComboDto {
 		return (this.getEndPerso() + this.getBouclier().BonusEndGlb());
 	}
 
+	public float getBouclierQualit() {
+		return (((float) this.getBouclierQualit2())/2);
+	}
+	
+	public void setBouclierQualit(float q) {
+		this.setBouclierQualit2((int) (q*2));
+	}
 }

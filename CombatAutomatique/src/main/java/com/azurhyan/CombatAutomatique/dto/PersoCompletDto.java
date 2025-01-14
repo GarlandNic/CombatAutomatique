@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.azurhyan.CombatAutomatique.model.ActionDB;
 import com.azurhyan.CombatAutomatique.model.BlessureDB;
 import com.azurhyan.CombatAutomatique.model.ComboDB;
+import com.azurhyan.CombatAutomatique.model.ComboDB.Bouclier;
 import com.azurhyan.CombatAutomatique.model.EtatDB;
 import com.azurhyan.CombatAutomatique.model.HandicapDB;
 import com.azurhyan.CombatAutomatique.model.PersonnageDB;
@@ -25,7 +26,7 @@ public class PersoCompletDto {
 	public PersoCompletDto(String partie) {
 		this.partie = partie;
 		this.comboList = new ArrayList<>();
-		this.comboList.add(new ComboDto("Base", false));
+		this.comboList.add(new ComboDto("BASE", false));
 		this.comboList.add(new ComboDto("Bonus permanent", true));
 		this.comboList.add(new ComboDto("Bonus 1 round", true));
 //		this.etat = new EtatDto();
@@ -157,6 +158,15 @@ public class PersoCompletDto {
 		return res;
 	}
 
+	public float lastQualitBouclier() {
+		float res = (float) 0.0;
+		for(ComboDto comb : comboList) {
+			if( comb.actif && comb.nom.contains("BOUCLIER") && !comb.bouclier.equals(Bouclier.Pas_de_bouclier) )
+				res = comb.getBouclierQualit();
+		}
+		return res;
+	}
+
 	public float totalNvArmure() {
 		float res = (float) 0.0;
 		for(BlessureDto bl : blessureList) {
@@ -237,11 +247,13 @@ public class PersoCompletDto {
 		ComboDto comboTot = this.getComboHandicap();
 		this.getComboList().forEach(combo -> {
 			if(combo.isActif()) {
-				if(combo.getNom().contains("Base")) {
+				if(combo.getNom().contains("BASE")) {
 					comboTot.setCaC(combo.isCaC());
 					comboTot.setTypeDgts(combo.getTypeDgts());
 					comboTot.setGlobaux(combo.isGlobaux());
 					comboTot.setElement(combo.getElement());
+				}
+				if(combo.getNom().contains("BOUCLIER")) {
 					comboTot.setBouclier(combo.getBouclier());
 				}
 				comboTot.setInit(comboTot.getInit()+combo.getInit());

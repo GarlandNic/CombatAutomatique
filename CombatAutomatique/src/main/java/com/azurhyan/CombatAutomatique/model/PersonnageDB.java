@@ -97,7 +97,7 @@ public class PersonnageDB {
 	public PersonnageDB(String partie) {
 		this.partie = partie;
 		this.comboList = new ArrayList<>();
-		this.comboList.add(new ComboDB("Base", this, false));
+		this.comboList.add(new ComboDB("BASE", this, false));
 		this.comboList.add(new ComboDB("Bonus permanent", this, true));
 		this.comboList.add(new ComboDB("Bonus 1 round", this, true));
 	}
@@ -131,7 +131,7 @@ public class PersonnageDB {
 	public boolean hasBouclier() {
 		boolean res = false;
 		for(ComboDB comb : this.comboList) {
-			if(comb.isActif() && comb.getNom().contains("Base"))
+			if(comb.isActif() && comb.getNom().contains("BASE"))
 				res = (comb.getBouclier() != Bouclier.Pas_de_bouclier); 
 		}
 		return res;

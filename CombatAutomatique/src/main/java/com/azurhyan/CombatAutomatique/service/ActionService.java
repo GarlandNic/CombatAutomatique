@@ -55,6 +55,9 @@ public class ActionService {
 	@Autowired
 	DegatsService dgtServ;
 	
+	@Autowired
+	PersonnageService persoServ;
+	
 	public void annulerAttaque(int refAttaque) {
 		Iterable<ActionDB> listActions = actionRepo.findByRefAttaque(refAttaque);
 		listActions.forEach(act -> annulerAction(act));
@@ -263,6 +266,7 @@ public class ActionService {
 				BlessureDB blToSave = bl.blessureToDB(defenseur);
 				blToSave.setRefAction(refAction);
 				blessRepo.save(blToSave);
+				defenseur.getBlessureList().add(blToSave);
 				descr += blToSave.blessureToString()+" ; ";
 				if(blToSave.getHandicap() > 0) {
 //					defenseur.addHandicap(refAction, blToSave.getHandicap(), TypeHand.FATIGUE, "Blessure");
@@ -279,6 +283,13 @@ public class ActionService {
 						case 3: etat.setIncapacite(3); break;
 					}
 					persoRepo.save(defenseur);
+				}
+				if(bl.getPartieTouchee().equals("Bouclier")) {
+					if(!persoServ.hasBouclierNow(defenseur)) {
+						descr += " Bouclier cassé !";
+						persoServ.unableBouclier(defenseur);
+						persoRepo.save(defenseur);
+					}
 				}
 			}
 		}

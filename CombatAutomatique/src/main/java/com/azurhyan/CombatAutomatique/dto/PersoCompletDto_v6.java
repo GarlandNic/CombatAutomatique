@@ -25,7 +25,7 @@ public class PersoCompletDto_v6 {
 	public PersoCompletDto_v6(String partie) {
 		this.partie = partie;
 		this.comboList = new ArrayList<>();
-		this.comboList.add(new ComboDto("Base", false));
+		this.comboList.add(new ComboDto("BASE", false));
 		this.comboList.add(new ComboDto("Bonus permanent", true));
 		this.comboList.add(new ComboDto("Bonus 1 round", true));
 //		this.etat = new EtatDto();
@@ -243,7 +243,7 @@ public class PersoCompletDto_v6 {
 		ComboDto comboTot = this.getComboHandicap();
 		this.getComboList().forEach(combo -> {
 			if(combo.isActif()) {
-				if(combo.getNom().contains("Base")) {
+				if(combo.getNom().contains("BASE")) {
 					comboTot.setCaC(combo.isCaC());
 					comboTot.setTypeDgts(combo.getTypeDgts());
 					comboTot.setGlobaux(combo.isGlobaux());

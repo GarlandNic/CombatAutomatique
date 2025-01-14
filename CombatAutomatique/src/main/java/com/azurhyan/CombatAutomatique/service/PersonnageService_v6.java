@@ -77,7 +77,7 @@ public class PersonnageService_v6 {
 //	public ComboDB comboTotal(PersonnageDB perso) {
 //		ComboDB comboTot = comboHandicap(perso);
 //		perso.getComboList().forEach(combo -> {
-//			if(combo.getNom().equals("Base")) {
+//			if(combo.getNom().equals("BASE")) {
 //				comboTot.setCaC(combo.isCaC());
 //				comboTot.setTypeDgts(combo.getTypeDgts());
 //			}

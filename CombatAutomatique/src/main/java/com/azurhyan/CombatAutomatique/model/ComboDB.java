@@ -272,6 +272,9 @@ public class ComboDB {
 	@Column(name="ENDBOUCLIER")
 	int endBouclier=15;
 	
+	@Column(name="BOUCLIERQUALIT2")
+	int bouclierQualit2=0;
+	
 	@Column(name="ENDPERSO")
 	int endPerso=15;
 	
@@ -312,9 +315,18 @@ public class ComboDB {
 		combo.setGlobaux(globaux);
 		combo.setElement(element);
 		combo.setBouclier(bouclier);
+		combo.setBouclierQualit2(bouclierQualit2);
 		combo.setActif(actif);
 		combo.setPerso(newPerso);
 		return combo;
+	}
+
+	public float getBouclierQualit() {
+		return (((float) this.getBouclierQualit2())/2);
+	}
+	
+	public void setBouclierQualit(float q) {
+		this.setBouclierQualit2((int) (q*2));
 	}
 
 }
