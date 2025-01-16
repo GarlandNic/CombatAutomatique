@@ -131,7 +131,7 @@ public class PersonnageDB {
 	public boolean hasBouclier() {
 		boolean res = false;
 		for(ComboDB comb : this.comboList) {
-			if(comb.isActif() && comb.getNom().contains("BASE"))
+			if(comb.isActif() && comb.getNom().contains("BOUCLIER"))
 				res = (comb.getBouclier() != Bouclier.Pas_de_bouclier); 
 		}
 		return res;

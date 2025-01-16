@@ -91,7 +91,6 @@ public class PersonnageController {
 	public String addBouclier(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId, 
 			@ModelAttribute("perso") PersoCompletDto perso, final HttpServletRequest req) {
 		perso.getComboList().add(new ComboDto("BOUCLIER - nouveau bouclier", true));
-	    perso.getBlessureList().add(new BlessureDto(-5, 0, req.getParameter("addBouclier")));
 	    return filledPage_Personnage(model, partie, perso);
 	}
 
