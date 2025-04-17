@@ -20,8 +20,8 @@ public class PersoPartieDto {
 		});
 		this.visible = perso.isVisible();
 		this.deDef = (null != perso.getEtat() ? perso.getEtat().getDeDef() : 0);
-		this.bles = perso.totalDemiNiveauxBlessures()*2/perso.getCON();
-		this.choc = perso.totalPtsDeChoc()*4/(perso.getCON()*2+1);
+		this.bles360 = perso.totalDemiNiveauxBlessures()*360/(perso.getCON()*2);
+		this.choc360 = perso.totalPtsDeChoc()*360/(perso.getCON()*2+1);
 		this.hand = perso.totalHandicaps();
 		this.incapacite = (null != perso.getEtat() ? perso.getEtat().getIncapacite() : 0);
 		this.turnOrder = (null != perso.getEtat() ? perso.getEtat().getTurnOrder() : perso.getPersoId());
@@ -41,8 +41,8 @@ public class PersoPartieDto {
 	
 	int deDef;
 	
-	int bles;
-	int choc;
+	int bles360;
+	int choc360;
 	int hand;
 	
 	int incapacite;

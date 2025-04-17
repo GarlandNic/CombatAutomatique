@@ -31,22 +31,22 @@
 		<tbody>
 			<tr th:each="perso : ${persos}">
 				<td><span th:text="${perso.init}"> init </span></td>
-				<td><span th:text="${perso.nom}" th:style="${ (perso.bles > 3 || perso.choc > 3) ? 
+				<td><span th:text="${perso.nom}" th:style="${ (perso.bles360 >= 360 || perso.choc360 >= 360) ? 
 						  	'text-decoration-line: line-through; background-color: '+perso.couleur+';' : 
 						  	'background-color: '+perso.couleur+';'}"> nom </span></td>
 				<td> 
 					<table style="border-collapse: collapse;margin: 0;">
-						<tr><td class="carre c11" th:style="${perso.bles > 0 ? 'background-color: red;' : ''}"></td>
-							<td class="carre c12" th:style="${perso.bles > 3 ? 'background-color: red;' : ''}"></td>
+						<tr><td class="carre c11" th:style="${perso.bles360 > 0 ? 'background-color: red;' : ''}"></td>
+							<td class="carre c12" th:style="${perso.bles360 > 270 ? 'background-color: red;' : ''}"></td>
 							<td class="emptyCell"></td>
-							<td class="carre c11" th:style="${perso.choc > 0 ? 'background-color: grey;' : ''}"></td>
-							<td class="carre c12" th:style="${perso.choc > 3 ? 'background-color: grey;' : ''}"></td>
+							<td class="carre c11" th:style="${perso.choc360 > 0 ? 'background-color: grey;' : ''}"></td>
+							<td class="carre c12" th:style="${perso.choc360 > 270 ? 'background-color: grey;' : ''}"></td>
 						</tr>
-						<tr><td class="carre c21" th:style="${perso.bles > 1 ? 'background-color: red;' : ''}"></td>
-							<td class="carre c22" th:style="${perso.bles > 2 ? 'background-color: red;' : ''}"></td>
+						<tr><td class="carre c21" th:style="${perso.bles360 > 90 ? 'background-color: red;' : ''}"></td>
+							<td class="carre c22" th:style="${perso.bles360 > 180 ? 'background-color: red;' : ''}"></td>
 							<td class="emptyCell"></td>
-							<td class="carre c21" th:style="${perso.choc > 1 ? 'background-color: grey;' : ''}"></td>
-							<td class="carre c22" th:style="${perso.choc > 2 ? 'background-color: grey;' : ''}"></td>
+							<td class="carre c21" th:style="${perso.choc360 > 90 ? 'background-color: grey;' : ''}"></td>
+							<td class="carre c22" th:style="${perso.choc360 > 180 ? 'background-color: grey;' : ''}"></td>
 						</tr>
 					</table>
 				</td>
