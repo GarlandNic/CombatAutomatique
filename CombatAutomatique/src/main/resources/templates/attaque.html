@@ -136,11 +136,11 @@
 	<br/>
 	<fieldset>
 		<legend> Particularités de l'attaque </legend>
-<!-- 		<label> -->
-<!-- 	  		<input type="checkbox" th:field="*{lePlusPossible}" title="l'ordre ci-dessus est pris en compte, les malus sont à remplacer par du -2/-1 cumulatifs"/> -->
-<!-- 	  		Le plus possible -->
-<!--   		</label> -->
-<input type="hidden" th:field="*{lePlusPossible}"/>
+		<label>
+	  		<input type="checkbox" th:field="*{lePlusPossible}" title="les malus sont à remplacer par du -2/-1 selon nombre d'ennemis"/>
+	  		Tir de Masse
+  		</label>
+<!-- <input type="hidden" th:field="*{lePlusPossible}"/> -->
 		<label>
 	  		<input type="checkbox" th:field="*{bousculade}" title="-1 niveau de blessure, mais H- temporaire équivalent à niv de blessure +1"/>
 	  		Bousculade

@@ -183,9 +183,11 @@ public class ActionService {
 					modTch = 2*na;
 					modFor = 0;
 				} else if(nd > 1) {
-					if(false && attaque.isLePlusPossible()) {
-//						modTch = -2 -2*j + combaPlusToucher(attaquant.getCCcombatPlusieurs());
-//						modFor = -1 -j + combaPlusForce(attaquant.getCCcombatPlusieurs());
+					if(attaque.isLePlusPossible()) { 
+						// Tir de masse
+						int niv = niveauDuNombre(nd);
+						modTch = -2*niv;
+						modFor = -1*niv;
 					} else {
 						modTch = -2*nd + combaPlusToucher(attaquant.getCCcombatPlusieurs());
 						modFor = -nd   + combaPlusForce(attaquant.getCCcombatPlusieurs());
@@ -233,6 +235,12 @@ public class ActionService {
 		}
 	}
 	
+	private int niveauDuNombre(int nd) {
+		int res = ((int) Math.ceil(Math.sqrt((double) nd)*2-2));
+		if(res < 1) return 1;
+		return res;
+	}
+
 	public ActionDB appliqueAttaque(Degat degats, CibleDto attaquant, PersonnageDB defenseur, int de, String descr, int refAttaque, final AttaqueDto attaque) {
 		ActionDB act = new ActionDB();
 		act.setPersoId(attaquant.getCibleId());
