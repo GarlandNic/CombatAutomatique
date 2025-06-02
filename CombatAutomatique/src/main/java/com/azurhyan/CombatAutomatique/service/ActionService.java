@@ -191,9 +191,9 @@ public class ActionService {
 					} else {
 						modTch = -2*nd + combaPlusToucher(attaquant.getCCcombatPlusieurs());
 						modFor = -nd   + combaPlusForce(attaquant.getCCcombatPlusieurs());
+						modTch = (modTch > -2 ? -2 : modTch);
+						modFor = (modFor > -1 ? -1 : modFor);
 					}
-					modTch = (modTch > -2 ? -2 : modTch);
-					modFor = (modFor > -1 ? -1 : modFor);
 				}
 				//
 				ComboDto comboDef = defenseurDto.getComboTotal();
@@ -323,7 +323,7 @@ public class ActionService {
 		int margeTch = comboAtt.getToucher() - (comboAtt.isCaC() ? comboDef.getDefense() : comboDef.getEsquive());
 		result.setMargeToucher(margeTch);
 		int endu;
-		if(margeTch < 0) {
+		if(margeTch < 0 && !attaque.isLePlusPossible()) {
 			return result;
 		} else {
 			if(!attaque.isCoupDansLeBouclier())
@@ -331,6 +331,8 @@ public class ActionService {
 			result.setMargeToucher(margeTch);
 			int bonusForce = (margeTch-1)/3;
 			bonusForce = (bonusForce > 0 ? bonusForce : 0);
+			if(attaque.isLePlusPossible() && margeTch < 0) bonusForce = margeTch;
+			
 			boolean isPare = (comboDef.getBouclier() != Bouclier.Pas_de_bouclier) && (margeTch <= 0);
 			if(attaque.isCoupDansLeBouclier()) isPare = true;
 			result.setPare(isPare);
