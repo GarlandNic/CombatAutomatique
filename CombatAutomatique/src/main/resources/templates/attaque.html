@@ -75,13 +75,13 @@
 								<input type="hidden" th:field="*{cibleList[__${itemStat.index}__].cibleNom}"/>							
 								<input th:type="${numPerso==0 ? 'number' : 'hidden'}" th:field="*{cibleList[__${itemStat.index}__].de}"/>							
 							</td>
-							<td th:if="${n > 1}"><em>
+							<td th:if="${n > 1}" th:with="nivNb=${T(java.lang.Math).ceil(T(java.lang.Math).sqrt(n)*2-2).intValue()}"><em>
 								(-
-								<span th:unless="*{lePlusPossible}" th:remove="tag" th:text="${n*2}"></span>
-								<span th:if="*{lePlusPossible}" th:remove="tag" th:text="${itemStat.count*2}"></span>
+								<span th:unless="*{tirDeMasse}" th:remove="tag" th:text="${n*2}"></span>
+								<span th:if="*{tirDeMasse}" th:remove="tag" th:text="${(nivNb > 1) ? nivNb*2 : 2}"></span>
 								 tch / -
-								<span th:unless="*{lePlusPossible}" th:remove="tag" th:text="${n}"></span>
-								<span th:if="*{lePlusPossible}" th:remove="tag" th:text="${itemStat.count}"></span>
+								<span th:unless="*{tirDeMasse}" th:remove="tag" th:text="${n}"></span>
+								<span th:if="*{tirDeMasse}" th:remove="tag" th:text="${(nivNb > 1) ? nivNb : 1}"></span>
 								 for)
 							</em></td>
 		                    <td> <button type="submit" name="removeTarget" th:value="${itemStat.index}"> &#x1F872; </button> </td>
@@ -137,10 +137,9 @@
 	<fieldset>
 		<legend> Particularités de l'attaque </legend>
 		<label>
-	  		<input type="checkbox" th:field="*{lePlusPossible}" title="les malus sont à remplacer par du -2/-1 selon nombre d'ennemis"/>
+	  		<input type="checkbox" th:field="*{tirDeMasse}" title="les malus sont à remplacer par du -2/-1 selon nombre d'ennemis. -2/-1 pour 1 seul ennemis même si c'est écrit autre chose."/>
 	  		Tir de Masse
   		</label>
-<!-- <input type="hidden" th:field="*{lePlusPossible}"/> -->
 		<label>
 	  		<input type="checkbox" th:field="*{bousculade}" title="-1 niveau de blessure, mais H- temporaire équivalent à niv de blessure +1"/>
 	  		Bousculade
@@ -148,6 +147,10 @@
 		<label>
 	  		<input type="checkbox" th:field="*{coupDansLeBouclier}" title="automatiquement paré, mais la parade ne réduit pas la marge de toucher"/>
 	  		Coup dans le bouclier
+  		</label>
+		<label>
+	  		<input type="checkbox" th:field="*{capture}" title="il faut que se soit à distance, pas de dégât, handicaps de capture"/>
+	  		Capture
   		</label>
 	</fieldset>
 	

@@ -171,7 +171,7 @@ public class ActionService_v6 {
 					modTch = na;
 					modFor = na/2;
 				} else if(nd > 1) {
-					if(attaque.isLePlusPossible()) {
+					if(attaque.isTirDeMasse()) {
 						modTch = -2 -2*j + combaPlusToucher(attaquant.getCCcombatPlusieurs());
 						modFor = -1 -j + combaPlusForce(attaquant.getCCcombatPlusieurs());
 					} else {

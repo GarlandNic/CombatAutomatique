@@ -14,9 +14,10 @@ public class AttaqueDto {
 	
 	List<CibleDto> autreList = new ArrayList<>();
 
-	boolean lePlusPossible = false; // = tirDeMasse
+	boolean tirDeMasse = false; // = tirDeMasse = lePlusPossible
 	boolean bousculade = false;
 	boolean coupDansLeBouclier = false;
+	boolean capture = false;
 	
 	String partie="";
 	

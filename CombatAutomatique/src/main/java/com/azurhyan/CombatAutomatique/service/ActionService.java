@@ -125,7 +125,6 @@ public class ActionService {
 				attaque.getAutreList().add(autre);
 			}
 		});
-		// comment je retrouve lePlusPossible ??? je ne fais pas
 		return attaque;
 	}
 	
@@ -183,7 +182,7 @@ public class ActionService {
 					modTch = 2*na;
 					modFor = 0;
 				} else if(nd > 1) {
-					if(attaque.isLePlusPossible()) { 
+					if(attaque.isTirDeMasse()) { 
 						// Tir de masse
 						int niv = niveauDuNombre(nd);
 						modTch = -2*niv;
@@ -194,6 +193,10 @@ public class ActionService {
 						modTch = (modTch > -2 ? -2 : modTch);
 						modFor = (modFor > -1 ? -1 : modFor);
 					}
+				} else if(attaque.isTirDeMasse()) { 
+					// Tir de masse cible unique
+					modTch = -2;
+					modFor = -1;
 				}
 				//
 				ComboDto comboDef = defenseurDto.getComboTotal();
@@ -323,7 +326,7 @@ public class ActionService {
 		int margeTch = comboAtt.getToucher() - (comboAtt.isCaC() ? comboDef.getDefense() : comboDef.getEsquive());
 		result.setMargeToucher(margeTch);
 		int endu;
-		if(margeTch < 0 && !attaque.isLePlusPossible()) {
+		if(margeTch < 0 && !attaque.isTirDeMasse()) {
 			return result;
 		} else {
 			if(!attaque.isCoupDansLeBouclier())
@@ -331,7 +334,7 @@ public class ActionService {
 			result.setMargeToucher(margeTch);
 			int bonusForce = (margeTch-1)/3;
 			bonusForce = (bonusForce > 0 ? bonusForce : 0);
-			if(attaque.isLePlusPossible() && margeTch < 0) bonusForce = margeTch;
+			if(attaque.isTirDeMasse() && margeTch < 0) bonusForce = margeTch;
 			
 			boolean isPare = (comboDef.getBouclier() != Bouclier.Pas_de_bouclier) && (margeTch <= 0);
 			if(attaque.isCoupDansLeBouclier()) isPare = true;
@@ -343,6 +346,12 @@ public class ActionService {
 				BlessureDto blBcl = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), 
 						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), true, modifDegre);
 				result.setMargeBlesser(bonusForce+comboAtt.getForce() - comboDef.getEndBouclier());
+				
+				if(attaque.isCapture()) {
+					result.setMargeBlesser(0);
+					blBcl = null;
+					return result; // pas de suite si paré
+				}
 
 				if(blBcl != null) {
 					partieTouchee = "Bouclier";
@@ -373,6 +382,13 @@ public class ActionService {
 					comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false, modifDegre);
 			if(!isPare)
 				result.setMargeBlesser(bonusForce+comboAtt.getForce() - endu);
+			
+			if(attaque.isCapture()) {
+				result.setMargeBlesser(0);
+				bl = null;
+				float handicaps = ((float) result.getMargeToucher())/2;
+				if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.MOBILITE, "Capture"));
+			}
 			
 			if(bl != null && (bl.getNiveau()+bl.getPtDeChoc()) > 0) {
 				bl.setPartieTouchee(partieTouchee);
