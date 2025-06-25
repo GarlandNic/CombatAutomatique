@@ -78,11 +78,14 @@
 							<td th:if="${n > 1}" th:with="nivNb=${T(java.lang.Math).ceil(T(java.lang.Math).sqrt(n)*2-2).intValue()}"><em>
 								(-
 								<span th:unless="*{tirDeMasse}" th:remove="tag" th:text="${n*2}"></span>
-								<span th:if="*{tirDeMasse}" th:remove="tag" th:text="${(nivNb > 1) ? nivNb*2 : 2}"></span>
+								<span th:if="*{tirDeMasse}" th:remove="tag" th:text="${nivNb*2}"></span>
 								 tch / -
 								<span th:unless="*{tirDeMasse}" th:remove="tag" th:text="${n}"></span>
-								<span th:if="*{tirDeMasse}" th:remove="tag" th:text="${(nivNb > 1) ? nivNb : 1}"></span>
+								<span th:if="*{tirDeMasse}" th:remove="tag" th:text="${nivNb}"></span>
 								 for)
+							</em></td>
+							<td th:if="${n == 1} and *{tirDeMasse}"><em>
+								(- 2 tch / - 1 for)
 							</em></td>
 		                    <td> <button type="submit" name="removeTarget" th:value="${itemStat.index}"> &#x1F872; </button> </td>
 						</tr>					
