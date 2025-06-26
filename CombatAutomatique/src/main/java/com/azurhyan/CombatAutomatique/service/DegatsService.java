@@ -13,10 +13,9 @@ import com.azurhyan.CombatAutomatique.model.ComboDB.Element;
 @Service
 public class DegatsService {
 
-	public int calculDegre(int margeBless, Dgts dgts, Element element, boolean isObjet) {
+	public int calculDegreChoc(int margeBless, Dgts dgts, Element element, boolean isObjet) {
 		int degreBrut = calculDegre(margeBless);
 		if(dgts.equals(Dgts.PRF) && isObjet) degreBrut -= 2;
-//		if(dgts.equals(Dgts.CTD) && isObjet) degreBrut += 1;
 		int modifElement = 0;
 		switch (element) {
 			case FEU: 
@@ -29,6 +28,32 @@ public class DegatsService {
 				modifElement=(isObjet ? -2 : 0); break;
 			case NECROTIQUE:
 				modifElement=(isObjet ? +1 : 0); break;
+			case BLANCHE:
+				modifElement = +1; break;
+			case NORMAL:
+			default:
+				modifElement=0; break;
+		}
+		degreBrut += modifElement;
+		return (degreBrut < 0 ? 0 : degreBrut);
+	}
+	public int calculDegreBl(int margeBless, Dgts dgts, Element element, boolean isObjet) {
+		int degreBrut = calculDegre(margeBless);
+		if(dgts.equals(Dgts.PRF) && isObjet) degreBrut -= 2;
+		int modifElement = 0;
+		switch (element) {
+			case FEU: 
+				modifElement=0; break;
+			case ACIDE:
+				modifElement=(isObjet ? +1 : 0); break;
+			case FROID:
+				modifElement=(isObjet ? +1 : 0); break;
+			case ELECTRICITE:
+				modifElement=(isObjet ? -2 : 0); break;
+			case NECROTIQUE:
+				modifElement=(isObjet ? +1 : 0); break;
+			case BLANCHE:
+				modifElement = -1; break;
 			case NORMAL:
 			default:
 				modifElement=0; break;
@@ -147,6 +172,7 @@ public class DegatsService {
 			return ptChoc;
 		case NECROTIQUE:
 			return ptChoc + degreDgts;
+		case BLANCHE:
     	default:
     		return ptChoc;
 		}
@@ -167,6 +193,8 @@ public class DegatsService {
 			return Dgts.NOR;
 		case NECROTIQUE:
 			return Dgts.NOR;
+		case BLANCHE:
+			return Dgts.CTD;
 		case NORMAL:
     	default:
 			return dgts;

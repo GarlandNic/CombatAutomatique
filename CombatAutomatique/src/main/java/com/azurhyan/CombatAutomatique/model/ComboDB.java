@@ -122,7 +122,8 @@ public class ComboDB {
 		ACIDE,
 		FROID,
 		ELECTRICITE,
-		NECROTIQUE;
+		NECROTIQUE,
+		BLANCHE;
 		
 		@Override
 		public String toString() {
@@ -139,6 +140,8 @@ public class ComboDB {
 					return "Electriques";
 				case NECROTIQUE:
 					return "Nécrotiques";
+				case BLANCHE:
+					return "de magie Blanche";
 	        	default:
 	        		return null;
 			}
@@ -157,6 +160,8 @@ public class ComboDB {
 				return 0 + (isCTD ? ptChoc/2 : ptChoc);
 			case NECROTIQUE:
 				return ptChoc + (isCTD ? ptChoc/4 : ptChoc/2);
+			case BLANCHE:
+				return ptChoc;// TODO +1 nv de pt de choc
         	default:
         		return ptChoc;
 			}
@@ -183,6 +188,8 @@ public class ComboDB {
 			case NECROTIQUE:
 				resDemi += (isObjet ? (resDemi+1)/2 : 0);
 				break;
+			case BLANCHE:
+				break; // TODO -1 niv de Bl
         	default:
         		break;
 			}

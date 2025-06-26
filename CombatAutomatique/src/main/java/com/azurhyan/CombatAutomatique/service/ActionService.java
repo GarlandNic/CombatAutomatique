@@ -357,9 +357,6 @@ public class ActionService {
 					partieTouchee = "Bouclier";
 					blBcl.setPartieTouchee(partieTouchee);
 					blBcl.setPtDeChoc(0);
-					/////////////// coorectiopn
-//					if(comboAtt.getTypeDgts()==Dgts.PRF) blBcl.setDemiNiveau(blBcl.getDemiNiveau()/2);
-					// doit etre calculer dans calculDegats puisque on lui donne le type de degats et isObjet
 					if(blBcl.getNiveau() > 0) result.getBlessList().add(blBcl);
 				}
 				
@@ -369,6 +366,13 @@ public class ActionService {
 							modifDegre+2+dgtServ.modifDegreBousc(comboAtt.getTypeDgts()));
 					float handicaps = (handicapBl != null ? handicapBl.getNiveau() : 0);
 					if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.MOBILITE, "Bousculade"));
+				}
+				if(comboAtt.getElement() == Element.BLANCHE) {
+					BlessureDto handicapBl = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), 
+							comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false, 
+							modifDegre+2);
+					float handicaps = (handicapBl != null ? handicapBl.getNiveau() : 0);
+					if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.FATIGUE, "Magie Blanche"));
 				}
 
 				partieTouchee = "Bras-bouclier";
@@ -410,6 +414,13 @@ public class ActionService {
 				float handicaps = (handicapBl != null ? handicapBl.getNiveau() : 0);
 				if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.MOBILITE, "Bousculade"));
 			}
+			if(comboAtt.getElement() == Element.BLANCHE && !isPare) {
+				BlessureDto handicapBl = calculDegats(bonusForce+comboAtt.getForce(), endu, 
+						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false, 
+						modifDegre+2);
+				float handicaps = (handicapBl != null ? handicapBl.getNiveau() : 0);
+				if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.FATIGUE, "Magie Blanche"));
+			}
 			
 			return result;
 		}
@@ -419,16 +430,18 @@ public class ActionService {
 		int margeBless = force - endu;
 		if(margeBless <= 0) return null;
 		dgts = dgtServ.checkTypeElement(dgts, element);
-		int degreDgts = dgtServ.calculDegre(margeBless, dgts, element, isObjet);
-		degreDgts += modifDegre;
-		int ptChoc = dgtServ.calculPtChoc(degreDgts, dgts);
-		float nvBl = dgtServ.calculNvBl(degreDgts, dgts);
+		int degreDgtsChoc = dgtServ.calculDegreChoc(margeBless, dgts, element, isObjet);
+		int degreDgtsBl = dgtServ.calculDegreBl(margeBless, dgts, element, isObjet);
+		degreDgtsChoc += modifDegre;
+		degreDgtsBl += modifDegre;
+		int ptChoc = dgtServ.calculPtChoc(degreDgtsChoc, dgts);
+		float nvBl = dgtServ.calculNvBl(degreDgtsBl, dgts);
 //		if(isGlb) {
 //			ptChoc = dgtServ.modifPtChocGlb(ptChoc);
 //			nvBl = dgtServ.modifNvBlGlb(nvBl);
 //		}
 		if(!element.equals(Element.NORMAL)) {
-			ptChoc = dgtServ.modifPtChoc(element, ptChoc, degreDgts);
+			ptChoc = dgtServ.modifPtChoc(element, ptChoc, degreDgtsChoc);
 			nvBl = dgtServ.modifNvBl(element, nvBl);
 		}
 

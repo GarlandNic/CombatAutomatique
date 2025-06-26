@@ -155,6 +155,7 @@
 							<option value="FROID">de Froid</option>
 							<option value="ELECTRICITE">Electriques</option>
 							<option value="NECROTIQUE">Nécrotiques</option>
+							<option value="BLANCHE">de magie Blanche</option>
 						</select>
 					</div>					
 					<div th:unless="*{#strings.contains(comboList[__${rowStat.index}__].nom, 'BASE')}">
@@ -176,11 +177,11 @@
 					<div th:if="*{#strings.contains(comboList[__${rowStat.index}__].nom, 'BOUCLIER')}">
 						<select th:field="*{comboList[__${rowStat.index}__].bouclier}">
 							<option value="Pas_de_bouclier">Pas de bouclier</option>
-							<option value="Dague">Dague</option>
-							<option value="Targe">Targe</option>
-							<option value="Bouclier">Bouclier</option>
-							<option value="Grand_bouclier">Grand bouclier</option>
-							<option value="Bouclier_tour">Bouclier-tour</option>
+							<option value="Dague">Dague (+0 End Glb)</option>
+							<option value="Targe">Targe (+1 End Glb)</option>
+							<option value="Bouclier">Bouclier (+2 End Glb)</option>
+							<option value="Grand_bouclier">Grand bouclier (+3 End Glb)</option>
+							<option value="Bouclier_tour">Bouclier-tour (+4 End Glb)</option>
 						</select>
 						<br/>
 						Qualité <input type="number" th:field="*{comboList[__${rowStat.index}__].bouclierQualit}" value="4" min="0" step="0.5"/>
