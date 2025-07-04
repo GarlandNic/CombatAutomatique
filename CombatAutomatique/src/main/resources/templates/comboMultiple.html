@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Azurhyan : <span th:remove="tag" th:text="${partie}">partie</span></title>
+	<link th:href="@{/style.css}" rel="stylesheet">
+</head>
+<body>
+	
+	<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get">
+		<button type="submit"> &#127968; </button> 
+	</form>
+	
+	<form action="#" th:action="@{'/azurhyan/'+${partie}+'/comboMultiple'}" th:object="${cmbMlt}" method="post">
+		<input type="hidden" th:field="*{partie}"/>
+	
+	<h1> Affecter un combo à plusieurs perso : </h1>
+	
+	<h3> Combo : </h3>
+	
+		<table>
+			<tr>
+				<th style="text-align: center;"> <span style="cursor: help;" title="Le nom du combo est libre mais le mot-clé ''BASE'' permet de dire que le type de dégâts et la portée (CàC/Dist) doivent être pris en compte. Le mot-clé ''BOUCLIER'' permet de définir un bouclier."> &#9432; </span> </th>
+				<th> Init </th>
+				<th> Toucher </th>
+				<th> Parade<br/>ennemie </th>
+				<th> Force </th>
+				<th> </th>
+				<th> Défense </th>
+				<th> Esquive </th>
+				<th> Parade </th>
+				<th> Endurance<br/>du perso </th>
+				<th style="text-align: center;"> <span style="cursor: help;" title="Les combos désactivés ne seront pas pris en compte dans le calcul du combo total."> &#9432; </span> </th>
+				<th> </th>
+			</tr>
+			<tr>
+				<td> 
+					<input type="text" th:field="*{combo.nom}"/> 
+					<div th:if="*{#strings.contains(combo.nom, 'BASE')}">
+						<select th:field="*{combo.CaC}">
+							<option value="true" text="C-à-c">C-à-c</option>
+							<option value="false" text="Dist">Dist</option>
+						</select>
+						<select th:field="*{combo.typeDgts}">
+							<option value="NOR">Normaux</option>
+							<option value="CTD">Contondant</option>
+							<option value="PRF">Perforant</option>
+						</select>
+						<select th:field="*{combo.globaux}">
+							<option value="false" text="standard">standard</option>
+							<option value="true" text="Globaux">Globaux</option>
+						</select>
+						<select th:field="*{combo.element}">
+							<option value="NORMAL">standard</option>
+							<option value="FEU">de Feu</option>
+							<option value="ACIDE">d'Acide</option>
+							<option value="FROID">de Froid</option>
+							<option value="ELECTRICITE">Electriques</option>
+							<option value="NECROTIQUE">Nécrotiques</option>
+							<option value="BLANCHE">de magie Blanche</option>
+						</select>
+					</div>					
+					<div th:unless="*{#strings.contains(combo.nom, 'BASE')}">
+						<input type="hidden" th:field="*{combo.CaC}" value="true"/>
+						<input type="hidden" th:field="*{combo.typeDgts}" value="NOR"/>
+						<input type="hidden" th:field="*{combo.globaux}" value="false"/>
+						<input type="hidden" th:field="*{combo.element}" value="NORMAL"/>
+					</div>
+				</td>
+				<td> <input type="number" th:field="*{combo.init}"/> </td>
+				<td> <input type="number" th:field="*{combo.toucher}"/> </td>
+				<td> <input type="number" th:field="*{combo.prdEnnemie}"/> </td>
+				<td> <input type="number" th:field="*{combo.force}"/> 
+					 <input type="hidden" th:field="*{combo.IBatt}"/> </td>
+				<td> </td>
+				<td> <input type="number" th:field="*{combo.defense}"/> </td>
+				<td> <input type="number" th:field="*{combo.esquive}"/> </td>
+				<td> <input type="number" th:field="*{combo.parade}"/> 
+					<div th:if="*{#strings.contains(combo.nom, 'BOUCLIER')}">
+						<select th:field="*{combo.bouclier}">
+							<option value="Pas_de_bouclier">Pas de bouclier</option>
+							<option value="Dague">Dague (+0 End Glb)</option>
+							<option value="Targe">Targe (+1 End Glb)</option>
+							<option value="Bouclier">Bouclier (+2 End Glb)</option>
+							<option value="Grand_bouclier">Grand bouclier (+3 End Glb)</option>
+							<option value="Bouclier_tour">Bouclier-tour (+4 End Glb)</option>
+						</select>
+						<br/>
+						Qualité <input type="number" th:field="*{combo.bouclierQualit}" value="4" min="0" step="0.5"/>
+					</div>					
+					<div th:unless="*{#strings.contains(combo.nom, 'BOUCLIER')}">
+						<input type="hidden" th:field="*{combo.bouclier}" value="Pas_de_bouclier"/>
+					</div>
+				
+				</td>
+				<td> <input type="hidden" th:field="*{combo.endBouclier}"/>
+					 <input type="number" th:field="*{combo.endPerso}"/>
+					 <input type="hidden" th:field="*{combo.IBdef}"/> </td>
+				<td> 
+					<input type="checkbox" th:field="*{combo.actif}" class="toggle">
+					<label class="checklab" th:for="${#ids.prev('combo.actif')}"></label>
+				</td>
+			</tr>
+		</table>
+	
+	<button type="submit" name="actu"> Actualiser </button>
+
+	<h3> Persos affectés : </h3>
+	
+	<table style="border: solid;">
+		<thead>
+			<tr style="border: solid;">
+				<td style="border: solid;">Concernés</td>
+				<td style="border: solid;">Personnages </td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr style="border: solid;">
+				<td style="border: solid;">
+					<table th:with="n=*{#lists.size(cibleList)}">
+						<tr th:each="cible, itemStat : *{cibleList}">
+							<td>
+								<span th:text="*{cibleList[__${itemStat.index}__].cibleNom}"> nom </span>
+								<input type="hidden" th:field="*{cibleList[__${itemStat.index}__].cibleId}"/>
+								<input type="hidden" th:field="*{cibleList[__${itemStat.index}__].cibleNom}"/>		
+							</td>
+		                    <td> <button type="submit" name="removeTarget" th:value="${itemStat.index}"> &#x1F872; </button> </td>
+						</tr>					
+					</table>
+				</td>
+				<td style="border: solid;">
+					<table>
+						<tr th:each="row, rowStat : *{autreList}">
+		                    <td> <button type="submit" name="addTarget" th:value="${rowStat.index}"> &#x1F870; </button> </td>
+							<td>
+								<span th:text="*{autreList[__${rowStat.index}__].cibleNom}"> nom </span>
+								<input type="hidden" th:field="*{autreList[__${rowStat.index}__].cibleId}"/>
+								<input type="hidden" th:field="*{autreList[__${rowStat.index}__].cibleNom}"/>
+							</td>
+							<th:block th:each="perso : ${persos}" th:if="${perso.id==row.cibleId}">
+								<td>
+									<table style="border-collapse: collapse;margin: 0;">
+										<tr><td class="carre c11" th:style="${perso.bles360 > 0 ? 'background-color: red;' : ''}"></td>
+											<td class="carre c12" th:style="${perso.bles360 > 270 ? 'background-color: red;' : ''}"></td>
+											<td class="emptyCell"></td>
+											<td class="carre c11" th:style="${perso.choc360 > 0 ? 'background-color: grey;' : ''}"></td>
+											<td class="carre c12" th:style="${perso.choc360 > 270 ? 'background-color: grey;' : ''}"></td>
+										</tr>
+										<tr><td class="carre c21" th:style="${perso.bles360 > 90 ? 'background-color: red;' : ''}"></td>
+											<td class="carre c22" th:style="${perso.bles360 > 180 ? 'background-color: red;' : ''}"></td>
+											<td class="emptyCell"></td>
+											<td class="carre c21" th:style="${perso.choc360 > 90 ? 'background-color: grey;' : ''}"></td>
+											<td class="carre c22" th:style="${perso.choc360 > 180 ? 'background-color: grey;' : ''}"></td>
+						</tr>
+					</table>
+								</td>
+								<td>
+									&#x1F6E1;<span th:unless="${perso.bouclier}" style="position:relative; left:-0.5em; top:0.1em; font-size: 1.4em;">&frasl;</span>
+								</td>
+								<td style="text-align:center;">
+									<span style="color:green;font-weight: bolder;" th:if="${perso.incapacite == 0}"> &xcirc; </span>
+									<span style="color:grey;font-weight: bolder;" th:if="${perso.incapacite == 1}"> &check; </span>
+									<span style="color:orange;font-weight: bolder;" th:if="${perso.incapacite == 2}"> &olcross; </span>
+									<span style="color:red;font-weight: bolder;" th:if="${perso.incapacite == 3}"> &cross; </span>
+								</td>
+								<td>H<span th:text="${perso.hand}">0</span></td>
+							</th:block>
+            		    </tr>						
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<br/>
+	
+	<p th:with="d=*{#lists.size(cibleList)}">
+		<span th:if="${d==0}" class="alert">Il faut au moins 1 perso !</span>
+		<button type="submit" th:if="${d>0}">Affecter le combo</button> 
+	</p>
+	</form>	
+	
+	<form action="#" th:action="@{'/azurhyan/'+${partie}}" method="get">
+		<button type="submit">Retour</button> 
+	</form>	
+		
+</body>
+</html>
