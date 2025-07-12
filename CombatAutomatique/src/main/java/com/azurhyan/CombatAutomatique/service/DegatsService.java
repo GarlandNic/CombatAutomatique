@@ -194,7 +194,7 @@ public class DegatsService {
 		case NECROTIQUE:
 			return Dgts.NOR;
 		case BLANCHE:
-			return Dgts.CTD;
+//			return Dgts.CTD;
 		case NORMAL:
     	default:
 			return dgts;
