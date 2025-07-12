@@ -69,11 +69,12 @@
 		<button type="submit">Enregistrer les modifications</button> 
 		</br>
 		</br>
-		<button type="submit" formmethod="get" th:formaction="@{/azurhyan/{partie}/nouveauPerso(partie=${partie})}">
+		<button type="submit" formmethod="post" name="get" th:formaction="@{/azurhyan/{partie}/nouveauPerso(partie=${partie})}">
 			Créer un nouveau perso</button> 
 		</br>
 		</br>
-		<button type="submit" th:formaction="@{'/azurhyan/'+${partie}}" formmethod="get">Retourner sans enregistrer</button> 
+		<button type="submit" th:formaction="@{'/azurhyan/'+${partie}}" formmethod="post" name="get">
+			Retourner sans enregistrer</button> 
 		<br/>
 		
 		<h2> Persos / templates archivés : </h2>

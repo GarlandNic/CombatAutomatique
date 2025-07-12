@@ -34,6 +34,11 @@ public class PersonnageController {
 		return filledPage_Personnage(model, partie, null);
 	}
 
+	@PostMapping(value="/azurhyan/{game}/nouveauPerso", params={"get"})
+	public String formNouvPersoPostGet(Model model, @PathVariable("game") final String partie) {
+		return "redirect:/azurhyan/"+partie+"/nouveauPerso";
+	}
+
 	@GetMapping("/azurhyan/{game}/{persoId}")
 	public String fichePersonnage(Model model, @PathVariable("game") final String partie, @PathVariable("persoId") final int persoId) {
 		return filledPage_Personnage(model, partie, persoServ.findPersoCompletDto(persoId));

@@ -371,7 +371,7 @@ public class ActionService {
 					BlessureDto handicapBl = calculDegats(bonusForce+comboAtt.getForce(), comboDef.getEndBouclier(), 
 							comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false, 
 							modifDegre+2);
-					float handicaps = (handicapBl != null ? handicapBl.getNiveau() : 0);
+					float handicaps = (handicapBl != null ? handicapBl.getNiveau() - blBcl.getNiveau() : 0);
 					if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.FATIGUE, "Magie Blanche"));
 				}
 
@@ -418,7 +418,7 @@ public class ActionService {
 				BlessureDto handicapBl = calculDegats(bonusForce+comboAtt.getForce(), endu, 
 						comboAtt.getTypeDgts(),	comboAtt.isGlobaux(), comboAtt.getElement(), false, 
 						modifDegre+2);
-				float handicaps = (handicapBl != null ? handicapBl.getNiveau() : 0);
+				float handicaps = (handicapBl != null ? handicapBl.getNiveau() - bl.getNiveau() : 0);
 				if(handicaps > 0) result.getHandList().add(new HandicapDto(handicaps, TypeHand.FATIGUE, "Magie Blanche"));
 			}
 			

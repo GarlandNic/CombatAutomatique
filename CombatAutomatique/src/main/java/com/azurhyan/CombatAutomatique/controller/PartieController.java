@@ -32,6 +32,11 @@ public class PartieController {
 		return filledPage_Partie(model, partie);
 	}
 	
+	@PostMapping(value="/azurhyan/{game}", params={"get"})
+	public String partiePostGet(Model model, @PathVariable("game") final String partie) {
+		return "redirect:/azurhyan/"+partie;
+	}
+	
 	@GetMapping("/azurhyan/{game}/effacerActions")
 	public String effacerLesActions(Model model, @PathVariable("game") final String partie) {
 		actionServ.effacerLesActions(partie);
@@ -49,7 +54,7 @@ public class PartieController {
 	@PostMapping("/azurhyan/{game}/visibilitePerso")
 	public String changeVisibilitePersos(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles) {
 		persoServ.setAllEtat(persosVisibles);
-		return filledPage_Partie(model, partie);
+		return "redirect:/azurhyan/"+partie;
 	}
 	
 	@PostMapping(value="/azurhyan/{game}/visibilitePerso", params={"archiver"})
