@@ -57,6 +57,13 @@ public class PartieController {
 		return "redirect:/azurhyan/"+partie;
 	}
 	
+	@PostMapping(value="/azurhyan/{game}/visibilitePerso", params={"voirCombo"})
+	public String voirComboPerso(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles, 
+			final HttpServletRequest req) {
+	    final Integer persoId = Integer.valueOf(req.getParameter("voirCombo"));
+		return "redirect:/azurhyan/"+partie+"/"+persoId;
+	}
+	
 	@PostMapping(value="/azurhyan/{game}/visibilitePerso", params={"archiver"})
 	public String archiverPerso(Model model, @PathVariable("game") final String partie, @ModelAttribute("persosVisibles") PersosVisiblesDto persosVisibles, 
 			final HttpServletRequest req) {

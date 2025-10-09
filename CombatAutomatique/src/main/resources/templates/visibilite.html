@@ -43,7 +43,7 @@
                     	<span th:text="*{persoList[__${itemStat.index}__].nom}"> nom </span>
                     </td>
                     <td>
-						<button type="submit" th:formaction="@{'/azurhyan/'+${partie}+'/'+${perso.id}}" formmethod="get">Voir combo</button>
+						<button type="submit" name="voirCombo" th:value="${perso.id}">Voir combo</button>
 					</td>
 					<td> <select th:field="*{persoList[__${itemStat.index}__].incapacite}">
 							<option value="0"> <span style="color:green;font-weight: bolder;"> &xcirc; </span>Peut agir</option>
@@ -89,7 +89,7 @@
                    	<span th:text="*{persoList[__${itemStat.index}__].nom}"> nom </span>
                 </td>
                 <td>
-					<button type="submit" th:formaction="@{'/azurhyan/'+${partie}+'/'+${perso.id}}" formmethod="get">Voir combo</button>
+					<button type="submit" name="voirCombo" th:value="${perso.id}">Voir combo</button>
 				</td>
                 <td> <button type="submit" name="dupliquer" th:value="${perso.id}">Générer un perso</button> </td>
                 <td> 
