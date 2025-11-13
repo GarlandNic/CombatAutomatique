@@ -184,16 +184,16 @@ public class DegatsService {
 	
 	public Dgts checkTypeElement(Dgts dgts, Element element) {
 		switch (element) {
-		case FEU:
-		case ACIDE:
-			return Dgts.NOR;
-		case FROID:
-			return Dgts.CTD;
-		case ELECTRICITE:
-			return Dgts.NOR;
-		case NECROTIQUE:
-			return Dgts.NOR;
-		case BLANCHE:
+//		case FEU:
+//		case ACIDE:
+//			return Dgts.NOR;
+//		case FROID:
+//			return Dgts.CTD;
+//		case ELECTRICITE:
+//			return Dgts.NOR;
+//		case NECROTIQUE:
+//			return Dgts.NOR;
+//		case BLANCHE:
 //			return Dgts.CTD;
 		case NORMAL:
     	default:

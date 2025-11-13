@@ -398,8 +398,8 @@ public class ActionService_v6 {
 		if(!isObjet) ptChoc = dgts.calculPtChoc(margeBless);
 		nvBl = dgts.calculNvBl(margeBless, isObjet);
 		if(isGlb) nvBl += 1;
-		ptChoc = element.modifPtChoc(ptChoc, (dgts == Dgts.CTD));
-		nvBl = element.modifNvBl(nvBl, (dgts == Dgts.CTD), isObjet);
+//		ptChoc = element.modifPtChoc(ptChoc, (dgts == Dgts.CTD));
+//		nvBl = element.modifNvBl(nvBl, (dgts == Dgts.CTD), isObjet);
 
 		BlessureDto bl = new BlessureDto(nvBl, ptChoc);
 		return bl;

@@ -429,7 +429,7 @@ public class ActionService {
 	private BlessureDto calculDegats(int force, int endu, Dgts dgts, boolean isGlb, Element element, boolean isObjet, int modifDegre) {
 		int margeBless = force - endu;
 		if(margeBless <= 0) return null;
-		dgts = dgtServ.checkTypeElement(dgts, element);
+//		dgts = dgtServ.checkTypeElement(dgts, element);
 		int degreDgtsChoc = dgtServ.calculDegreChoc(margeBless, dgts, element, isObjet);
 		int degreDgtsBl = dgtServ.calculDegreBl(margeBless, dgts, element, isObjet);
 		degreDgtsChoc += modifDegre;

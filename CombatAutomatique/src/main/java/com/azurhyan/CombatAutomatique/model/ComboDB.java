@@ -147,54 +147,54 @@ public class ComboDB {
 			}
 		}
 
-		public int modifPtChoc(int ptChoc, boolean isCTD) {
-			switch (this) {
-			case NORMAL:
-				return ptChoc;
-			case FEU:
-			case ACIDE:
-				return ptChoc + (isCTD ? ptChoc/4 : ptChoc/2);
-			case FROID:
-				return ptChoc + (isCTD ? 0 : ptChoc);
-			case ELECTRICITE:
-				return 0 + (isCTD ? ptChoc/2 : ptChoc);
-			case NECROTIQUE:
-				return ptChoc + (isCTD ? ptChoc/4 : ptChoc/2);
-			case BLANCHE:
-				return ptChoc;// TODO +1 nv de pt de choc
-        	default:
-        		return ptChoc;
-			}
-		}
-
-		public float modifNvBl(float nvBl, boolean isCTD, boolean isObjet) {
-			int resDemi = (int) (nvBl*2);
-			switch (this) {
-			case NORMAL:
-			case FEU:
-				break;
-			case ACIDE:
-				resDemi += (isObjet ? (resDemi+1)/2 : 0);
-				break;
-			case FROID:
-				if(!isCTD) resDemi -= 2;
-				resDemi = (resDemi>0 ? resDemi : 0);
-				resDemi += (isObjet ? (resDemi+1)/2 : 0);
-				break;
-			case ELECTRICITE:
-				if(isCTD) resDemi += 2;
-				resDemi -= (isObjet ? resDemi/2 : 0);
-				break;
-			case NECROTIQUE:
-				resDemi += (isObjet ? (resDemi+1)/2 : 0);
-				break;
-			case BLANCHE:
-				break; // TODO -1 niv de Bl
-        	default:
-        		break;
-			}
-			return (float) (resDemi/2.0);
-		}
+//		public int modifPtChoc(int ptChoc, boolean isCTD) {
+//			switch (this) {
+//			case NORMAL:
+//				return ptChoc;
+//			case FEU:
+//			case ACIDE:
+//				return ptChoc + (isCTD ? ptChoc/4 : ptChoc/2);
+//			case FROID:
+//				return ptChoc + (isCTD ? 0 : ptChoc);
+//			case ELECTRICITE:
+//				return 0 + (isCTD ? ptChoc/2 : ptChoc);
+//			case NECROTIQUE:
+//				return ptChoc + (isCTD ? ptChoc/4 : ptChoc/2);
+//			case BLANCHE:
+//				return ptChoc;// TODO +1 nv de pt de choc
+//        	default:
+//        		return ptChoc;
+//			}
+//		}
+//
+//		public float modifNvBl(float nvBl, boolean isCTD, boolean isObjet) {
+//			int resDemi = (int) (nvBl*2);
+//			switch (this) {
+//			case NORMAL:
+//			case FEU:
+//				break;
+//			case ACIDE:
+//				resDemi += (isObjet ? (resDemi+1)/2 : 0);
+//				break;
+//			case FROID:
+//				if(!isCTD) resDemi -= 2;
+//				resDemi = (resDemi>0 ? resDemi : 0);
+//				resDemi += (isObjet ? (resDemi+1)/2 : 0);
+//				break;
+//			case ELECTRICITE:
+//				if(isCTD) resDemi += 2;
+//				resDemi -= (isObjet ? resDemi/2 : 0);
+//				break;
+//			case NECROTIQUE:
+//				resDemi += (isObjet ? (resDemi+1)/2 : 0);
+//				break;
+//			case BLANCHE:
+//				break; // TODO -1 niv de Bl
+//        	default:
+//        		break;
+//			}
+//			return (float) (resDemi/2.0);
+//		}
 	}
 
 	public ComboDB() {
